@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/iRefresh"
+        android:alphabeticShortcut="r"
+        android:icon="@drawable/ic_menu_refresh"
+        android:title="@string/lblRefresh">
+    </item>
+    <item
+        android:id="@+id/iSettings"
+        android:alphabeticShortcut="s"
+        android:icon="@drawable/ic_menu_preferences"
+        android:title="@string/lblSettings">
+    </item>
+    <item
+        android:id="@+id/iAbout"
+        android:alphabeticShortcut="a"
+        android:icon="@drawable/ic_menu_info_details"
+        android:title="@string/lblAbout">
+    </item>
+</menu>

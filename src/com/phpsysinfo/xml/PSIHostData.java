@@ -1,0 +1,89 @@
+package com.phpsysinfo.xml;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class PSIHostData {
+
+	private String hostname = "";
+	private String uptime = "";
+	private String loadAvg = "";
+	private String kernel = "";
+	private String distro = "";
+	private String Ip = "";
+	private Map<String, Integer> mountPoint = new HashMap<String, Integer>();
+	private int appMemoryPercent = 0;
+	private int appMemoryUsed= 0;
+	private int appMemoryTotal = 0;
+
+	public String getHostname() {
+		return hostname;
+	}
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	public String getUptime() {
+		return uptime;
+	}
+	public void setUptime(String uptime) {
+
+		int up = (int)Double.parseDouble(uptime);
+		int min = up/60;
+		int hours = min/60;
+		int days = (int) Math.floor(hours/24);
+		hours = (int) Math.floor(hours - (days * 24));
+		min = (int) Math.floor(min - (days * 60 * 24) - (hours * 60));
+
+		this.uptime = new String(days+"d "+hours+"h "+min + "m");
+	}
+
+	public void setAppMemoryPercent(String value) {
+		this.appMemoryPercent = Integer.parseInt(value);
+	}
+	public int getAppMemoryPercent() {
+		return appMemoryPercent;
+	}
+	public String getLoadAvg() {
+		return loadAvg;
+	}
+	public void setLoadAvg(String loadAvg) {
+		this.loadAvg = loadAvg;
+	}
+	public String getKernel() {
+		return kernel;
+	}
+	public void setKernel(String kernel) {
+		this.kernel = kernel;
+	}
+	public String getDistro() {
+		return distro;
+	}
+	public void setDistro(String distro) {
+		this.distro = distro;
+	}
+	public String getIp() {
+		return Ip;
+	}
+	public void setIp(String ip) {
+		Ip = ip;
+	}
+	public void addMountPoint(String name, String percent) {
+		mountPoint.put(name, Integer.parseInt(percent));
+	}
+	public Map<String, Integer> getMountPoint() {
+		return mountPoint;
+	}
+	public int getAppMemoryUsed() {
+		return appMemoryUsed;
+	}
+	public void setAppMemoryUsed(String appMemoryUsed) {
+		this.appMemoryUsed = (int) (Long.parseLong(appMemoryUsed)/1024/1024);
+	}
+	public int getAppMemoryTotal() {
+		return appMemoryTotal;
+	}
+	public void setAppMemoryTotal(String appMemoryTotal) {
+		this.appMemoryTotal = (int) (Long.parseLong(appMemoryTotal)/1024/1024);
+	}
+}
