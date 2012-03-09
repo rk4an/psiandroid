@@ -37,6 +37,11 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 		setContentView(R.layout.url);
 
 		lvUrl = (ListView) findViewById(R.id.listView1);
+		lvUrl.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		lvUrl.setSelection(0);
+		lvUrl.setOnItemClickListener(this);
+		lvUrl.setOnItemLongClickListener(this);
+		
 		urls = new ArrayList<String>();
 
 		Button btnAdd = (Button) findViewById(R.id.btnAdd);
@@ -45,19 +50,25 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
 		String listUrl = pref.getString("listUrl", "");
+		String selectedUrl = pref.getString("selectedUrl", "");
+		
 		String[] iUrl = listUrl.split(";");
 
-		for (int i = 0;i<iUrl.length;i++) {
+		for (int i = 0; i<iUrl.length; i++) {
 			if(!iUrl[i].equals("")) {
-				urls.add(iUrl[i]);
+					urls.add(iUrl[i]);
 			}
 		}
 
-		aaUrls = new ArrayAdapter<String>(this, R.layout.mylist,urls);
+		aaUrls = new ArrayAdapter<String>(this, R.layout.mylist, urls);
 		lvUrl.setAdapter(aaUrls);
-		lvUrl.setOnItemClickListener(this);
-		lvUrl.setOnItemLongClickListener(this);
 		
+		//select the current URL
+		for(int i = 0; i<urls.size(); i++) {
+			if(urls.get(i).equals(selectedUrl)) {
+				lvUrl.setItemChecked(i, true);
+			}
+		}
 	}
 
 

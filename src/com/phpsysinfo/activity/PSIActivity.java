@@ -1,6 +1,7 @@
 package com.phpsysinfo.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -17,8 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.phpsysinfo.R;
 import com.phpsysinfo.xml.PSIDownloadData;
@@ -32,10 +33,13 @@ implements OnClickListener
 	private SharedPreferences pref;
 	private static final String SCRIPT_NAME = "/xml.php";
 
-	private PSIHostData entry = null;
 	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
+	Dialog aboutDialog = null;
+	Dialog errorDialog = null;
+	TextView textError = null;
 
+	//current selected url
 	private String selectedUrl = "";
 
 	@Override
@@ -53,19 +57,45 @@ implements OnClickListener
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		selectedUrl = pref.getString("selectedUrl", "");
 
+		//check if a current selected url is already set
 		if(selectedUrl.equals("")) {
 			//TODO: disable refresh button
 		}
+		else {
+			PSIDownloadData task = new PSIDownloadData(this);
+			task.execute(selectedUrl + SCRIPT_NAME);
+		}
+
+
+		//create about dialog
+		aboutDialog = new Dialog(this);
+		aboutDialog.setContentView(R.layout.about_dialog);
+		aboutDialog.setTitle("About PSIAndroid");
+		TextView text = (TextView) aboutDialog.findViewById(R.id.text);
+		text.setText("http://phpsysinfo.sf.net");
+		ImageView image = (ImageView) aboutDialog.findViewById(R.id.image);
+		image.setImageResource(R.drawable.ic_launcher);
+		image.setOnClickListener(this);
+
+		//create error dialog
+		errorDialog = new Dialog(this);
+		errorDialog.setContentView(R.layout.error_dialog);
+		errorDialog.setTitle("Error");
+		textError = (TextView) errorDialog.findViewById(R.id.textError);
+		textError.setText("");
+		ImageView imageError = (ImageView) errorDialog.findViewById(R.id.imageError);
+		imageError.setImageResource(R.drawable.ic_launcher);
+		imageError.setOnClickListener(this);	
+
 	}
 
 	@Override
 	public void onClick(View event) {
-		if(event.getId() == R.id.pgMemory) {
-			Toast.makeText(
-					this, getString(R.string.lblUsed) + 
-					" " + entry.getAppMemoryUsed() + getString(R.string.lblMio) + 
-					" / " + entry.getAppMemoryTotal() + getString(R.string.lblMio), 
-					3000).show();
+		if(event.getId() == R.id.image) {
+			aboutDialog.hide();
+		}
+		else if(event.getId() == R.id.imageError) {
+			errorDialog.hide();
 		}
 	}
 
@@ -81,8 +111,6 @@ implements OnClickListener
 	public void displayInfo(PSIHostData entry) {
 
 		this.enableButton();
-
-		this.entry = entry;
 
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
@@ -113,22 +141,45 @@ implements OnClickListener
 		TextView txtIp = (TextView) findViewById(R.id.txtIp);
 		txtIp.setText(entry.getIp());
 
-		//memory
-		ProgressBar pbMemory = (ProgressBar) findViewById(R.id.pgMemory);
-		pbMemory.setProgress(entry.getAppMemoryPercent());
-		pbMemory.setOnClickListener(this);
-
-
-		TextView txtMemory = (TextView) findViewById(R.id.txtMemory);
-		txtMemory.setText(entry.getAppMemoryPercent()+"%");
 
 		//display
 		TableLayout tlVital = (TableLayout) findViewById(R.id.tableVitals);
 		tlVital.setVisibility(View.VISIBLE);
 
 		//init mount point table
-		TableLayout tlMount = (TableLayout) findViewById(R.id.tableMount);		
+		TableLayout tlMount = (TableLayout) findViewById(R.id.tableMount);	
 		tlMount.removeAllViews();
+
+
+		//memory
+		ProgressBar pbMemory = new ProgressBar(
+				this,null,android.R.attr.progressBarStyleHorizontal);
+
+		TextView tvNameMemory = new TextView(this);
+		pbMemory.setProgress(entry.getAppMemoryPercent());
+		tvNameMemory.setText(getString(R.string.lblMemory) + " " + entry.getAppMemoryUsed() + 
+				"/" + entry.getAppMemoryTotal() + getString(R.string.lblMio) +" ("+ entry.getAppMemoryPercent()+"%)");
+
+		//text in red if memory usage is high
+		if(entry.getAppMemoryPercent() > 75) {
+			tvNameMemory.setTextColor(0xFFFF0000);
+		}
+
+
+		LayoutParams p = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+
+		//add mount point name row
+		TableRow trNameMemory = new TableRow(this);
+		trNameMemory.setLayoutParams(p);
+		trNameMemory.addView(tvNameMemory,p);
+		tlMount.addView(trNameMemory,p);
+
+		//add progress bar row
+		TableRow trProgressMemory = new TableRow(this);
+		trProgressMemory.setLayoutParams(p);
+		trProgressMemory.addView(pbMemory,p);
+		tlMount.addView(trProgressMemory,p);	
+
 
 		//fill mount point table
 		for (String mountPointName : entry.getMountPoint().keySet()) {
@@ -140,25 +191,21 @@ implements OnClickListener
 			TextView tvName = new TextView(this);
 			pgPercent.setProgress(entry.getMountPoint().get(mountPointName));
 			if(mountPointName.length() > 10) {
-				tvName.setText(mountPointName.substring(0, 10));
+				tvName.setText(mountPointName.substring(0, 10) + ": ");
 			}
 			else {
-				tvName.setText(mountPointName);
+				tvName.setText(mountPointName + ":");
 			}
 
-			TextView tvPercent = new TextView(this);
-			tvPercent.setText(entry.getMountPoint().get(mountPointName)+"%");
+			//mount point name row
+			TableRow trName = new TableRow(this);
+			trName.addView(tvName);
+			tlMount.addView(trName);
 
-			TableRow tr = new TableRow(this);
-			tr.setPadding(0, 0, 0, 3);
-			tr.addView(tvName);
-			tvName.setWidth(100);
-			tr.addView(pgPercent);
-			tvPercent.setPadding(5, 0, 0, 0);
-			tr.addView(tvPercent);
-
-			// add row to table
-			tlMount.addView(tr);
+			//progress bar row
+			TableRow trProgress = new TableRow(this);
+			trProgress.addView(pgPercent);
+			tlMount.addView(trProgress);
 		}
 	}
 
@@ -167,7 +214,8 @@ implements OnClickListener
 	 * @param error
 	 */
 	public void displayError(PSIErrorCode error) {
-		Toast.makeText(getApplicationContext(), "Error: " + error, Toast.LENGTH_SHORT).show();
+		textError.setText(error.toString());
+		this.errorDialog.show();
 
 		this.enableButton();
 	}
@@ -203,7 +251,7 @@ implements OnClickListener
 			Editor editor = pref.edit();
 			editor.putString("selectedUrl", selectedUrl);
 			editor.commit();
-			
+
 			PSIDownloadData task = new PSIDownloadData(this);
 			task.execute(selectedUrl + SCRIPT_NAME);
 		}
@@ -220,9 +268,7 @@ implements OnClickListener
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.iAbout:
-			Toast.makeText(
-					this, "PSIAndroid\nhttp://phpsysinfo.sf.net/psiandroid", 
-					3000).show();
+			aboutDialog.show();
 			return true;
 		case R.id.iRefresh:
 			PSIDownloadData task = new PSIDownloadData(this);
