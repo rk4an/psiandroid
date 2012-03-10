@@ -32,6 +32,7 @@ implements OnClickListener
 {
 	private SharedPreferences pref;
 	private static final String SCRIPT_NAME = "/xml.php";
+	private static final int MEMORY_THR = 75;
 
 	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
@@ -161,7 +162,7 @@ implements OnClickListener
 				"/" + entry.getAppMemoryTotal() + getString(R.string.lblMio) +" ("+ entry.getAppMemoryPercent()+"%)");
 
 		//text in red if memory usage is high
-		if(entry.getAppMemoryPercent() > 75) {
+		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_THR) {
 			tvNameMemory.setTextColor(0xFFFF0000);
 		}
 

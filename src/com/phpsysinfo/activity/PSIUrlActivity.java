@@ -41,28 +41,29 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 		lvUrl.setSelection(0);
 		lvUrl.setOnItemClickListener(this);
 		lvUrl.setOnItemLongClickListener(this);
-		
+
 		urls = new ArrayList<String>();
 
 		Button btnAdd = (Button) findViewById(R.id.btnAdd);
 		btnAdd.setOnClickListener(this);
-		
+
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
+		//get string representing the URL list and split with the delimiter
 		String listUrl = pref.getString("listUrl", "");
 		String selectedUrl = pref.getString("selectedUrl", "");
-		
+
 		String[] iUrl = listUrl.split(";");
 
 		for (int i = 0; i<iUrl.length; i++) {
 			if(!iUrl[i].equals("")) {
-					urls.add(iUrl[i]);
+				urls.add(iUrl[i]);
 			}
 		}
 
 		aaUrls = new ArrayAdapter<String>(this, R.layout.mylist, urls);
 		lvUrl.setAdapter(aaUrls);
-		
+
 		//select the current URL
 		for(int i = 0; i<urls.size(); i++) {
 			if(urls.get(i).equals(selectedUrl)) {
@@ -75,6 +76,7 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
+		//return the selected item
 		selectedUrl = lvUrl.getItemAtPosition(position).toString();
 
 		Intent i = new Intent();
@@ -92,6 +94,7 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which){
 			case DialogInterface.BUTTON_POSITIVE:
+				//delete item and save the list
 				aaUrls.remove((String)lvUrl.getItemAtPosition(pos));
 				saveList();
 				break;
@@ -105,6 +108,8 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 	@Override
 	public boolean onItemLongClick(AdapterView<?> a, View v, int position, long id) {
 		pos = position;
+
+		//create and display the remove dialog
 		AlertDialog.Builder adb = new AlertDialog.Builder(PSIUrlActivity.this);
 		adb.setMessage("Remove " + lvUrl.getItemAtPosition(position) + " ?");
 		adb.setPositiveButton("Yes", dialogClickListener);
@@ -119,6 +124,7 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 	public void onClick(View arg0) {
 		EditText txtUrl = (EditText) findViewById(R.id.txtUrl);
 
+		//add URL to the list
 		if(!txtUrl.getText().toString().equals("")) {
 			aaUrls.add(txtUrl.getText().toString());
 			saveList();
@@ -126,7 +132,7 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 	}
 
 	/**
-	 * 
+	 * save the list into a string in the preference
 	 */
 	public void saveList() {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
