@@ -42,7 +42,7 @@ public class PSIXmlParse extends DefaultHandler {
 			this.entry.setAppMemoryUsed(attributes.getValue("App"));
 		}
 		else if(localName.equalsIgnoreCase("Mount")){
-			this.entry.addMountPoint(attributes.getValue("MountPoint"), attributes.getValue("Percent"));
+			this.entry.addMountPoint(attributes.getValue("MountPoint"), attributes.getValue("Percent"), attributes.getValue("Used"), attributes.getValue("Total"));
 		}
 	}
 

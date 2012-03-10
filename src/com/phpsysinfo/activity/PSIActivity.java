@@ -1,5 +1,7 @@
 package com.phpsysinfo.activity;
 
+import java.text.NumberFormat;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +28,7 @@ import com.phpsysinfo.R;
 import com.phpsysinfo.xml.PSIDownloadData;
 import com.phpsysinfo.xml.PSIErrorCode;
 import com.phpsysinfo.xml.PSIHostData;
+import com.phpsysinfo.xml.PSIMountPoint;
 
 public class PSIActivity 
 extends Activity
@@ -113,6 +117,8 @@ implements OnClickListener
 
 		this.enableButton();
 
+		NumberFormat nf = NumberFormat.getInstance();
+
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
 		txtHostname.setText(entry.getHostname());
@@ -158,8 +164,8 @@ implements OnClickListener
 
 		TextView tvNameMemory = new TextView(this);
 		pbMemory.setProgress(entry.getAppMemoryPercent());
-		tvNameMemory.setText(getString(R.string.lblMemory) + " " + entry.getAppMemoryUsed() + 
-				"/" + entry.getAppMemoryTotal() + getString(R.string.lblMio) +" ("+ entry.getAppMemoryPercent()+"%)");
+		tvNameMemory.setText(Html.fromHtml("<b>"+getString(R.string.lblMemory) + "</b> (" + nf.format(entry.getAppMemoryUsed()) + 
+				"/" + nf.format(entry.getAppMemoryTotal()) + getString(R.string.lblMio) +") "+ entry.getAppMemoryPercent()+"%"));
 
 		//text in red if memory usage is high
 		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_THR) {
@@ -183,21 +189,33 @@ implements OnClickListener
 
 
 		//fill mount point table
-		for (String mountPointName : entry.getMountPoint().keySet()) {
+		for (PSIMountPoint psiMp: entry.getMountPoint()) {
 
 			//build row
 			ProgressBar pgPercent = new ProgressBar(
 					this,null,android.R.attr.progressBarStyleHorizontal);
 
 			TextView tvName = new TextView(this);
-			pgPercent.setProgress(entry.getMountPoint().get(mountPointName));
-			if(mountPointName.length() > 10) {
-				tvName.setText(mountPointName.substring(0, 10) + ": ");
+			pgPercent.setProgress(psiMp.getPercentUsed());
+
+			String lblMountText = "<b>";
+			if(psiMp.getName().length() > 10) {
+				lblMountText += psiMp.getName().substring(0, 10) + "</b> ";
 			}
 			else {
-				tvName.setText(mountPointName + ":");
+				lblMountText += psiMp.getName() + "</b>";
 			}
 
+			lblMountText += " (" + nf.format(psiMp.getUsed()) + 
+					"/" + nf.format(psiMp.getTotal()) + getString(R.string.lblMio) +") "+ psiMp.getPercentUsed()+"%";
+
+			tvName.setText(Html.fromHtml(lblMountText));
+
+			//text in red if mount point usage is high
+			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_THR) {
+				tvName.setTextColor(0xFFFF0000);
+			}
+			
 			//mount point name row
 			TableRow trName = new TableRow(this);
 			trName.addView(tvName);

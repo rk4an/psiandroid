@@ -1,7 +1,7 @@
 package com.phpsysinfo.xml;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PSIHostData {
@@ -12,7 +12,7 @@ public class PSIHostData {
 	private String kernel = "";
 	private String distro = "";
 	private String Ip = "";
-	private Map<String, Integer> mountPoint = new HashMap<String, Integer>();
+	private List<PSIMountPoint> mountPoint = new ArrayList<PSIMountPoint>();
 	private int appMemoryPercent = 0;
 	private int appMemoryUsed= 0;
 	private int appMemoryTotal = 0;
@@ -68,10 +68,14 @@ public class PSIHostData {
 	public void setIp(String ip) {
 		Ip = ip;
 	}
-	public void addMountPoint(String name, String percent) {
-		mountPoint.put(name, Integer.parseInt(percent));
+	public void addMountPoint(String name, String percentUsed, String used, String total) {
+		int _percentUsed = Integer.parseInt(percentUsed);
+		int _used = (int) (Long.parseLong(used)/1024/1024);
+		int _total = (int) (Long.parseLong(total)/1024/1024);
+		mountPoint.add(new PSIMountPoint(name, _percentUsed, _used, _total));
+		
 	}
-	public Map<String, Integer> getMountPoint() {
+	public List<PSIMountPoint> getMountPoint() {
 		return mountPoint;
 	}
 	public int getAppMemoryUsed() {

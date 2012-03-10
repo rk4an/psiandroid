@@ -66,7 +66,8 @@
                         android:id="@+id/lblDistro"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lblDistro" />
+                        android:text="@string/lblDistro"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtDistro"
@@ -86,7 +87,8 @@
                         android:id="@+id/lblKernel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lblKernel" />
+                        android:text="@string/lblKernel"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtKernel"
@@ -106,7 +108,8 @@
                         android:id="@+id/lblIp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lblIp" />
+                        android:text="@string/lblIp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtIp"
@@ -126,7 +129,8 @@
                         android:id="@+id/lblUptime"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/lblUptime" />
+                        android:text="@string/lblUptime"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtUptime"
@@ -146,7 +150,8 @@
                         android:id="@+id/lblLoad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lblLoad" />
+                        android:text="@string/lblLoad"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtLoad"

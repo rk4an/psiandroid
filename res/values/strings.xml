@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">PSIAndroid</string>
     <string name="lblUptime">Uptime:</string>
-    <string name="lblMemory">Memory:</string>
+    <string name="lblMemory">Memory</string>
     <string name="lblLoad">Load:</string>
     <string name="lblKernel">Kernel:</string>
     <string name="lblDistro">Distro:</string>
@@ -11,7 +11,6 @@
     <string name="lblHost">phpSysInfo URL</string>
     <string name="lblSettings">Settings</string>
     <string name="lblNodata"></string>
-    <string name="lblUsed">Used:</string>
     <string name="lblMio">MiB</string>
     <string name="lblSave">Save</string>
     <string name="lblAdd">Add</string>
