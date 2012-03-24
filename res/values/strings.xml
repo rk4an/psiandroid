@@ -8,11 +8,9 @@
     <string name="lblDistro">Distro:</string>
     <string name="lblIp">IP:</string>
     <string name="lblRefresh">Refresh</string>
-    <string name="lblHost">phpSysInfo URL</string>
     <string name="lblSettings">Settings</string>
     <string name="lblNodata"></string>
     <string name="lblMio">MiB</string>
-    <string name="lblSave">Save</string>
     <string name="lblAdd">Add</string>
     <string name="lblAbout">About</string>
     <string name="lblUrlHint">http://</string>
