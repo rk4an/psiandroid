@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -121,7 +122,8 @@ implements OnClickListener
 
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
-		txtHostname.setText(entry.getHostname());
+		txtHostname.setText(Html.fromHtml("<a href=\""+selectedUrl+"\">"+entry.getHostname()+"</a>"));
+		txtHostname.setMovementMethod(LinkMovementMethod.getInstance());
 
 		//uptime
 		TextView txtUptime = (TextView) findViewById(R.id.txtUptime);
