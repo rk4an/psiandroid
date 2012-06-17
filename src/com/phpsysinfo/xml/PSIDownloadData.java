@@ -5,7 +5,15 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -89,10 +97,24 @@ extends AsyncTask<String, Void, Void>
 	private static InputStream getUrl(String url)
 			throws MalformedURLException, IOException
 			{
+
 		int code = 0;
 		URL u = new URL(url); 
-		HttpURLConnection huc = (HttpURLConnection) u.openConnection(); 
+		HttpURLConnection huc = null;
+
+		//check if https url
+		if (u.getProtocol().toLowerCase().equals("https")) {
+			trustAllHosts();
+			huc = (HttpsURLConnection) u.openConnection();
+			((HttpsURLConnection)huc).setHostnameVerifier(DO_NOT_VERIFY);
+		}
+		else {
+			huc = (HttpURLConnection) u.openConnection(); 
+		}
+
 		huc.setRequestMethod("GET");
+		//huc.setRequestProperty("Authorization", "Basic " + Base64.encodeToString("user:password".getBytes(), Base64.NO_WRAP));
+
 		huc.connect();
 		code = huc.getResponseCode();
 
@@ -101,4 +123,46 @@ extends AsyncTask<String, Void, Void>
 		else
 			return null;
 			}
+
+
+
+	// always verify the host - don't check for certificate
+	final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
+		public boolean verify(String hostname, SSLSession session) {
+			return true;
+		}
+	};
+
+
+	/**
+	 * Trust every server - don't check for any certificate
+	 */
+	private static void trustAllHosts() {
+		// Create a trust manager that does not validate certificate chains
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return new java.security.cert.X509Certificate[] {};
+			}
+
+			public void checkClientTrusted(X509Certificate[] chain,
+					String authType) throws CertificateException {
+			}
+
+			public void checkServerTrusted(X509Certificate[] chain,
+					String authType) throws CertificateException {
+			}
+		} };
+
+		// Install the all-trusting trust manager
+		try {
+			SSLContext sc = SSLContext.getInstance("TLS");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection
+			.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
 }
