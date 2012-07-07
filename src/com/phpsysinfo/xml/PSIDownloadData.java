@@ -20,6 +20,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.helpers.DefaultHandler;
 
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import com.phpsysinfo.activity.PSIActivity;
@@ -39,10 +40,13 @@ extends AsyncTask<String, Void, Void>
 	@Override
 	protected Void doInBackground(String... strs) {
 		String address = strs[0];
+		String user = strs[1];
+		String password = strs[2];
+		
 		SAXParser parser = null;
 		InputStream input = null;
 		try {
-			input = getUrl(address);
+			input = getUrl(address,user,password);
 		}
 		catch (Exception e) {
 			Log.d("PSIAndroid", "Url error", e);
@@ -94,7 +98,7 @@ extends AsyncTask<String, Void, Void>
 		this.activity.disableButton();
 	}
 
-	private static InputStream getUrl(String url)
+	private static InputStream getUrl(String url, String user, String password)
 			throws MalformedURLException, IOException
 			{
 
@@ -112,9 +116,12 @@ extends AsyncTask<String, Void, Void>
 			huc = (HttpURLConnection) u.openConnection(); 
 		}
 
-		huc.setRequestMethod("GET");
-		//huc.setRequestProperty("Authorization", "Basic " + Base64.encodeToString("user:password".getBytes(), Base64.NO_WRAP));
-
+		//if a username is set
+		if(!user.equals("")) {
+			huc.setRequestMethod("GET");
+			huc.setRequestProperty("Authorization", "Basic " + Base64.encodeToString((user+":"+password).getBytes(), Base64.NO_WRAP));
+		}
+		
 		huc.connect();
 		code = huc.getResponseCode();
 

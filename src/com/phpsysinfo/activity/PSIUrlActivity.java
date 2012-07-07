@@ -3,6 +3,8 @@ package com.phpsysinfo.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -22,65 +25,80 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.phpsysinfo.R;
+import com.phpsysinfo.xml.Host;
+import com.phpsysinfo.xml.Hosts;
 
-public class PSIUrlActivity extends Activity implements OnItemClickListener, OnItemLongClickListener, OnClickListener {
+public class PSIUrlActivity extends Activity implements OnItemClickListener,
+OnItemLongClickListener, OnClickListener {
 
-	List<String> urls = null;
-	ListView lvUrl = null;
-	ArrayAdapter<String> aaUrls = null;
+	List<String> listStringUrls = null;
+	ListView listViewUrls = null;
+	ArrayAdapter<String> arrayAdapterUrlList = null;
 	int pos = 0;
-	String selectedUrl = "";
+
+	private ObjectMapper objectMapper = null;
+
+	private Hosts hostList = null;
+
+	final private String JSON_HOSTS = "JSON_HOSTS";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.url);
 
-		lvUrl = (ListView) findViewById(R.id.listView1);
-		lvUrl.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		lvUrl.setSelection(0);
-		lvUrl.setOnItemClickListener(this);
-		lvUrl.setOnItemLongClickListener(this);
+		listViewUrls = (ListView) findViewById(R.id.listView1);
+		listViewUrls.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		listViewUrls.setSelection(0);
+		listViewUrls.setOnItemClickListener(this);
+		listViewUrls.setOnItemLongClickListener(this);
 
-		urls = new ArrayList<String>();
+		listStringUrls = new ArrayList<String>();
 
 		Button btnAdd = (Button) findViewById(R.id.btnAdd);
 		btnAdd.setOnClickListener(this);
 
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences pref = PreferenceManager
+				.getDefaultSharedPreferences(this);
 
-		//get string representing the URL list and split with the delimiter
-		String listUrl = pref.getString("listUrl", "");
-		String selectedUrl = pref.getString("selectedUrl", "");
+		objectMapper = new ObjectMapper();
 
-		String[] iUrl = listUrl.split(";");
+		String data = "";
+		try {
+			data = pref.getString(JSON_HOSTS, "");
+			if (data.equals("")) {
+				hostList = new Hosts();
+			}
 
-		for (int i = 0; i<iUrl.length; i++) {
-			if(!iUrl[i].equals("")) {
-				urls.add(iUrl[i]);
+			hostList = objectMapper.readValue(data, Hosts.class);
+
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		for (int i = 0; i < hostList.getHost().size(); i++) {
+			if (!hostList.getHost().get(i).getUrl().equals("")) {
+				listStringUrls.add(hostList.getHost().get(i).getUrl());
 			}
 		}
 
-		aaUrls = new ArrayAdapter<String>(this, R.layout.mylist, urls);
-		lvUrl.setAdapter(aaUrls);
+		arrayAdapterUrlList = new ArrayAdapter<String>(this, R.layout.mylist,
+				listStringUrls);
+		listViewUrls.setAdapter(arrayAdapterUrlList);
 
-		//select the current URL
-		for(int i = 0; i<urls.size(); i++) {
-			if(urls.get(i).equals(selectedUrl)) {
-				lvUrl.setItemChecked(i, true);
-			}
-		}
 	}
 
-
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+			long arg3) {
 
-		//return the selected item
-		selectedUrl = lvUrl.getItemAtPosition(position).toString();
 
 		Intent i = new Intent();
-		i.putExtra("url", selectedUrl);
+		try {
+			i.putExtra("host", objectMapper.writeValueAsString(hostList.getHost().get(position)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		setResult(Activity.RESULT_OK, i);
 		finish();
@@ -92,10 +110,26 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			switch (which){
+			switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
-				//delete item and save the list
-				aaUrls.remove((String)lvUrl.getItemAtPosition(pos));
+				// delete item and save the list
+
+				boolean find = false;
+				for (int i = 0; i < hostList.getHost().size() && !find; i++) {
+					if (hostList
+							.getHost()
+							.get(i)
+							.getUrl()
+							.equals((String) listViewUrls
+									.getItemAtPosition(pos))) {
+						hostList.getHost().remove(i);
+						find = true;
+					}
+				}
+
+				arrayAdapterUrlList.remove((String) listViewUrls
+						.getItemAtPosition(pos));
+
 				saveList();
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:
@@ -104,14 +138,15 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 		}
 	};
 
-
 	@Override
-	public boolean onItemLongClick(AdapterView<?> a, View v, int position, long id) {
+	public boolean onItemLongClick(AdapterView<?> a, View v, int position,
+			long id) {
 		pos = position;
 
-		//create and display the remove dialog
+		// create and display the remove dialog
 		AlertDialog.Builder adb = new AlertDialog.Builder(PSIUrlActivity.this);
-		adb.setMessage("Remove " + lvUrl.getItemAtPosition(position) + " ?");
+		adb.setMessage("Remove " + listViewUrls.getItemAtPosition(position)
+				+ " ?");
 		adb.setPositiveButton("Yes", dialogClickListener);
 		adb.setNegativeButton("No", dialogClickListener);
 		adb.show();
@@ -119,14 +154,20 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 		return true;
 	}
 
-
 	@Override
 	public void onClick(View arg0) {
 		EditText txtUrl = (EditText) findViewById(R.id.txtUrl);
+		EditText txtUser = (EditText) findViewById(R.id.txtUser);
+		EditText txtPasword = (EditText) findViewById(R.id.txtPassword);
 
-		//add URL to the list
-		if(!txtUrl.getText().toString().equals("")) {
-			aaUrls.add(txtUrl.getText().toString());
+		// add URL to the list
+		if (!txtUrl.getText().toString().equals("")) {
+			arrayAdapterUrlList.add(txtUrl.getText().toString());
+
+			Host psiHostUrl = new Host(txtUrl.getText().toString(), txtUser
+					.getText().toString(), txtPasword.getText().toString());
+			hostList.getHost().add(psiHostUrl);
+
 			saveList();
 		}
 	}
@@ -135,16 +176,20 @@ public class PSIUrlActivity extends Activity implements OnItemClickListener, OnI
 	 * save the list into a string in the preference
 	 */
 	public void saveList() {
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		String listUrl = "";
+		SharedPreferences pref = PreferenceManager
+				.getDefaultSharedPreferences(this);
 
-		for (int i = 0; i < aaUrls.getCount(); i++) {
-			listUrl =  listUrl+";"+aaUrls.getItem(i);
+		String data = "";
+		try {
+			data = objectMapper.writeValueAsString(hostList);
+		} catch (Exception e) {
+
+			e.printStackTrace();
 		}
 
 		Editor editor = pref.edit();
-		editor.putString("listUrl", listUrl);
+		editor.putString(JSON_HOSTS, data);
 		editor.commit();
 	}
 

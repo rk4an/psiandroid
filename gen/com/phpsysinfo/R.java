@@ -19,9 +19,9 @@ public final class R {
     }
     public static final class id {
         public static final int btnAdd=0x7f06001c;
-        public static final int iAbout=0x7f060023;
-        public static final int iRefresh=0x7f060021;
-        public static final int iSettings=0x7f060022;
+        public static final int iAbout=0x7f060025;
+        public static final int iRefresh=0x7f060023;
+        public static final int iSettings=0x7f060024;
         public static final int image=0x7f060001;
         public static final int imageError=0x7f060003;
         public static final int layout_root=0x7f060000;
@@ -31,9 +31,9 @@ public final class R {
         public static final int lblLoad=0x7f060018;
         public static final int lblUptime=0x7f060015;
         public static final int linearLayout1=0x7f060005;
-        public static final int linearLayout2=0x7f06001f;
-        public static final int linearLayout4=0x7f06001d;
-        public static final int listView1=0x7f060020;
+        public static final int linearLayout2=0x7f060021;
+        public static final int linearLayout4=0x7f06001f;
+        public static final int listView1=0x7f060022;
         public static final int llContent=0x7f060009;
         public static final int llTitle=0x7f060007;
         public static final int pgLoading=0x7f060006;
@@ -46,14 +46,16 @@ public final class R {
         public static final int tableVitals=0x7f06000a;
         public static final int text=0x7f060002;
         public static final int textError=0x7f060004;
-        public static final int textView1=0x7f06001e;
+        public static final int textView1=0x7f060020;
         public static final int txtDistro=0x7f06000d;
         public static final int txtHostname=0x7f060008;
         public static final int txtIp=0x7f060013;
         public static final int txtKernel=0x7f060010;
         public static final int txtLoad=0x7f060019;
+        public static final int txtPassword=0x7f06001e;
         public static final int txtUptime=0x7f060016;
         public static final int txtUrl=0x7f06001b;
+        public static final int txtUser=0x7f06001d;
     }
     public static final class layout {
         public static final int about_dialog=0x7f030000;
@@ -77,9 +79,11 @@ public final class R {
         public static final int lblMemory=0x7f040002;
         public static final int lblMio=0x7f04000a;
         public static final int lblNodata=0x7f040009;
+        public static final int lblPassword=0x7f040010;
         public static final int lblRefresh=0x7f040007;
         public static final int lblSettings=0x7f040008;
         public static final int lblUptime=0x7f040001;
         public static final int lblUrlHint=0x7f04000d;
+        public static final int lblUser=0x7f04000f;
     }
 }

@@ -2,6 +2,8 @@ package com.phpsysinfo.activity;
 
 import java.text.NumberFormat;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -26,6 +28,7 @@ import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
 import com.phpsysinfo.R;
+import com.phpsysinfo.xml.Host;
 import com.phpsysinfo.xml.PSIDownloadData;
 import com.phpsysinfo.xml.PSIErrorCode;
 import com.phpsysinfo.xml.PSIHostData;
@@ -38,16 +41,23 @@ implements OnClickListener
 	private SharedPreferences pref;
 	private static final String SCRIPT_NAME = "/xml.php";
 	private static final int MEMORY_THR = 75;
-
+	private final String JSON_CURRENT_HOST = "JSON_CURRENT_HOST";
+	
 	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
 	Dialog aboutDialog = null;
 	Dialog errorDialog = null;
 	TextView textError = null;
 
-	//current selected url
-	private String selectedUrl = "";
+	private ObjectMapper objectMapper = null;
 
+	//current selected url
+	private String currentHost = "";
+	String url = "";
+	String user = "";
+	String password = "";
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,15 +71,30 @@ implements OnClickListener
 
 		//get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		selectedUrl = pref.getString("selectedUrl", "");
+		currentHost = pref.getString(JSON_CURRENT_HOST, "");
 
 		//check if a current selected url is already set
-		if(selectedUrl.equals("")) {
+		if(currentHost.equals("")) {
 			//TODO: disable refresh button
 		}
 		else {
 			PSIDownloadData task = new PSIDownloadData(this);
-			task.execute(selectedUrl + SCRIPT_NAME);
+
+			objectMapper = new ObjectMapper();
+
+			Host sHost = null;
+			try {
+				sHost = objectMapper.readValue(currentHost, Host.class);
+
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
+			url = sHost.getUrl();
+			user = sHost.getUsername();
+			password = sHost.getPassword();
+
+			task.execute(url + SCRIPT_NAME, user, password);
 		}
 
 
@@ -122,7 +147,7 @@ implements OnClickListener
 
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
-		txtHostname.setText(Html.fromHtml("<a href=\""+selectedUrl+"\">"+entry.getHostname()+"</a>"));
+		txtHostname.setText(Html.fromHtml("<a href=\""+currentHost+"\">"+entry.getHostname()+"</a>"));
 		txtHostname.setMovementMethod(LinkMovementMethod.getInstance());
 
 		//uptime
@@ -217,7 +242,7 @@ implements OnClickListener
 			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_THR) {
 				tvName.setTextColor(0xFFFF0000);
 			}
-			
+
 			//mount point name row
 			TableRow trName = new TableRow(this);
 			trName.addView(tvName);
@@ -267,14 +292,29 @@ implements OnClickListener
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-			selectedUrl = data.getExtras().getString("url");
+			String hString = data.getExtras().getString("host");
 
+			objectMapper = new ObjectMapper();
+
+			Host sHost = null;
+			try {
+				sHost = objectMapper.readValue(hString, Host.class);
+
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
+			//save last selected host
 			Editor editor = pref.edit();
-			editor.putString("selectedUrl", selectedUrl);
+			editor.putString(JSON_CURRENT_HOST,hString);
 			editor.commit();
 
+			url = sHost.getUrl();
+			user = sHost.getUsername();
+			password = sHost.getPassword();
+
 			PSIDownloadData task = new PSIDownloadData(this);
-			task.execute(selectedUrl + SCRIPT_NAME);
+			task.execute(url + SCRIPT_NAME, user, password);
 		}
 	}
 
@@ -293,7 +333,7 @@ implements OnClickListener
 			return true;
 		case R.id.iRefresh:
 			PSIDownloadData task = new PSIDownloadData(this);
-			task.execute(selectedUrl + SCRIPT_NAME);
+			task.execute(url + SCRIPT_NAME, user, password);
 			return true;
 		case R.id.iSettings:
 			Intent i = new Intent(this, PSIUrlActivity.class);

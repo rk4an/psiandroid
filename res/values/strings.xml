@@ -15,4 +15,6 @@
     <string name="lblAbout">About</string>
     <string name="lblUrlHint">http://</string>
     <string name="lblHosts">Hosts</string>
+    <string name="lblUser">username</string>
+    <string name="lblPassword">password</string>
 </resources>
