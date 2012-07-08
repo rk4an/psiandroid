@@ -1,6 +1,9 @@
 package com.phpsysinfo.activity;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -15,6 +18,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -33,11 +37,12 @@ import com.phpsysinfo.xml.PSIMountPoint;
 
 public class PSIActivity 
 extends Activity
-implements OnClickListener
+implements OnClickListener, View.OnTouchListener
 {
 	private SharedPreferences pref;
 	private static final String SCRIPT_NAME = "/xml.php";
-	private static final int MEMORY_THR = 75;
+	private static final int MEMORY_SOFT_THR = 80;
+	private static final int MEMORY_HARD_THR = 90;
 
 	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
@@ -47,6 +52,9 @@ implements OnClickListener
 
 	//current selected url
 	private String selectedUrl = "";
+	
+	List<String> urls = new ArrayList<String>();	
+	private int selectedIndex = 0 ;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +70,7 @@ implements OnClickListener
 		//get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		selectedUrl = pref.getString("selectedUrl", "");
+						
 
 		//check if a current selected url is already set
 		if(selectedUrl.equals("")) {
@@ -71,6 +80,11 @@ implements OnClickListener
 			PSIDownloadData task = new PSIDownloadData(this);
 			task.execute(selectedUrl + SCRIPT_NAME);
 		}
+		
+		loadUrlList();
+		
+		findViewById(R.id.scrollView1).setOnTouchListener(this);
+		
 
 
 		//create about dialog
@@ -93,6 +107,30 @@ implements OnClickListener
 		imageError.setImageResource(R.drawable.ic_launcher);
 		imageError.setOnClickListener(this);	
 
+	}
+	
+	private void loadUrlList() {
+		
+		urls.clear();
+		
+		String listUrlString = pref.getString("listUrl", "");
+		if (listUrlString.equals("")) {			
+			// do nothing
+		} else {			
+			String[] iUrl = listUrlString.split(";");
+
+			for (int i = 0; i<iUrl.length; i++) {
+				if(!iUrl[i].equals("")) {
+					urls.add(iUrl[i]);
+				}
+			}
+			for(int i = 0; i<urls.size(); i++) {
+				if(urls.get(i).equals(selectedUrl)) {
+					selectedIndex = i;
+				}
+			}			
+		}
+		
 	}
 
 	@Override
@@ -169,8 +207,13 @@ implements OnClickListener
 		tvNameMemory.setText(Html.fromHtml("<b>"+getString(R.string.lblMemory) + "</b> (" + nf.format(entry.getAppMemoryUsed()) + 
 				"/" + nf.format(entry.getAppMemoryTotal()) + getString(R.string.lblMio) +") "+ entry.getAppMemoryPercent()+"%"));
 
-		//text in red if memory usage is high
-		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_THR) {
+		//text in yellow if memory usage is high
+		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_SOFT_THR) {
+			tvNameMemory.setTextColor(0xFFFFFF00);
+		}
+		
+		//text in red if memory usage is very high
+		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_HARD_THR) {
 			tvNameMemory.setTextColor(0xFFFF0000);
 		}
 
@@ -200,9 +243,10 @@ implements OnClickListener
 			TextView tvName = new TextView(this);
 			pgPercent.setProgress(psiMp.getPercentUsed());
 
+			final int MP_MAX_LENGTH = 12;
 			String lblMountText = "<b>";
-			if(psiMp.getName().length() > 10) {
-				lblMountText += psiMp.getName().substring(0, 10) + "</b> ";
+			if(psiMp.getName().length() > MP_MAX_LENGTH) {
+				lblMountText += psiMp.getName().substring(0, MP_MAX_LENGTH) + "</b> ";
 			}
 			else {
 				lblMountText += psiMp.getName() + "</b>";
@@ -213,8 +257,14 @@ implements OnClickListener
 
 			tvName.setText(Html.fromHtml(lblMountText));
 
-			//text in red if mount point usage is high
-			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_THR) {
+			
+			//text in yellow if mount point usage is high
+			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_SOFT_THR) {
+				tvName.setTextColor(0xFFFFFF00);
+			}
+			
+			//text in red if mount point usage is very high
+			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_HARD_THR) {
 				tvName.setTextColor(0xFFFF0000);
 			}
 			
@@ -267,11 +317,14 @@ implements OnClickListener
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
+						
 			selectedUrl = data.getExtras().getString("url");
 
 			Editor editor = pref.edit();
 			editor.putString("selectedUrl", selectedUrl);
 			editor.commit();
+			
+			loadUrlList();
 
 			PSIDownloadData task = new PSIDownloadData(this);
 			task.execute(selectedUrl + SCRIPT_NAME);
@@ -303,4 +356,57 @@ implements OnClickListener
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+
+	Float firstX = null;
+		
+		
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		
+		
+		
+		if (urls.size() <= 1) {
+			return true;
+		}
+		Logger.getLogger("This").info( ">" + urls.size() );
+		
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			firstX = event.getX();
+		} else {
+			if (firstX != null) {
+				float x = event.getX();					
+				float diff = firstX - x;					
+				
+				if (Math.abs(diff) > 100) {
+				
+					if (diff > 0) {
+						selectedIndex++;
+						if (selectedIndex >= urls.size()) {
+							selectedIndex = 0;
+						}
+					}
+						
+					if (diff < 0) {
+						selectedIndex--;
+						if (selectedIndex < 0) {
+							selectedIndex = urls.size() -1;
+						}
+					}
+					
+					selectedUrl = urls.get(selectedIndex);
+					
+					PSIDownloadData task = new PSIDownloadData(this);
+					task.execute(selectedUrl + SCRIPT_NAME);
+					
+					firstX = null;
+					return false;
+				}
+			}	
+		}
+		
+		return true;
+	}
+		
+	
 }
