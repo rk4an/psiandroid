@@ -83,9 +83,7 @@ implements OnClickListener, View.OnTouchListener
 
 		loadUrlList();
 
-		findViewById(R.id.scrollView1).setOnTouchListener(this);
-
-
+		findViewById(R.id.llAll).setOnTouchListener(this);
 
 		//create about dialog
 		aboutDialog = new Dialog(this);
