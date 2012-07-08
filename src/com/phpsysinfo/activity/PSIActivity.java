@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
@@ -55,6 +56,7 @@ implements OnClickListener, View.OnTouchListener
 	
 	List<String> urls = new ArrayList<String>();	
 	private int selectedIndex = 0 ;
+	private ScrollView scrollView; 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ implements OnClickListener, View.OnTouchListener
 		setContentView(R.layout.main);
 
 		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
+		scrollView = (ScrollView) findViewById(R.id.scrollView1);
 
 		ivLogo = new ImageView(this);
 		ivLogo.setImageResource(R.drawable.psilogo);
@@ -83,7 +86,7 @@ implements OnClickListener, View.OnTouchListener
 		
 		loadUrlList();
 		
-		findViewById(R.id.scrollView1).setOnTouchListener(this);
+		scrollView.setOnTouchListener(this);
 		
 
 
@@ -364,6 +367,7 @@ implements OnClickListener, View.OnTouchListener
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		
+		scrollView.onTouchEvent(event);
 		
 		
 		if (urls.size() <= 1) {
@@ -378,7 +382,7 @@ implements OnClickListener, View.OnTouchListener
 				float x = event.getX();					
 				float diff = firstX - x;					
 				
-				if (Math.abs(diff) > 100) {
+				if (Math.abs(diff) > 150) {
 				
 					if (diff > 0) {
 						selectedIndex++;
