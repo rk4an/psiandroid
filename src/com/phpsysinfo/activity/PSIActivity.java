@@ -52,7 +52,7 @@ implements OnClickListener, View.OnTouchListener
 
 	//current selected url
 	private String selectedUrl = "";
-	
+
 	List<String> urls = new ArrayList<String>();	
 	private int selectedIndex = 0 ;
 
@@ -70,7 +70,7 @@ implements OnClickListener, View.OnTouchListener
 		//get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		selectedUrl = pref.getString("selectedUrl", "");
-						
+
 
 		//check if a current selected url is already set
 		if(selectedUrl.equals("")) {
@@ -80,11 +80,11 @@ implements OnClickListener, View.OnTouchListener
 			PSIDownloadData task = new PSIDownloadData(this);
 			task.execute(selectedUrl + SCRIPT_NAME);
 		}
-		
+
 		loadUrlList();
-		
+
 		findViewById(R.id.scrollView1).setOnTouchListener(this);
-		
+
 
 
 		//create about dialog
@@ -108,11 +108,11 @@ implements OnClickListener, View.OnTouchListener
 		imageError.setOnClickListener(this);	
 
 	}
-	
+
 	private void loadUrlList() {
-		
+
 		urls.clear();
-		
+
 		String listUrlString = pref.getString("listUrl", "");
 		if (listUrlString.equals("")) {			
 			// do nothing
@@ -130,7 +130,7 @@ implements OnClickListener, View.OnTouchListener
 				}
 			}			
 		}
-		
+
 	}
 
 	@Override
@@ -211,7 +211,7 @@ implements OnClickListener, View.OnTouchListener
 		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_SOFT_THR) {
 			tvNameMemory.setTextColor(0xFFFFFF00);
 		}
-		
+
 		//text in red if memory usage is very high
 		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_HARD_THR) {
 			tvNameMemory.setTextColor(0xFFFF0000);
@@ -257,17 +257,17 @@ implements OnClickListener, View.OnTouchListener
 
 			tvName.setText(Html.fromHtml(lblMountText));
 
-			
+
 			//text in yellow if mount point usage is high
 			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_SOFT_THR) {
 				tvName.setTextColor(0xFFFFFF00);
 			}
-			
+
 			//text in red if mount point usage is very high
 			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_HARD_THR) {
 				tvName.setTextColor(0xFFFF0000);
 			}
-			
+
 			//mount point name row
 			TableRow trName = new TableRow(this);
 			trName.addView(tvName);
@@ -317,13 +317,13 @@ implements OnClickListener, View.OnTouchListener
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-						
+
 			selectedUrl = data.getExtras().getString("url");
 
 			Editor editor = pref.edit();
 			editor.putString("selectedUrl", selectedUrl);
 			editor.commit();
-			
+
 			loadUrlList();
 
 			PSIDownloadData task = new PSIDownloadData(this);
@@ -356,57 +356,55 @@ implements OnClickListener, View.OnTouchListener
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 
 	Float firstX = null;
-		
-		
+
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		
-		
-		
+
 		if (urls.size() <= 1) {
 			return true;
 		}
 		Logger.getLogger("This").info( ">" + urls.size() );
-		
+
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			firstX = event.getX();
 		} else {
 			if (firstX != null) {
 				float x = event.getX();					
 				float diff = firstX - x;					
-				
+
 				if (Math.abs(diff) > 100) {
-				
+
 					if (diff > 0) {
 						selectedIndex++;
 						if (selectedIndex >= urls.size()) {
 							selectedIndex = 0;
 						}
 					}
-						
+
 					if (diff < 0) {
 						selectedIndex--;
 						if (selectedIndex < 0) {
 							selectedIndex = urls.size() -1;
 						}
 					}
-					
+
 					selectedUrl = urls.get(selectedIndex);
-					
+
 					PSIDownloadData task = new PSIDownloadData(this);
 					task.execute(selectedUrl + SCRIPT_NAME);
-					
+
 					firstX = null;
 					return false;
 				}
 			}	
 		}
-		
+
 		return true;
 	}
-		
-	
+
+
 }
