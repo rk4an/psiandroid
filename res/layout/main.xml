@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:layout_margin="2dp"
-    android:layout_weight="1" >
+    android:layout_weight="1" 
+    android:id="@+id/scrollView1">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <LinearLayout
             android:id="@+id/linearLayout1"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:orientation="vertical" >
@@ -29,13 +30,13 @@
 
         <LinearLayout
             android:id="@+id/llTitle"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/txtHostname"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/lblNodata"
@@ -44,20 +45,20 @@
 
         <LinearLayout
             android:id="@+id/llContent"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <TableLayout
                 android:id="@+id/tableVitals"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="1"
                 android:visibility="invisible" >
 
                 <TableRow
                     android:id="@+id/tableRow5"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1" >
@@ -78,7 +79,7 @@
 
                 <TableRow
                     android:id="@+id/tableRow4"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1" >
@@ -99,7 +100,7 @@
 
                 <TableRow
                     android:id="@+id/tableRow6"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1" >
@@ -120,7 +121,7 @@
 
                 <TableRow
                     android:id="@+id/tableRow1"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1" >
@@ -141,7 +142,7 @@
 
                 <TableRow
                     android:id="@+id/tableRow3"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1" >
@@ -163,8 +164,8 @@
 
             <TableLayout
                 android:id="@+id/tableMount"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:stretchColumns="0,1" >
             </TableLayout>
         </LinearLayout>

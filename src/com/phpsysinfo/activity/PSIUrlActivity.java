@@ -3,7 +3,10 @@ package com.phpsysinfo.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,8 +28,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.phpsysinfo.R;
-import com.phpsysinfo.xml.Host;
-import com.phpsysinfo.xml.Hosts;
 
 public class PSIUrlActivity extends Activity implements OnItemClickListener,
 OnItemLongClickListener, OnClickListener {
@@ -36,11 +37,9 @@ OnItemLongClickListener, OnClickListener {
 	ArrayAdapter<String> arrayAdapterUrlList = null;
 	int pos = 0;
 
-	private ObjectMapper objectMapper = null;
+	private JSONArray hostsJsonArray = null;
 
-	private Hosts hostList = null;
-
-	final private String JSON_HOSTS = "JSON_HOSTS";
+	final private String HOSTS_JSON_STORE = "HOSTS_JSON_STORE_4";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,24 +60,29 @@ OnItemLongClickListener, OnClickListener {
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 
-		objectMapper = new ObjectMapper();
-
-		String data = "";
+		String dataStore = "";
 		try {
-			data = pref.getString(JSON_HOSTS, "");
-			if (data.equals("")) {
-				hostList = new Hosts();
+			dataStore = pref.getString(HOSTS_JSON_STORE, "");
+			Log.d("LOAD",dataStore);
+			if (dataStore.equals("")) {
+				hostsJsonArray = new JSONArray();
 			}
-
-			hostList = objectMapper.readValue(data, Hosts.class);
-
-		} catch (Exception e1) {
-			e1.printStackTrace();
+			else {
+				JSONTokener tokener = new JSONTokener(dataStore);
+				hostsJsonArray = new JSONArray(tokener);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 
-		for (int i = 0; i < hostList.getHost().size(); i++) {
-			if (!hostList.getHost().get(i).getUrl().equals("")) {
-				listStringUrls.add(hostList.getHost().get(i).getUrl());
+		for (int i = 0; i < hostsJsonArray.length(); i++) {
+			try {
+				String url = ((JSONObject)hostsJsonArray.get(i)).getString("url");
+				if (!url.equals("")) {
+					listStringUrls.add(url);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -92,10 +96,9 @@ OnItemLongClickListener, OnClickListener {
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 			long arg3) {
 
-
 		Intent i = new Intent();
 		try {
-			i.putExtra("host", objectMapper.writeValueAsString(hostList.getHost().get(position)));
+			i.putExtra("host", hostsJsonArray.get(position).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,15 +118,20 @@ OnItemLongClickListener, OnClickListener {
 				// delete item and save the list
 
 				boolean find = false;
-				for (int i = 0; i < hostList.getHost().size() && !find; i++) {
-					if (hostList
-							.getHost()
-							.get(i)
-							.getUrl()
-							.equals((String) listViewUrls
-									.getItemAtPosition(pos))) {
-						hostList.getHost().remove(i);
-						find = true;
+				for (int i = 0; i < hostsJsonArray.length() && !find; i++) {
+					try {
+						if (((JSONObject)hostsJsonArray
+								.get(i))
+								.getString("url")
+								.equals((String) listViewUrls
+										.getItemAtPosition(pos))) {
+							//TODO: hostList.remove(i);
+
+							find = true;
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 
@@ -161,12 +169,18 @@ OnItemLongClickListener, OnClickListener {
 		EditText txtPasword = (EditText) findViewById(R.id.txtPassword);
 
 		// add URL to the list
-		if (!txtUrl.getText().toString().equals("")) {
+		if (!txtUrl.getText().equals("")) {
 			arrayAdapterUrlList.add(txtUrl.getText().toString());
 
-			Host psiHostUrl = new Host(txtUrl.getText().toString(), txtUser
-					.getText().toString(), txtPasword.getText().toString());
-			hostList.getHost().add(psiHostUrl);
+			try {
+				JSONObject host = new JSONObject();
+				host.put("url", txtUrl.getText());
+				host.put("username", txtUser.getText());
+				host.put("password", txtPasword.getText());
+				hostsJsonArray.put(host);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 
 			saveList();
 		}
@@ -180,16 +194,16 @@ OnItemLongClickListener, OnClickListener {
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 
-		String data = "";
+		String dataStore = "";
 		try {
-			data = objectMapper.writeValueAsString(hostList);
+			dataStore = hostsJsonArray.toString();
 		} catch (Exception e) {
-
 			e.printStackTrace();
 		}
 
+		Log.d("SAVE",dataStore);
 		Editor editor = pref.edit();
-		editor.putString(JSON_HOSTS, data);
+		editor.putString(HOSTS_JSON_STORE, dataStore);
 		editor.commit();
 	}
 

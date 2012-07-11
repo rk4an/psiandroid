@@ -1,8 +1,12 @@
 package com.phpsysinfo.activity;
 
 import java.text.NumberFormat;
+import java.util.logging.Logger;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,21 +18,23 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
 import com.phpsysinfo.R;
-import com.phpsysinfo.xml.Host;
 import com.phpsysinfo.xml.PSIDownloadData;
 import com.phpsysinfo.xml.PSIErrorCode;
 import com.phpsysinfo.xml.PSIHostData;
@@ -36,34 +42,40 @@ import com.phpsysinfo.xml.PSIMountPoint;
 
 public class PSIActivity 
 extends Activity
-implements OnClickListener
+implements OnClickListener, View.OnTouchListener
 {
 	private SharedPreferences pref;
 	private static final String SCRIPT_NAME = "/xml.php";
-	private static final int MEMORY_THR = 75;
-	private final String JSON_CURRENT_HOST = "JSON_CURRENT_HOST";
-	
+	private static final int MEMORY_SOFT_THR = 80;
+	private static final int MEMORY_HARD_THR = 90;
+
+	final private String HOSTS_JSON_STORE = "HOSTS_JSON_STORE_4";
+	private final String JSON_CURRENT_HOST = "JSON_CURRENT_HOST_4";
+
 	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
 	Dialog aboutDialog = null;
 	Dialog errorDialog = null;
 	TextView textError = null;
 
-	private ObjectMapper objectMapper = null;
+	private JSONArray hostsJsonArray;
+	private int selectedIndex = 0 ;
+	private ScrollView scrollView; 
 
 	//current selected url
 	private String currentHost = "";
 	String url = "";
 	String user = "";
 	String password = "";
-	
-	
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
 		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
+		scrollView = (ScrollView) findViewById(R.id.scrollView1);
 
 		ivLogo = new ImageView(this);
 		ivLogo.setImageResource(R.drawable.psilogo);
@@ -73,31 +85,15 @@ implements OnClickListener
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		currentHost = pref.getString(JSON_CURRENT_HOST, "");
 
+		loadHostsArray();
+		
 		//check if a current selected url is already set
-		if(currentHost.equals("")) {
-			//TODO: disable refresh button
-		}
-		else {
-			PSIDownloadData task = new PSIDownloadData(this);
-
-			objectMapper = new ObjectMapper();
-
-			Host sHost = null;
-			try {
-				sHost = objectMapper.readValue(currentHost, Host.class);
-
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-
-			url = sHost.getUrl();
-			user = sHost.getUsername();
-			password = sHost.getPassword();
-
-			task.execute(url + SCRIPT_NAME, user, password);
+		if(!currentHost.equals("")) {
+			getData(currentHost);
 		}
 
-
+		scrollView.setOnTouchListener(this);
+		
 		//create about dialog
 		aboutDialog = new Dialog(this);
 		aboutDialog.setContentView(R.layout.about_dialog);
@@ -194,8 +190,13 @@ implements OnClickListener
 		tvNameMemory.setText(Html.fromHtml("<b>"+getString(R.string.lblMemory) + "</b> (" + nf.format(entry.getAppMemoryUsed()) + 
 				"/" + nf.format(entry.getAppMemoryTotal()) + getString(R.string.lblMio) +") "+ entry.getAppMemoryPercent()+"%"));
 
-		//text in red if memory usage is high
-		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_THR) {
+		//text in yellow if memory usage is high
+		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_SOFT_THR) {
+			tvNameMemory.setTextColor(0xFFFFFF00);
+		}
+
+		//text in red if memory usage is very high
+		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_HARD_THR) {
 			tvNameMemory.setTextColor(0xFFFF0000);
 		}
 
@@ -225,9 +226,10 @@ implements OnClickListener
 			TextView tvName = new TextView(this);
 			pgPercent.setProgress(psiMp.getPercentUsed());
 
+			final int MP_MAX_LENGTH = 12;
 			String lblMountText = "<b>";
-			if(psiMp.getName().length() > 10) {
-				lblMountText += psiMp.getName().substring(0, 10) + "</b> ";
+			if(psiMp.getName().length() > MP_MAX_LENGTH) {
+				lblMountText += psiMp.getName().substring(0, MP_MAX_LENGTH) + "</b> ";
 			}
 			else {
 				lblMountText += psiMp.getName() + "</b>";
@@ -238,8 +240,13 @@ implements OnClickListener
 
 			tvName.setText(Html.fromHtml(lblMountText));
 
-			//text in red if mount point usage is high
-			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_THR) {
+			//text in yellow if mount point usage is high
+			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_SOFT_THR) {
+				tvName.setTextColor(0xFFFFFF00);
+			}
+
+			//text in red if mount point usage is very high
+			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_HARD_THR) {
 				tvName.setTextColor(0xFFFF0000);
 			}
 
@@ -292,29 +299,15 @@ implements OnClickListener
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-			String hString = data.getExtras().getString("host");
+			String currentHost = data.getExtras().getString("host");
 
-			objectMapper = new ObjectMapper();
-
-			Host sHost = null;
-			try {
-				sHost = objectMapper.readValue(hString, Host.class);
-
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+			getData(currentHost);
+			loadHostsArray();
 
 			//save last selected host
 			Editor editor = pref.edit();
-			editor.putString(JSON_CURRENT_HOST,hString);
+			editor.putString(JSON_CURRENT_HOST,currentHost);
 			editor.commit();
-
-			url = sHost.getUrl();
-			user = sHost.getUsername();
-			password = sHost.getPassword();
-
-			PSIDownloadData task = new PSIDownloadData(this);
-			task.execute(url + SCRIPT_NAME, user, password);
 		}
 	}
 
@@ -342,5 +335,109 @@ implements OnClickListener
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+
+	Float firstX = null;
+
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+
+		scrollView.onTouchEvent(event);
+
+		if (hostsJsonArray.length() <= 1) {
+			return true;
+		}
+
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			firstX = event.getX();
+		} else {
+			if (firstX != null) {
+				float x = event.getX();
+				float diff = firstX - x;
+				if (Math.abs(diff) > 150) {
+
+					if (diff > 0) {
+						selectedIndex++;
+						if (selectedIndex >= hostsJsonArray.length()) {
+							selectedIndex = 0;
+						}
+					}
+
+					if (diff < 0) {
+						selectedIndex--;
+						if (selectedIndex < 0) {
+							selectedIndex = hostsJsonArray.length() -1;
+						}
+					}
+
+					String curHost = "";
+					try {
+						curHost = hostsJsonArray.get(selectedIndex).toString();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					getData(curHost);
+
+					firstX = null;
+					return false;
+				}
+			}	
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * 
+	 */
+	public void loadHostsArray() {
+		String dataStore = "";
+		try {
+			dataStore = pref.getString(HOSTS_JSON_STORE, "");
+			Log.d("dataStored",dataStore);
+			if (dataStore.equals("")) {
+				hostsJsonArray = new JSONArray();
+			}
+			else {
+				JSONTokener tokener = new JSONTokener(dataStore);
+				hostsJsonArray = new JSONArray(tokener);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 
+	 * @param currentHost
+	 */
+	public void getData(String currentHost) {
+		PSIDownloadData task = new PSIDownloadData(this);
+
+		JSONObject sHost = null;
+		try {
+
+			JSONTokener tokener = new JSONTokener(currentHost);
+			sHost = new JSONObject(tokener);
+
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+
+		try {
+			url = sHost.getString("url");
+			user = sHost.getString("username");
+			password = sHost.getString("password");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		task.execute(url + SCRIPT_NAME, user, password);
+
 	}
 }
