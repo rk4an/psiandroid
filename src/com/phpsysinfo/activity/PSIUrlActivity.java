@@ -16,7 +16,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -63,7 +62,7 @@ OnItemLongClickListener, OnClickListener {
 		String dataStore = "";
 		try {
 			dataStore = pref.getString(HOSTS_JSON_STORE, "");
-			Log.d("LOAD",dataStore);
+
 			if (dataStore.equals("")) {
 				hostsJsonArray = new JSONArray();
 			}
@@ -118,21 +117,18 @@ OnItemLongClickListener, OnClickListener {
 				// delete item and save the list
 
 				boolean find = false;
+				JSONArray temp = new JSONArray();
 				for (int i = 0; i < hostsJsonArray.length() && !find; i++) {
 					try {
-						if (((JSONObject)hostsJsonArray
-								.get(i))
-								.getString("url")
-								.equals((String) listViewUrls
-										.getItemAtPosition(pos))) {
-							//TODO: hostList.remove(i);
-
-							find = true;
+						if (i != pos) {
+							temp.put(hostsJsonArray.get(i));
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
 				}
+				
+				hostsJsonArray = temp;
 
 				arrayAdapterUrlList.remove((String) listViewUrls
 						.getItemAtPosition(pos));
@@ -176,9 +172,9 @@ OnItemLongClickListener, OnClickListener {
 				host.put("url", txtUrl.getText().toString());
 				host.put("username", txtUser.getText().toString());
 				host.put("password", txtPasword.getText().toString());
-					
+
 				hostsJsonArray.put(host);
-				
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -202,7 +198,6 @@ OnItemLongClickListener, OnClickListener {
 			e.printStackTrace();
 		}
 
-		Log.d("SAVE",dataStore);
 		Editor editor = pref.edit();
 		editor.putString(HOSTS_JSON_STORE, dataStore);
 		editor.commit();

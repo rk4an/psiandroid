@@ -91,8 +91,6 @@ implements OnClickListener, View.OnTouchListener
 			getData(currentHost);
 		}
 		
-		Log.d("CURRENT",currentHost);
-		
 		loadHostsArray();
 
 		scrollView.setOnTouchListener(this);
@@ -311,6 +309,9 @@ implements OnClickListener, View.OnTouchListener
 			Editor editor = pref.edit();
 			editor.putString(JSON_CURRENT_HOST,currentHost);
 			editor.commit();
+		}
+		else {
+			loadHostsArray();
 		}
 	}
 
