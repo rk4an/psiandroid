@@ -79,6 +79,7 @@ implements OnClickListener, View.OnTouchListener
 		ivLogo.setImageResource(R.drawable.psilogo);
 		llContent.addView(ivLogo,0);
 
+		
 		//get preference
 		if(currentHost.equals("")) {
 			pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -89,6 +90,8 @@ implements OnClickListener, View.OnTouchListener
 		if(!currentHost.equals("")) {
 			getData(currentHost);
 		}
+		
+		Log.d("CURRENT",currentHost);
 		
 		loadHostsArray();
 
@@ -325,8 +328,10 @@ implements OnClickListener, View.OnTouchListener
 			aboutDialog.show();
 			return true;
 		case R.id.iRefresh:
-			PSIDownloadData task = new PSIDownloadData(this);
-			task.execute(url + SCRIPT_NAME, user, password);
+			if(!url.equals("")) {
+				PSIDownloadData task = new PSIDownloadData(this);
+				task.execute(url + SCRIPT_NAME, user, password);
+			}
 			return true;
 		case R.id.iSettings:
 			Intent i = new Intent(this, PSIUrlActivity.class);
@@ -337,9 +342,7 @@ implements OnClickListener, View.OnTouchListener
 		}
 	}
 
-
 	Float firstX = null;
-
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -434,7 +437,6 @@ implements OnClickListener, View.OnTouchListener
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-
 
 		try {
 			url = sHost.getString("url");
