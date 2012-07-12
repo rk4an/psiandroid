@@ -39,7 +39,7 @@ OnItemLongClickListener, OnClickListener {
 
 	private JSONArray hostsJsonArray = null;
 
-	final private String HOSTS_JSON_STORE = "HOSTS_JSON_STORE_4";
+	final public static String HOSTS_JSON_STORE = "HOSTS_JSON_STORE";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -130,7 +130,6 @@ OnItemLongClickListener, OnClickListener {
 							find = true;
 						}
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -169,15 +168,17 @@ OnItemLongClickListener, OnClickListener {
 		EditText txtPasword = (EditText) findViewById(R.id.txtPassword);
 
 		// add URL to the list
-		if (!txtUrl.getText().equals("")) {
+		if (!txtUrl.getText().toString().equals("")) {
 			arrayAdapterUrlList.add(txtUrl.getText().toString());
 
 			try {
 				JSONObject host = new JSONObject();
-				host.put("url", txtUrl.getText());
-				host.put("username", txtUser.getText());
-				host.put("password", txtPasword.getText());
+				host.put("url", txtUrl.getText().toString());
+				host.put("username", txtUser.getText().toString());
+				host.put("password", txtPasword.getText().toString());
+					
 				hostsJsonArray.put(host);
+				
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

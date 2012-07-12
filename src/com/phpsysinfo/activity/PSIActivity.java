@@ -1,7 +1,6 @@
 package com.phpsysinfo.activity;
 
 import java.text.NumberFormat;
-import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,24 +48,23 @@ implements OnClickListener, View.OnTouchListener
 	private static final int MEMORY_SOFT_THR = 80;
 	private static final int MEMORY_HARD_THR = 90;
 
-	final private String HOSTS_JSON_STORE = "HOSTS_JSON_STORE_4";
-	private final String JSON_CURRENT_HOST = "JSON_CURRENT_HOST_4";
-
-	private ImageView ivLogo = null;
-	boolean ivLogoDisplay = true;
-	Dialog aboutDialog = null;
-	Dialog errorDialog = null;
-	TextView textError = null;
+	private final String JSON_CURRENT_HOST = "JSON_CURRENT_HOST";
 
 	private JSONArray hostsJsonArray;
-	private int selectedIndex = 0 ;
-	private ScrollView scrollView; 
+	
+	private ImageView ivLogo = null;
+	boolean ivLogoDisplay = true;
+	private Dialog aboutDialog = null;
+	private Dialog errorDialog = null;
+	private TextView textError = null;
+	private ScrollView scrollView;
 
 	//current selected url
 	private String currentHost = "";
-	String url = "";
-	String user = "";
-	String password = "";
+	private String url = "";
+	private String user = "";
+	private String password = "";
+	private int selectedIndex = 0 ;
 
 
 	@Override
@@ -82,15 +80,17 @@ implements OnClickListener, View.OnTouchListener
 		llContent.addView(ivLogo,0);
 
 		//get preference
-		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		currentHost = pref.getString(JSON_CURRENT_HOST, "");
+		if(currentHost.equals("")) {
+			pref = PreferenceManager.getDefaultSharedPreferences(this);
+			currentHost = pref.getString(JSON_CURRENT_HOST, "");
+		}
 
-		loadHostsArray();
-		
 		//check if a current selected url is already set
 		if(!currentHost.equals("")) {
 			getData(currentHost);
 		}
+		
+		loadHostsArray();
 
 		scrollView.setOnTouchListener(this);
 		
@@ -372,14 +372,12 @@ implements OnClickListener, View.OnTouchListener
 						}
 					}
 
-					String curHost = "";
 					try {
-						curHost = hostsJsonArray.get(selectedIndex).toString();
+						currentHost = hostsJsonArray.get(selectedIndex).toString();
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					getData(curHost);
+					getData(currentHost);
 
 					firstX = null;
 					return false;
@@ -397,7 +395,7 @@ implements OnClickListener, View.OnTouchListener
 	public void loadHostsArray() {
 		String dataStore = "";
 		try {
-			dataStore = pref.getString(HOSTS_JSON_STORE, "");
+			dataStore = pref.getString(PSIUrlActivity.HOSTS_JSON_STORE, "");
 			Log.d("dataStored",dataStore);
 			if (dataStore.equals("")) {
 				hostsJsonArray = new JSONArray();
@@ -405,6 +403,15 @@ implements OnClickListener, View.OnTouchListener
 			else {
 				JSONTokener tokener = new JSONTokener(dataStore);
 				hostsJsonArray = new JSONArray(tokener);
+			}
+			
+			//get index of current selected host
+			for(int i=0; i<hostsJsonArray.length(); i++) {
+				String u = ((JSONObject)hostsJsonArray.get(i)).getString("url");
+				
+				if(u.equals(url)) {
+					selectedIndex = i;
+				}
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
