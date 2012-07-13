@@ -38,8 +38,6 @@ OnItemLongClickListener, OnClickListener {
 
 	private JSONArray hostsJsonArray = null;
 
-	final public static String HOSTS_JSON_STORE = "HOSTS_JSON_STORE";
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,9 +57,8 @@ OnItemLongClickListener, OnClickListener {
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 
-		String dataStore = "";
 		try {
-			dataStore = pref.getString(HOSTS_JSON_STORE, "");
+			String dataStore = pref.getString(PSIConfig.HOSTS_JSON_STORE, "");
 
 			if (dataStore.equals("")) {
 				hostsJsonArray = new JSONArray();
@@ -199,7 +196,7 @@ OnItemLongClickListener, OnClickListener {
 		}
 
 		Editor editor = pref.edit();
-		editor.putString(HOSTS_JSON_STORE, dataStore);
+		editor.putString(PSIConfig.HOSTS_JSON_STORE, dataStore);
 		editor.commit();
 	}
 

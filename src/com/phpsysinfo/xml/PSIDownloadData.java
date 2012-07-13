@@ -42,7 +42,7 @@ extends AsyncTask<String, Void, Void>
 		String address = strs[0];
 		String user = strs[1];
 		String password = strs[2];
-		
+
 		SAXParser parser = null;
 		InputStream input = null;
 		try {
@@ -121,7 +121,7 @@ extends AsyncTask<String, Void, Void>
 			huc.setRequestMethod("GET");
 			huc.setRequestProperty("Authorization", "Basic " + Base64.encodeToString((user+":"+password).getBytes(), Base64.NO_WRAP));
 		}
-		
+
 		huc.connect();
 		code = huc.getResponseCode();
 

@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,14 +43,8 @@ extends Activity
 implements OnClickListener, View.OnTouchListener
 {
 	private SharedPreferences pref;
-	private static final String SCRIPT_NAME = "/xml.php";
-	private static final int MEMORY_SOFT_THR = 80;
-	private static final int MEMORY_HARD_THR = 90;
-
-	private final String JSON_CURRENT_HOST = "JSON_CURRENT_HOST";
-
 	private JSONArray hostsJsonArray;
-	
+
 	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
 	private Dialog aboutDialog = null;
@@ -61,40 +54,29 @@ implements OnClickListener, View.OnTouchListener
 
 	//current selected url
 	private String currentHost = "";
-	private String url = "";
-	private String user = "";
-	private String password = "";
 	private int selectedIndex = 0 ;
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.main);
 
 		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
 		scrollView = (ScrollView) findViewById(R.id.scrollView1);
-
 		ivLogo = new ImageView(this);
 		ivLogo.setImageResource(R.drawable.psilogo);
 		llContent.addView(ivLogo,0);
 
-		
 		//get preference
-		if(currentHost.equals("")) {
-			pref = PreferenceManager.getDefaultSharedPreferences(this);
-			currentHost = pref.getString(JSON_CURRENT_HOST, "");
-		}
+		pref = PreferenceManager.getDefaultSharedPreferences(this);
+		currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
 
-		//check if a current selected url is already set
-		if(!currentHost.equals("")) {
-			getData(currentHost);
-		}
-		
 		loadHostsArray();
 
 		scrollView.setOnTouchListener(this);
-		
+
 		//create about dialog
 		aboutDialog = new Dialog(this);
 		aboutDialog.setContentView(R.layout.about_dialog);
@@ -172,7 +154,6 @@ implements OnClickListener, View.OnTouchListener
 		TextView txtIp = (TextView) findViewById(R.id.txtIp);
 		txtIp.setText(entry.getIp());
 
-
 		//display
 		TableLayout tlVital = (TableLayout) findViewById(R.id.tableVitals);
 		tlVital.setVisibility(View.VISIBLE);
@@ -180,7 +161,6 @@ implements OnClickListener, View.OnTouchListener
 		//init mount point table
 		TableLayout tlMount = (TableLayout) findViewById(R.id.tableMount);	
 		tlMount.removeAllViews();
-
 
 		//memory
 		ProgressBar pbMemory = new ProgressBar(
@@ -192,15 +172,14 @@ implements OnClickListener, View.OnTouchListener
 				"/" + nf.format(entry.getAppMemoryTotal()) + getString(R.string.lblMio) +") "+ entry.getAppMemoryPercent()+"%"));
 
 		//text in yellow if memory usage is high
-		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_SOFT_THR) {
+		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_SOFT_THR) {
 			tvNameMemory.setTextColor(0xFFFFFF00);
 		}
 
 		//text in red if memory usage is very high
-		if(entry.getAppMemoryPercent() > PSIActivity.MEMORY_HARD_THR) {
+		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_HARD_THR) {
 			tvNameMemory.setTextColor(0xFFFF0000);
 		}
-
 
 		LayoutParams p = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
@@ -242,12 +221,12 @@ implements OnClickListener, View.OnTouchListener
 			tvName.setText(Html.fromHtml(lblMountText));
 
 			//text in yellow if mount point usage is high
-			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_SOFT_THR) {
+			if(psiMp.getPercentUsed() > PSIConfig.MEMORY_SOFT_THR) {
 				tvName.setTextColor(0xFFFFFF00);
 			}
 
 			//text in red if mount point usage is very high
-			if(psiMp.getPercentUsed() > PSIActivity.MEMORY_HARD_THR) {
+			if(psiMp.getPercentUsed() > PSIConfig.MEMORY_HARD_THR) {
 				tvName.setTextColor(0xFFFF0000);
 			}
 
@@ -300,17 +279,19 @@ implements OnClickListener, View.OnTouchListener
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-			String currentHost = data.getExtras().getString("host");
 
+			//load new selected host
+			String currentHost = data.getExtras().getString("host");
 			getData(currentHost);
 			loadHostsArray();
 
-			//save last selected host
+			//save new selected host
 			Editor editor = pref.edit();
-			editor.putString(JSON_CURRENT_HOST,currentHost);
+			editor.putString(PSIConfig.JSON_CURRENT_HOST,currentHost);
 			editor.commit();
 		}
 		else {
+			//just update list of hosts
 			loadHostsArray();
 		}
 	}
@@ -329,10 +310,7 @@ implements OnClickListener, View.OnTouchListener
 			aboutDialog.show();
 			return true;
 		case R.id.iRefresh:
-			if(!url.equals("")) {
-				PSIDownloadData task = new PSIDownloadData(this);
-				task.execute(url + SCRIPT_NAME, user, password);
-			}
+			getData(currentHost);
 			return true;
 		case R.id.iSettings:
 			Intent i = new Intent(this, PSIUrlActivity.class);
@@ -381,6 +359,8 @@ implements OnClickListener, View.OnTouchListener
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
+
+					//load the previous/next host
 					getData(currentHost);
 
 					firstX = null;
@@ -394,13 +374,12 @@ implements OnClickListener, View.OnTouchListener
 
 
 	/**
-	 * 
+	 * load list of hosts
 	 */
 	public void loadHostsArray() {
-		String dataStore = "";
 		try {
-			dataStore = pref.getString(PSIUrlActivity.HOSTS_JSON_STORE, "");
-			Log.d("dataStored",dataStore);
+			String dataStore = pref.getString(PSIConfig.HOSTS_JSON_STORE, "");
+
 			if (dataStore.equals("")) {
 				hostsJsonArray = new JSONArray();
 			}
@@ -408,11 +387,15 @@ implements OnClickListener, View.OnTouchListener
 				JSONTokener tokener = new JSONTokener(dataStore);
 				hostsJsonArray = new JSONArray(tokener);
 			}
-			
+
+			JSONTokener tokener = new JSONTokener(currentHost);
+			JSONObject sHost = new JSONObject(tokener);
+
 			//get index of current selected host
 			for(int i=0; i<hostsJsonArray.length(); i++) {
 				String u = ((JSONObject)hostsJsonArray.get(i)).getString("url");
-				
+
+				String url = sHost.getString("url");
 				if(u.equals(url)) {
 					selectedIndex = i;
 				}
@@ -429,25 +412,18 @@ implements OnClickListener, View.OnTouchListener
 	public void getData(String currentHost) {
 		PSIDownloadData task = new PSIDownloadData(this);
 
-		JSONObject sHost = null;
 		try {
-
 			JSONTokener tokener = new JSONTokener(currentHost);
-			sHost = new JSONObject(tokener);
+			JSONObject sHost = new JSONObject(tokener);
+			String url = sHost.getString("url");
+			String user = sHost.getString("username");
+			String password = sHost.getString("password");
 
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-
-		try {
-			url = sHost.getString("url");
-			user = sHost.getString("username");
-			password = sHost.getString("password");
+			if(!url.equals("")) {
+				task.execute(url + PSIConfig.SCRIPT_NAME, user, password);
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-		task.execute(url + SCRIPT_NAME, user, password);
-
 	}
 }

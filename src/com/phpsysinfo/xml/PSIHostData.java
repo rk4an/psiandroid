@@ -3,7 +3,6 @@ package com.phpsysinfo.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class PSIHostData {
 
 	private String hostname = "";
@@ -20,14 +19,16 @@ public class PSIHostData {
 	public String getHostname() {
 		return hostname;
 	}
+
 	public void setHostname(String hostname) {
 		this.hostname = hostname;
 	}
+
 	public String getUptime() {
 		return uptime;
 	}
-	public void setUptime(String uptime) {
 
+	public void setUptime(String uptime) {
 		int up = (int)Double.parseDouble(uptime);
 		int min = up/60;
 		int hours = min/60;
@@ -41,52 +42,65 @@ public class PSIHostData {
 	public void setAppMemoryPercent(String value) {
 		this.appMemoryPercent = Integer.parseInt(value);
 	}
+
 	public int getAppMemoryPercent() {
 		return appMemoryPercent;
 	}
+
 	public String getLoadAvg() {
 		return loadAvg;
 	}
+
 	public void setLoadAvg(String loadAvg) {
 		this.loadAvg = loadAvg;
 	}
+
 	public String getKernel() {
 		return kernel;
 	}
+
 	public void setKernel(String kernel) {
 		this.kernel = kernel;
 	}
+
 	public String getDistro() {
 		return distro;
 	}
 	public void setDistro(String distro) {
 		this.distro = distro;
 	}
+
 	public String getIp() {
 		return Ip;
 	}
+
 	public void setIp(String ip) {
 		Ip = ip;
 	}
+
 	public void addMountPoint(String name, String percentUsed, String used, String total) {
 		int _percentUsed = Integer.parseInt(percentUsed);
 		int _used = (int) (Long.parseLong(used)/1024/1024);
 		int _total = (int) (Long.parseLong(total)/1024/1024);
 		mountPoint.add(new PSIMountPoint(name, _percentUsed, _used, _total));
-		
 	}
+
 	public List<PSIMountPoint> getMountPoint() {
 		return mountPoint;
 	}
+
 	public int getAppMemoryUsed() {
 		return appMemoryUsed;
 	}
+
 	public void setAppMemoryUsed(String appMemoryUsed) {
 		this.appMemoryUsed = (int) (Long.parseLong(appMemoryUsed)/1024/1024);
 	}
+
 	public int getAppMemoryTotal() {
 		return appMemoryTotal;
 	}
+
 	public void setAppMemoryTotal(String appMemoryTotal) {
 		this.appMemoryTotal = (int) (Long.parseLong(appMemoryTotal)/1024/1024);
 	}
