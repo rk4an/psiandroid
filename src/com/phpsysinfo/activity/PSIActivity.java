@@ -72,7 +72,9 @@ implements OnClickListener, View.OnTouchListener
 		//get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
-
+		
+		//load data
+		getData(currentHost);
 		loadHostsArray();
 
 		scrollView.setOnTouchListener(this);
