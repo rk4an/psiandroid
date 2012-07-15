@@ -176,6 +176,11 @@ OnItemLongClickListener, OnClickListener {
 				e.printStackTrace();
 			}
 
+			//clear
+			txtUrl.setText("http://");
+			txtUser.setText("");
+			txtPasword.setText("");
+			
 			saveList();
 		}
 	}

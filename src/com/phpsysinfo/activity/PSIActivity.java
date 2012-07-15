@@ -43,7 +43,7 @@ extends Activity
 implements OnClickListener, View.OnTouchListener
 {
 	private SharedPreferences pref;
-	private JSONArray hostsJsonArray;
+	private JSONArray hostsJsonArray = new JSONArray();
 
 	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
@@ -69,10 +69,43 @@ implements OnClickListener, View.OnTouchListener
 		ivLogo.setImageResource(R.drawable.psilogo);
 		llContent.addView(ivLogo,0);
 
+
 		//get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+
+		/***************************************************************/
+		//convert old format of storing
+		String oldUrl = pref.getString("listUrl", "");
+		if(!oldUrl.equals("")) {
+			String[] ou = oldUrl.split(";");
+
+			for (int i = 0; i<ou.length; i++) {
+				if(!ou[i].equals("")) {
+					try {
+						JSONObject host = new JSONObject();
+						host.put("url",ou[i]);
+						host.put("username", "");
+						host.put("password", "");
+						hostsJsonArray.put(host);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+			//save new store and erase old
+			Editor editor = pref.edit();
+			editor.putString(PSIConfig.HOSTS_JSON_STORE, hostsJsonArray.toString());
+			editor.putString("listUrl", "");
+			editor.commit();
+		}
+		/***************************************************************/
+
+
+		//get preference
 		currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
-		
+
 		//load data
 		getData(currentHost);
 		loadHostsArray();
@@ -364,6 +397,10 @@ implements OnClickListener, View.OnTouchListener
 
 					//load the previous/next host
 					getData(currentHost);
+					
+					Editor editor = pref.edit();
+					editor.putString(PSIConfig.JSON_CURRENT_HOST,currentHost);
+					editor.commit();
 
 					firstX = null;
 					return false;
