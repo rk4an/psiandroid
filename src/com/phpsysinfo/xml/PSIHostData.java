@@ -40,7 +40,9 @@ public class PSIHostData {
 	}
 
 	public void setAppMemoryPercent(String value) {
-		this.appMemoryPercent = Integer.parseInt(value);
+		if(value != null) {
+			this.appMemoryPercent = Integer.parseInt(value);
+		}
 	}
 
 	public int getAppMemoryPercent() {
@@ -94,7 +96,9 @@ public class PSIHostData {
 	}
 
 	public void setAppMemoryUsed(String appMemoryUsed) {
-		this.appMemoryUsed = (int) (Long.parseLong(appMemoryUsed)/1024/1024);
+		if(appMemoryUsed != null) {
+			this.appMemoryUsed = (int) (Long.parseLong(appMemoryUsed)/1024/1024);
+		}
 	}
 
 	public int getAppMemoryTotal() {

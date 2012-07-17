@@ -36,6 +36,8 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 		else if (localName.equalsIgnoreCase("Memory")){
 			this.entry.setAppMemoryTotal(attributes.getValue("Total"));
+			this.entry.setAppMemoryPercent(attributes.getValue("Percent"));
+			this.entry.setAppMemoryUsed(attributes.getValue("Used"));
 		}
 		else if (localName.equalsIgnoreCase("Details")){
 			this.entry.setAppMemoryPercent(attributes.getValue("AppPercent"));
