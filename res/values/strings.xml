@@ -17,4 +17,6 @@
     <string name="lblHosts">Hosts</string>
     <string name="lblUser">username</string>
     <string name="lblPassword">password</string>
+    <string name="lblMemoryUsage">Memory Usage</string>
+    <string name="lblMountPoints">Mounted File Systems</string>
 </resources>

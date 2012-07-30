@@ -8,12 +8,13 @@
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/llMain"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/linearLayout1"
+            android:id="@+id/llLoading"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -25,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:visibility="invisible" />
+              />
         </LinearLayout>
 
         <LinearLayout
@@ -47,14 +48,15 @@
             android:id="@+id/llContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+             >
 
             <TableLayout
                 android:id="@+id/tableVitals"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="1"
-                android:visibility="invisible" >
+                 >
 
                 <TableRow
                     android:id="@+id/tableRow5"
@@ -162,13 +164,48 @@
                 </TableRow>
             </TableLayout>
 
+            <TextView
+                android:id="@+id/tvMemoryUsage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5px"
+                android:background="#444242"
+                android:padding="5px"
+                android:text="@string/lblMemoryUsage"
+                android:textStyle="bold" />
+
             <TableLayout
-                android:id="@+id/tableMount"
+                android:id="@+id/tMemory"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:stretchColumns="0,1" >
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/tvMountPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#444242"
+                android:padding="5px"
+                android:text="@string/lblMountPoints"
+                android:textStyle="bold" />
+
+            <TableLayout
+                android:id="@+id/tMountPoints"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:stretchColumns="0,1" >
             </TableLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

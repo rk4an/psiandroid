@@ -62,14 +62,15 @@ implements OnClickListener, View.OnTouchListener
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.main);
-
-		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
+		
+		LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
 		scrollView = (ScrollView) findViewById(R.id.scrollView1);
 		ivLogo = new ImageView(this);
 		ivLogo.setImageResource(R.drawable.psilogo);
-		llContent.addView(ivLogo,0);
+		
+		llLogo.addView(ivLogo,0);
 
-
+		
 		//get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -130,8 +131,11 @@ implements OnClickListener, View.OnTouchListener
 		textError.setText("");
 		ImageView imageError = (ImageView) errorDialog.findViewById(R.id.imageError);
 		imageError.setImageResource(R.drawable.ic_launcher);
-		imageError.setOnClickListener(this);	
+		imageError.setOnClickListener(this);
 
+		((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
+		((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
+	
 	}
 
 	@Override
@@ -141,6 +145,24 @@ implements OnClickListener, View.OnTouchListener
 		}
 		else if(event.getId() == R.id.imageError) {
 			errorDialog.hide();
+		}
+		else if(event.getId() == R.id.tvMemoryUsage) {
+			TableLayout tMemory = (TableLayout) findViewById(R.id.tMemory);
+			if(tMemory.getVisibility() == TableLayout.VISIBLE) {
+				tMemory.setVisibility(TableLayout.GONE);
+			}
+			else {
+				tMemory.setVisibility(TableLayout.VISIBLE);
+			}
+		}
+		else if(event.getId() == R.id.tvMountPoints) {
+			TableLayout tMountPoints = (TableLayout) findViewById(R.id.tMountPoints);
+			if(tMountPoints.getVisibility() == TableLayout.VISIBLE) {
+				tMountPoints.setVisibility(TableLayout.GONE);
+			}
+			else {
+				tMountPoints.setVisibility(TableLayout.VISIBLE);
+			}
 		}
 	}
 
@@ -161,7 +183,17 @@ implements OnClickListener, View.OnTouchListener
 
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
-		txtHostname.setText(Html.fromHtml("<a href=\""+currentHost+"\">"+entry.getHostname()+"</a>"));
+		
+		String url = "";
+		try {
+			JSONTokener tokener = new JSONTokener(currentHost);
+			JSONObject sHost = new JSONObject(tokener);
+			url = sHost.getString("url");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		txtHostname.setText(Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
 		txtHostname.setMovementMethod(LinkMovementMethod.getInstance());
 
 		//uptime
@@ -191,11 +223,10 @@ implements OnClickListener, View.OnTouchListener
 
 		//display
 		TableLayout tlVital = (TableLayout) findViewById(R.id.tableVitals);
-		tlVital.setVisibility(View.VISIBLE);
 
 		//init mount point table
-		TableLayout tlMount = (TableLayout) findViewById(R.id.tableMount);	
-		tlMount.removeAllViews();
+		TableLayout tMountPoints = (TableLayout) findViewById(R.id.tMountPoints);	
+		tMountPoints.removeAllViews();
 
 		//memory
 		ProgressBar pbMemory = new ProgressBar(
@@ -218,17 +249,21 @@ implements OnClickListener, View.OnTouchListener
 
 		LayoutParams p = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
+		//init memory table
+		TableLayout tMemory = (TableLayout) findViewById(R.id.tMemory);	
+		tMemory.removeAllViews();
+		
 		//add mount point name row
 		TableRow trNameMemory = new TableRow(this);
 		trNameMemory.setLayoutParams(p);
 		trNameMemory.addView(tvNameMemory,p);
-		tlMount.addView(trNameMemory,p);
+		tMemory.addView(trNameMemory,p);
 
 		//add progress bar row
 		TableRow trProgressMemory = new TableRow(this);
 		trProgressMemory.setLayoutParams(p);
 		trProgressMemory.addView(pbMemory,p);
-		tlMount.addView(trProgressMemory,p);	
+		tMemory.addView(trProgressMemory,p);	
 
 
 		//fill mount point table
@@ -268,12 +303,12 @@ implements OnClickListener, View.OnTouchListener
 			//mount point name row
 			TableRow trName = new TableRow(this);
 			trName.addView(tvName);
-			tlMount.addView(trName);
+			tMountPoints.addView(trName);
 
 			//progress bar row
 			TableRow trProgress = new TableRow(this);
 			trProgress.addView(pgPercent);
-			tlMount.addView(trProgress);
+			tMountPoints.addView(trProgress);
 		}
 	}
 
@@ -297,8 +332,12 @@ implements OnClickListener, View.OnTouchListener
 		pgLoading.setVisibility(View.INVISIBLE);	
 
 		if(ivLogoDisplay) {
+			LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
+			llLogo.setVisibility(LinearLayout.GONE);
+			
 			LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
-			llContent.removeView(ivLogo);
+			llContent.setVisibility(LinearLayout.VISIBLE);
+			
 			ivLogoDisplay = false;
 		}
 	}
