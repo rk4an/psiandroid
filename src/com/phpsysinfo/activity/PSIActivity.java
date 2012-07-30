@@ -63,12 +63,13 @@ implements OnClickListener, View.OnTouchListener
 
 		setContentView(R.layout.main);
 		
-		LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
+		
 		scrollView = (ScrollView) findViewById(R.id.scrollView1);
 		ivLogo = new ImageView(this);
 		ivLogo.setImageResource(R.drawable.psilogo);
 		
-		llLogo.addView(ivLogo,0);
+		LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
+		llLogo.addView(ivLogo);
 
 		
 		//get preference
