@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -236,16 +237,16 @@ implements OnClickListener, View.OnTouchListener
 		TextView tvNameMemory = new TextView(this);
 		pbMemory.setProgress(entry.getAppMemoryPercent());
 		tvNameMemory.setText(Html.fromHtml("<b>"+getString(R.string.lblMemory) + "</b> (" + nf.format(entry.getAppMemoryUsed()) + 
-				"/" + nf.format(entry.getAppMemoryTotal()) + getString(R.string.lblMio) +") "+ entry.getAppMemoryPercent()+"%"));
+				" / " + nf.format(entry.getAppMemoryTotal()) + getString(R.string.lblMio) +") "+ entry.getAppMemoryPercent()+"%"));
 
 		//text in yellow if memory usage is high
 		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_SOFT_THR) {
-			tvNameMemory.setTextColor(0xFFFFFF00);
+			tvNameMemory.setTextColor(PSIConfig.COLOR_SOFT);
 		}
 
 		//text in red if memory usage is very high
 		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_HARD_THR) {
-			tvNameMemory.setTextColor(0xFFFF0000);
+			tvNameMemory.setTextColor(PSIConfig.COLOR_HARD);
 		}
 
 		LayoutParams p = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -287,18 +288,18 @@ implements OnClickListener, View.OnTouchListener
 			}
 
 			lblMountText += " (" + nf.format(psiMp.getUsed()) + 
-					"/" + nf.format(psiMp.getTotal()) + getString(R.string.lblMio) +") "+ psiMp.getPercentUsed()+"%";
+					" / " + nf.format(psiMp.getTotal()) + getString(R.string.lblMio) +") "+ psiMp.getPercentUsed()+"%";
 
 			tvName.setText(Html.fromHtml(lblMountText));
 
 			//text in yellow if mount point usage is high
 			if(psiMp.getPercentUsed() > PSIConfig.MEMORY_SOFT_THR) {
-				tvName.setTextColor(0xFFFFFF00);
+				tvName.setTextColor(PSIConfig.COLOR_SOFT);
 			}
 
 			//text in red if mount point usage is very high
 			if(psiMp.getPercentUsed() > PSIConfig.MEMORY_HARD_THR) {
-				tvName.setTextColor(0xFFFF0000);
+				tvName.setTextColor(PSIConfig.COLOR_HARD);
 			}
 
 			//mount point name row
@@ -356,7 +357,7 @@ implements OnClickListener, View.OnTouchListener
 		if (resultCode == RESULT_OK) {
 
 			//load new selected host
-			String currentHost = data.getExtras().getString("host");
+			currentHost = data.getExtras().getString("host");
 			getData(currentHost);
 			loadHostsArray();
 
@@ -402,7 +403,7 @@ implements OnClickListener, View.OnTouchListener
 	public boolean onTouch(View v, MotionEvent event) {
 
 		scrollView.onTouchEvent(event);
-
+		
 		if (hostsJsonArray.length() <= 1) {
 			return true;
 		}
@@ -477,6 +478,7 @@ implements OnClickListener, View.OnTouchListener
 				String url = sHost.getString("url");
 				if(u.equals(url)) {
 					selectedIndex = i;
+					Log.d("test",i+"");
 				}
 			}
 		} catch (JSONException e) {
