@@ -239,7 +239,7 @@ implements OnClickListener, View.OnTouchListener
 		pbMemory.setProgress(entry.getAppMemoryPercent());
 		tvNameMemory.setText(Html.fromHtml(
 				"<b>"+getString(R.string.lblMemory) + "</b>" +
-		"(" + getFormatedMemory(entry.getAppMemoryUsed()) + 
+		" (" + getFormatedMemory(entry.getAppMemoryUsed()) + 
 		" / " + getFormatedMemory(entry.getAppMemoryTotal()) + ") " + 
 		entry.getAppMemoryPercent()+"%"));
 
