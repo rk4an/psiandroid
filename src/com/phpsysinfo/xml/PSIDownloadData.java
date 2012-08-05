@@ -119,7 +119,8 @@ extends AsyncTask<String, Void, Void>
 		//if a username is set
 		if(!user.equals("")) {
 			huc.setRequestMethod("GET");
-			huc.setRequestProperty("Authorization", "Basic " + Base64.encodeToString((user+":"+password).getBytes(), Base64.NO_WRAP));
+			huc.setRequestProperty("Authorization", 
+					"Basic " + Base64.encodeToString((user+":"+password).getBytes(), Base64.NO_WRAP));
 		}
 
 		huc.connect();

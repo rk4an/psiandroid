@@ -24,7 +24,8 @@ public class PSIXmlParse extends DefaultHandler {
 	}
 
 	@Override
-	public void startElement(String uri, String localName, String name,	Attributes attributes) throws SAXException {
+	public void startElement(String uri, String localName, String name,	Attributes attributes) 
+			throws SAXException {
 
 		if (localName.equalsIgnoreCase("Vitals")){
 			this.entry.setHostname(attributes.getValue("Hostname"));
@@ -44,7 +45,10 @@ public class PSIXmlParse extends DefaultHandler {
 			this.entry.setAppMemoryUsed(attributes.getValue("App"));
 		}
 		else if(localName.equalsIgnoreCase("Mount")){
-			this.entry.addMountPoint(attributes.getValue("MountPoint"), attributes.getValue("Percent"), attributes.getValue("Used"), attributes.getValue("Total"));
+			this.entry.addMountPoint(attributes.getValue("MountPoint"), 
+					attributes.getValue("Percent"), 
+					attributes.getValue("Used"), 
+					attributes.getValue("Total"));
 		}
 	}
 

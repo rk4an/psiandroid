@@ -1,6 +1,5 @@
 package com.phpsysinfo.activity;
 
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 import org.json.JSONArray;
@@ -196,7 +195,8 @@ implements OnClickListener, View.OnTouchListener
 			e.printStackTrace();
 		}
 
-		txtHostname.setText(Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
+		txtHostname.setText(
+				Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
 		txtHostname.setMovementMethod(LinkMovementMethod.getInstance());
 
 		//uptime
@@ -237,8 +237,11 @@ implements OnClickListener, View.OnTouchListener
 
 		TextView tvNameMemory = new TextView(this);
 		pbMemory.setProgress(entry.getAppMemoryPercent());
-		tvNameMemory.setText(Html.fromHtml("<b>"+getString(R.string.lblMemory) + "</b> (" + getFormatedMemory(entry.getAppMemoryUsed()) + 
-				" / " + getFormatedMemory(entry.getAppMemoryTotal()) + ") " + entry.getAppMemoryPercent()+"%"));
+		tvNameMemory.setText(Html.fromHtml(
+				"<b>"+getString(R.string.lblMemory) + "</b>" +
+		"(" + getFormatedMemory(entry.getAppMemoryUsed()) + 
+		" / " + getFormatedMemory(entry.getAppMemoryTotal()) + ") " + 
+		entry.getAppMemoryPercent()+"%"));
 
 		//text in yellow if memory usage is high
 		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_SOFT_THR) {
