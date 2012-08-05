@@ -11,6 +11,7 @@
     <string name="lblSettings">Settings</string>
     <string name="lblNodata"></string>
     <string name="lblMio">MiB</string>
+    <string name="lblGio">GiB</string>
     <string name="lblAdd">Add</string>
     <string name="lblAbout">About</string>
     <string name="lblUrlHint">http://</string>

@@ -76,23 +76,24 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
-        public static final int lblAbout=0x7f04000c;
-        public static final int lblAdd=0x7f04000b;
+        public static final int lblAbout=0x7f04000d;
+        public static final int lblAdd=0x7f04000c;
         public static final int lblDistro=0x7f040005;
-        public static final int lblHosts=0x7f04000e;
+        public static final int lblGio=0x7f04000b;
+        public static final int lblHosts=0x7f04000f;
         public static final int lblIp=0x7f040006;
         public static final int lblKernel=0x7f040004;
         public static final int lblLoad=0x7f040003;
         public static final int lblMemory=0x7f040002;
-        public static final int lblMemoryUsage=0x7f040011;
+        public static final int lblMemoryUsage=0x7f040012;
         public static final int lblMio=0x7f04000a;
-        public static final int lblMountPoints=0x7f040012;
+        public static final int lblMountPoints=0x7f040013;
         public static final int lblNodata=0x7f040009;
-        public static final int lblPassword=0x7f040010;
+        public static final int lblPassword=0x7f040011;
         public static final int lblRefresh=0x7f040007;
         public static final int lblSettings=0x7f040008;
         public static final int lblUptime=0x7f040001;
-        public static final int lblUrlHint=0x7f04000d;
-        public static final int lblUser=0x7f04000f;
+        public static final int lblUrlHint=0x7f04000e;
+        public static final int lblUser=0x7f040010;
     }
 }

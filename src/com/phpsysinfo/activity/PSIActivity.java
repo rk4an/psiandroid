@@ -1,5 +1,6 @@
 package com.phpsysinfo.activity;
 
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 import org.json.JSONArray;
@@ -63,16 +64,16 @@ implements OnClickListener, View.OnTouchListener
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.main);
-		
-		
+
+
 		scrollView = (ScrollView) findViewById(R.id.scrollView1);
 		ivLogo = new ImageView(this);
 		ivLogo.setImageResource(R.drawable.psilogo);
-		
+
 		LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
 		llLogo.addView(ivLogo);
 
-		
+
 		//get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -137,7 +138,7 @@ implements OnClickListener, View.OnTouchListener
 
 		((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
 		((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
-	
+
 	}
 
 	@Override
@@ -181,11 +182,11 @@ implements OnClickListener, View.OnTouchListener
 
 		this.enableButton();
 
-		NumberFormat nf = NumberFormat.getInstance();
+		
 
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
-		
+
 		String url = "";
 		try {
 			JSONTokener tokener = new JSONTokener(currentHost);
@@ -194,7 +195,7 @@ implements OnClickListener, View.OnTouchListener
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		txtHostname.setText(Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
 		txtHostname.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -236,8 +237,8 @@ implements OnClickListener, View.OnTouchListener
 
 		TextView tvNameMemory = new TextView(this);
 		pbMemory.setProgress(entry.getAppMemoryPercent());
-		tvNameMemory.setText(Html.fromHtml("<b>"+getString(R.string.lblMemory) + "</b> (" + nf.format(entry.getAppMemoryUsed()) + 
-				" / " + nf.format(entry.getAppMemoryTotal()) + getString(R.string.lblMio) +") "+ entry.getAppMemoryPercent()+"%"));
+		tvNameMemory.setText(Html.fromHtml("<b>"+getString(R.string.lblMemory) + "</b> (" + getFormatedMemory(entry.getAppMemoryUsed()) + 
+				" / " + getFormatedMemory(entry.getAppMemoryTotal()) + ") " + entry.getAppMemoryPercent()+"%"));
 
 		//text in yellow if memory usage is high
 		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_SOFT_THR) {
@@ -254,7 +255,7 @@ implements OnClickListener, View.OnTouchListener
 		//init memory table
 		TableLayout tMemory = (TableLayout) findViewById(R.id.tMemory);	
 		tMemory.removeAllViews();
-		
+
 		//add mount point name row
 		TableRow trNameMemory = new TableRow(this);
 		trNameMemory.setLayoutParams(p);
@@ -287,8 +288,8 @@ implements OnClickListener, View.OnTouchListener
 				lblMountText += psiMp.getName() + "</b>";
 			}
 
-			lblMountText += " (" + nf.format(psiMp.getUsed()) + 
-					" / " + nf.format(psiMp.getTotal()) + getString(R.string.lblMio) +") "+ psiMp.getPercentUsed()+"%";
+			lblMountText += " (" + getFormatedMemory(psiMp.getUsed()) + 
+					" / " + getFormatedMemory(psiMp.getTotal()) +") "+ psiMp.getPercentUsed()+"%";
 
 			tvName.setText(Html.fromHtml(lblMountText));
 
@@ -336,10 +337,10 @@ implements OnClickListener, View.OnTouchListener
 		if(ivLogoDisplay) {
 			LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
 			llLogo.setVisibility(LinearLayout.GONE);
-			
+
 			LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
 			llContent.setVisibility(LinearLayout.VISIBLE);
-			
+
 			ivLogoDisplay = false;
 		}
 	}
@@ -403,7 +404,7 @@ implements OnClickListener, View.OnTouchListener
 	public boolean onTouch(View v, MotionEvent event) {
 
 		scrollView.onTouchEvent(event);
-		
+
 		if (hostsJsonArray.length() <= 1) {
 			return true;
 		}
@@ -438,7 +439,7 @@ implements OnClickListener, View.OnTouchListener
 
 					//load the previous/next host
 					getData(currentHost);
-					
+
 					Editor editor = pref.edit();
 					editor.putString(PSIConfig.JSON_CURRENT_HOST,currentHost);
 					editor.commit();
@@ -507,4 +508,27 @@ implements OnClickListener, View.OnTouchListener
 			e.printStackTrace();
 		}
 	}
+
+
+	/**
+	 * 
+	 * @param memory
+	 * @return
+	 */
+	public String getFormatedMemory(int memory) {
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(1);
+		String value = "0";
+		
+		if(memory > 1024) {
+			value = nf.format((float)memory/1024) + " " + getString(R.string.lblGio);
+		}
+		else {
+			value = nf.format(memory) + " " + getString(R.string.lblMio);
+		}
+		
+		return value;
+	}
+
+
 }
