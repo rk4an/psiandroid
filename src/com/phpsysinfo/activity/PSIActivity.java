@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -338,7 +339,13 @@ implements OnClickListener, View.OnTouchListener
 			TextView tvIpmi = new TextView(this);
 			tvIpmi.setId(R.id.tvIpmi);
 			tvIpmi.setText("IPMI");
+			tvIpmi.setTypeface(null,Typeface.BOLD);
 			tvIpmi.setPadding(5, 5, 5, 5);
+		
+			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			llp.setMargins(0, 5, 0, 5);
+			tvIpmi.setLayoutParams(llp);
+			
 			tvIpmi.setBackgroundColor(Color.parseColor("#444242"));
 			llPlugins.addView(tvIpmi);
 			
