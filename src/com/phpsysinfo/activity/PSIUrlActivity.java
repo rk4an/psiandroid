@@ -141,9 +141,12 @@ OnItemLongClickListener, OnClickListener {
 				try {
 					editHost = (JSONObject) hostsJsonArray.get(pos);
 					
-					((EditText) findViewById(R.id.txtUrl)).setText(editHost.get("url").toString());
-					((EditText) findViewById(R.id.txtUser)).setText(editHost.get("username").toString());
-					((EditText) findViewById(R.id.txtPassword)).setText(editHost.get("password").toString());
+					((EditText) findViewById(R.id.txtUrl)).setText(
+							editHost.get("url").toString());
+					((EditText) findViewById(R.id.txtUser)).setText(
+							editHost.get("username").toString());
+					((EditText) findViewById(R.id.txtPassword)).setText(
+							editHost.get("password").toString());
 					
 				} catch (JSONException e) {
 					e.printStackTrace();
