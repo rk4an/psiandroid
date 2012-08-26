@@ -7,7 +7,7 @@ Features:
 
  * Operating System Information (Version, Uptime, ...)
  * CPU, Memory and Disk usage
- * Multi-host
+ * Multi-host (add, remove, edit)
  * HTTPS
  * Basic Authentification
  * Networks information (coming soon)
