@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -132,6 +133,23 @@ OnItemLongClickListener, OnClickListener {
 
 				saveList();
 				break;
+			case DialogInterface.BUTTON_NEUTRAL:
+				
+				//get json at position pos
+				
+				JSONObject editHost = null;
+				try {
+					editHost = (JSONObject) hostsJsonArray.get(pos);
+					
+					((EditText) findViewById(R.id.txtUrl)).setText(editHost.get("url").toString());
+					((EditText) findViewById(R.id.txtUser)).setText(editHost.get("username").toString());
+					((EditText) findViewById(R.id.txtPassword)).setText(editHost.get("password").toString());
+					
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
+				break;
 			case DialogInterface.BUTTON_NEGATIVE:
 				break;
 			}
@@ -145,10 +163,11 @@ OnItemLongClickListener, OnClickListener {
 
 		// create and display the remove dialog
 		AlertDialog.Builder adb = new AlertDialog.Builder(PSIUrlActivity.this);
-		adb.setMessage("Remove " + listViewUrls.getItemAtPosition(position)
+		adb.setMessage("Action for " + listViewUrls.getItemAtPosition(position)
 				+ " ?");
-		adb.setPositiveButton("Yes", dialogClickListener);
-		adb.setNegativeButton("No", dialogClickListener);
+		adb.setPositiveButton("Remove", dialogClickListener);
+		adb.setNegativeButton("Cancel", dialogClickListener);
+		adb.setNeutralButton("Edit", dialogClickListener);
 		adb.show();
 
 		return true;

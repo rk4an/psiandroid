@@ -50,6 +50,9 @@ public class PSIXmlParse extends DefaultHandler {
 					attributes.getValue("Used"), 
 					attributes.getValue("Total"));
 		}
+		else if (localName.equalsIgnoreCase("Generation")){
+			this.entry.setPsiVersion(attributes.getValue("version"));
+		}
 	}
 
 	@Override

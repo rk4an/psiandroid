@@ -207,6 +207,10 @@ implements OnClickListener, View.OnTouchListener
 		TextView txtLoad = (TextView) findViewById(R.id.txtLoad);
 		txtLoad.setText(entry.getLoadAvg());
 
+		//psi version
+		TextView txtVersion = (TextView) findViewById(R.id.txtVersion);
+		txtVersion.setText(entry.getPsiVersion());
+		
 		//kernel version
 		TextView txtKernel = (TextView) findViewById(R.id.txtKernel);
 		if(entry.getKernel().length() > 17) {

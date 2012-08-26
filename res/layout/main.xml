@@ -163,6 +163,29 @@
                         android:layout_height="wrap_content"
                         android:text="@string/lblNodata" />
                 </TableRow>
+                
+                 <TableRow
+                    android:id="@+id/tableRow8"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_weight="1" >
+
+                    <TextView
+                        android:id="@+id/lblVersion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lblVersion"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtVersion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lblNodata" />
+                </TableRow>    
+                
+                
             </TableLayout>
 
             <TextView

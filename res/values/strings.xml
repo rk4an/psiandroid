@@ -4,6 +4,7 @@
     <string name="lblUptime">Uptime:</string>
     <string name="lblMemory">Memory</string>
     <string name="lblLoad">Load:</string>
+    <string name="lblVersion">PSI version:</string>
     <string name="lblKernel">Kernel:</string>
     <string name="lblDistro">Distro:</string>
     <string name="lblIp">IP:</string>

@@ -11,6 +11,8 @@ public class PSIHostData {
 	private String kernel = "";
 	private String distro = "";
 	private String Ip = "";
+	private String psiVersion = "";
+
 	private List<PSIMountPoint> mountPoint = new ArrayList<PSIMountPoint>();
 	private int appMemoryPercent = 0;
 	private int appMemoryUsed= 0;
@@ -80,6 +82,14 @@ public class PSIHostData {
 		Ip = ip;
 	}
 
+	public String getPsiVersion() {
+		return psiVersion;
+	}
+
+	public void setPsiVersion(String psiVersion) {
+		this.psiVersion = psiVersion;
+	}
+	
 	public void addMountPoint(String name, String percentUsed, String used, String total) {
 		int _percentUsed = Integer.parseInt(percentUsed);
 		int _used = (int) (Long.parseLong(used)/1024/1024);
