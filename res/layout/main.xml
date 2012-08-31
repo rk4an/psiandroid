@@ -56,11 +56,11 @@
                 android:id="@+id/tableVitals"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:stretchColumns="1"
-                 >
+                android:shrinkColumns="1"
+                android:stretchColumns="1" >
 
                 <TableRow
-                    android:id="@+id/tableRow5"
+                    android:id="@+id/trDistro"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
@@ -81,7 +81,7 @@
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/tableRow4"
+                    android:id="@+id/trKernel"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
@@ -102,7 +102,7 @@
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/tableRow6"
+                    android:id="@+id/trIp"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
@@ -123,7 +123,7 @@
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/tableRow1"
+                    android:id="@+id/trUptime"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
@@ -144,7 +144,7 @@
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/tableRow3"
+                    android:id="@+id/trLoad"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="3dp"
@@ -165,11 +165,11 @@
                 </TableRow>
                 
                  <TableRow
-                    android:id="@+id/tableRow8"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_weight="1" >
+                     android:id="@+id/trVersion"
+                     android:layout_width="fill_parent"
+                     android:layout_height="0dp"
+                     android:layout_marginBottom="3dp"
+                     android:layout_weight="1" >
 
                     <TextView
                         android:id="@+id/lblVersion"
@@ -221,7 +221,9 @@
                 android:id="@+id/tMountPoints"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:shrinkColumns="0"
                 android:stretchColumns="0,1" >
+
             </TableLayout>
         </LinearLayout>
 

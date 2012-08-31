@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -223,9 +222,6 @@ implements OnClickListener, View.OnTouchListener
 		TextView txtIp = (TextView) findViewById(R.id.txtIp);
 		txtIp.setText(entry.getIp());
 
-		//display
-		TableLayout tlVital = (TableLayout) findViewById(R.id.tableVitals);
-
 		//init mount point table
 		TableLayout tMountPoints = (TableLayout) findViewById(R.id.tMountPoints);	
 		tMountPoints.removeAllViews();
@@ -239,8 +235,8 @@ implements OnClickListener, View.OnTouchListener
 		tvNameMemory.setText(Html.fromHtml(
 				"<b>"+getString(R.string.lblMemory) + "</b>" +
 		" (" + getFormatedMemory(entry.getAppMemoryUsed()) + 
-		" / " + getFormatedMemory(entry.getAppMemoryTotal()) + ") " + 
-		entry.getAppMemoryPercent()+"%"));
+		" of " + getFormatedMemory(entry.getAppMemoryTotal()) + ") <i>" + 
+		entry.getAppMemoryPercent()+"%</i>"));
 
 		//text in yellow if memory usage is high
 		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_SOFT_THR) {
@@ -281,17 +277,10 @@ implements OnClickListener, View.OnTouchListener
 			TextView tvName = new TextView(this);
 			pgPercent.setProgress(psiMp.getPercentUsed());
 
-			final int MP_MAX_LENGTH = 12;
-			String lblMountText = "<b>";
-			if(psiMp.getName().length() > MP_MAX_LENGTH) {
-				lblMountText += psiMp.getName().substring(0, MP_MAX_LENGTH) + "</b> ";
-			}
-			else {
-				lblMountText += psiMp.getName() + "</b>";
-			}
+			String lblMountText = "<b>" + psiMp.getName() + "</b>";
 
 			lblMountText += " (" + getFormatedMemory(psiMp.getUsed()) + 
-					" / " + getFormatedMemory(psiMp.getTotal()) +") "+ psiMp.getPercentUsed()+"%";
+					"&nbsp;of&nbsp;" + getFormatedMemory(psiMp.getTotal()) + ")&nbsp;<i>"+ psiMp.getPercentUsed()+"%</i>";
 
 			tvName.setText(Html.fromHtml(lblMountText));
 
@@ -481,7 +470,6 @@ implements OnClickListener, View.OnTouchListener
 				String url = sHost.getString("url");
 				if(u.equals(url)) {
 					selectedIndex = i;
-					Log.d("test",i+"");
 				}
 			}
 		} catch (JSONException e) {
@@ -523,10 +511,10 @@ implements OnClickListener, View.OnTouchListener
 		String value = "0";
 		
 		if(memory > 1024) {
-			value = nf.format((float)memory/1024) + " " + getString(R.string.lblGio);
+			value = nf.format((float)memory/1024) + "&nbsp;" + getString(R.string.lblGio);
 		}
 		else {
-			value = nf.format(memory) + " " + getString(R.string.lblMio);
+			value = nf.format(memory) + "&nbsp;" + getString(R.string.lblMio);
 		}
 		
 		return value;
