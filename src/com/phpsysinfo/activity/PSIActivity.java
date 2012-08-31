@@ -213,12 +213,7 @@ implements OnClickListener, View.OnTouchListener
 		
 		//kernel version
 		TextView txtKernel = (TextView) findViewById(R.id.txtKernel);
-		if(entry.getKernel().length() > 17) {
-			txtKernel.setText(entry.getKernel().substring(0, 17));
-		}
-		else {
-			txtKernel.setText(entry.getKernel());
-		}
+		txtKernel.setText(entry.getKernel());
 
 		//distro name
 		TextView txtDistro = (TextView) findViewById(R.id.txtDistro);
