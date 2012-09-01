@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -165,6 +167,15 @@ implements OnClickListener, View.OnTouchListener
 				tMountPoints.setVisibility(TableLayout.VISIBLE);
 			}
 		}
+		else if(event.getId() == R.id.tvIpmi) {
+			LinearLayout llIpmi = (LinearLayout) findViewById(R.id.llIpmi);
+			if(llIpmi.getVisibility() == LinearLayout.VISIBLE) {
+				llIpmi.setVisibility(LinearLayout.GONE);
+			}
+			else {
+				llIpmi.setVisibility(LinearLayout.VISIBLE);
+			}
+		}
 	}
 
 	@Override
@@ -179,9 +190,7 @@ implements OnClickListener, View.OnTouchListener
 	public void displayInfo(PSIHostData entry) {
 
 		this.enableButton();
-
 		
-
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
 
@@ -234,9 +243,11 @@ implements OnClickListener, View.OnTouchListener
 		pbMemory.setProgress(entry.getAppMemoryPercent());
 		tvNameMemory.setText(Html.fromHtml(
 				"<b>"+getString(R.string.lblMemory) + "</b>" +
+
 		" (" + getFormatedMemory(entry.getAppMemoryUsed()) + 
 		" of " + getFormatedMemory(entry.getAppMemoryTotal()) + ") <i>" + 
 		entry.getAppMemoryPercent()+"%</i>"));
+
 
 		//text in yellow if memory usage is high
 		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_SOFT_THR) {
@@ -303,6 +314,44 @@ implements OnClickListener, View.OnTouchListener
 			TableRow trProgress = new TableRow(this);
 			trProgress.addView(pgPercent);
 			tMountPoints.addView(trProgress);
+		}
+
+		
+		//cleanup plugins
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+		llPlugins.removeAllViews();
+		
+		
+		//IMPI section
+		if(entry.getImpi().size() > 0) {
+			//header
+			TextView tvIpmi = new TextView(this);
+			tvIpmi.setId(R.id.tvIpmi);
+			tvIpmi.setText("IPMI");
+			tvIpmi.setTypeface(null,Typeface.BOLD);
+			tvIpmi.setPadding(5, 5, 5, 5);
+		
+			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			llp.setMargins(0, 5, 0, 5);
+			tvIpmi.setLayoutParams(llp);
+			
+			tvIpmi.setBackgroundColor(Color.parseColor("#444242"));
+			llPlugins.addView(tvIpmi);
+			
+			tvIpmi.setOnClickListener(this);
+			
+			//content
+			LinearLayout llImpi = new LinearLayout(this);
+			llImpi.setId(R.id.llIpmi);
+			llImpi.setOrientation(LinearLayout.VERTICAL);
+			llPlugins.addView(llImpi);
+			
+			//populate IMPI content
+			for (String mapKey : entry.getImpi().keySet()) {
+				TextView tvItem = new TextView(this);
+				tvItem.setText(Html.fromHtml("<b>" + mapKey + "</b>: " + entry.getImpi().get(mapKey)));
+				llImpi.addView(tvItem);
+			}
 		}
 	}
 
@@ -509,14 +558,14 @@ implements OnClickListener, View.OnTouchListener
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(1);
 		String value = "0";
-		
+
 		if(memory > 1024) {
 			value = nf.format((float)memory/1024) + "&nbsp;" + getString(R.string.lblGio);
 		}
 		else {
 			value = nf.format(memory) + "&nbsp;" + getString(R.string.lblMio);
 		}
-		
+
 		return value;
 	}
 

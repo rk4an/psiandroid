@@ -9,6 +9,9 @@ public class PSIXmlParse extends DefaultHandler {
 
 	private PSIHostData entry;
 
+	private boolean inPluginImpi = false;
+	private boolean inPluginImpiTemperature = false;
+	
 	@Override
 	public void processingInstruction(String target, String data) throws SAXException {
 		super.processingInstruction(target, data);
@@ -53,11 +56,27 @@ public class PSIXmlParse extends DefaultHandler {
 		else if (localName.equalsIgnoreCase("Generation")){
 			this.entry.setPsiVersion(attributes.getValue("version"));
 		}
+		else if (localName.equalsIgnoreCase("Plugin_ipmi")){
+			inPluginImpi = true;
+		}
+		else if (inPluginImpi && localName.equalsIgnoreCase("Temperature")){
+			inPluginImpiTemperature = true;
+		}
+		else if (inPluginImpiTemperature){
+			if(localName.equalsIgnoreCase("Item")) {
+				this.entry.addImpi(attributes.getValue("Label"), attributes.getValue("Value"));
+			}
+		}
 	}
 
 	@Override
 	public void endElement(String uri, String localName, String name) throws SAXException {
-
+		if (localName.equalsIgnoreCase("Plugin_ipmi")){
+			inPluginImpi = false;
+		}
+		else if(localName.equalsIgnoreCase("Temperature")){
+			inPluginImpiTemperature = false;
+		}
 	}
 
 	public PSIHostData getData(){

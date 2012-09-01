@@ -1,6 +1,7 @@
 package com.phpsysinfo.xml;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PSIHostData {
@@ -17,6 +18,8 @@ public class PSIHostData {
 	private int appMemoryPercent = 0;
 	private int appMemoryUsed= 0;
 	private int appMemoryTotal = 0;
+	
+	private HashMap<String,String> impi = new HashMap<String,String>();
 
 	public String getHostname() {
 		return hostname;
@@ -117,5 +120,13 @@ public class PSIHostData {
 
 	public void setAppMemoryTotal(String appMemoryTotal) {
 		this.appMemoryTotal = (int) (Long.parseLong(appMemoryTotal)/1024/1024);
+	}
+	
+	public void addImpi(String key, String value) {
+		impi.put(key, value);
+	}
+	
+	public HashMap<String, String> getImpi() {
+		return impi;
 	}
 }
