@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.phpsysinfo"
-    android:versionCode="250"
-    android:versionName="0.25" >
+    android:versionCode="260"
+    android:versionName="0.26" >
 
     <uses-sdk 
         android:minSdkVersion="8" 
-        android:targetSdkVersion="15"/>
+        android:targetSdkVersion="16"/>
     
     <uses-permission android:name="android.permission.INTERNET"/>
 
