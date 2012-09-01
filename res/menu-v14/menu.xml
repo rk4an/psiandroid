@@ -4,21 +4,21 @@
     <item
         android:id="@+id/iRefresh"
         android:alphabeticShortcut="r"
-        android:icon="@drawable/ic_menu_refresh"
+        android:icon="@drawable/ic_action_refresh"
         android:title="@string/lblRefresh"
         android:showAsAction="ifRoom">
     </item>
     <item
         android:id="@+id/iSettings"
         android:alphabeticShortcut="s"
-        android:icon="@drawable/ic_menu_preferences"
+        android:icon="@drawable/ic_action_settings"
         android:title="@string/lblSettings"
         android:showAsAction="ifRoom">
     </item>
     <item
         android:id="@+id/iAbout"
         android:alphabeticShortcut="a"
-        android:icon="@drawable/ic_menu_info_details"
+        android:icon="@drawable/ic_action_about"
         android:title="@string/lblAbout"
         android:showAsAction="never">
     </item>
