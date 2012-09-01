@@ -65,7 +65,6 @@ implements OnClickListener, View.OnTouchListener
 
 		setContentView(R.layout.main);
 
-
 		scrollView = (ScrollView) findViewById(R.id.scrollView1);
 		ivLogo = new ImageView(this);
 		ivLogo.setImageResource(R.drawable.psilogo);
@@ -167,13 +166,13 @@ implements OnClickListener, View.OnTouchListener
 				tMountPoints.setVisibility(TableLayout.VISIBLE);
 			}
 		}
-		else if(event.getId() == R.id.tvIpmi) {
-			LinearLayout llIpmi = (LinearLayout) findViewById(R.id.llIpmi);
-			if(llIpmi.getVisibility() == LinearLayout.VISIBLE) {
-				llIpmi.setVisibility(LinearLayout.GONE);
+		else if(event.getId() == R.id.tvTemperature) {
+			LinearLayout llTemperature = (LinearLayout) findViewById(R.id.llTemperature);
+			if(llTemperature.getVisibility() == LinearLayout.VISIBLE) {
+				llTemperature.setVisibility(LinearLayout.GONE);
 			}
 			else {
-				llIpmi.setVisibility(LinearLayout.VISIBLE);
+				llTemperature.setVisibility(LinearLayout.VISIBLE);
 			}
 		}
 	}
@@ -223,6 +222,10 @@ implements OnClickListener, View.OnTouchListener
 		TextView txtKernel = (TextView) findViewById(R.id.txtKernel);
 		txtKernel.setText(entry.getKernel());
 
+		//Cpu
+		//TextView txtCpu = (TextView) findViewById(R.id.txtCpu);
+		//txtCpu.setText(entry.getCpu());
+		
 		//distro name
 		TextView txtDistro = (TextView) findViewById(R.id.txtDistro);
 		txtDistro.setText(entry.getDistro());
@@ -323,34 +326,34 @@ implements OnClickListener, View.OnTouchListener
 		
 		
 		//IMPI section
-		if(entry.getImpi().size() > 0) {
+		if(entry.getTemperature().size() > 0) {
 			//header
-			TextView tvIpmi = new TextView(this);
-			tvIpmi.setId(R.id.tvIpmi);
-			tvIpmi.setText("IPMI");
-			tvIpmi.setTypeface(null,Typeface.BOLD);
-			tvIpmi.setPadding(5, 5, 5, 5);
+			TextView tvTemperature = new TextView(this);
+			tvTemperature.setId(R.id.tvTemperature);
+			tvTemperature.setText("Temperature");
+			tvTemperature.setTypeface(null,Typeface.BOLD);
+			tvTemperature.setPadding(5, 5, 5, 5);
 		
 			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 			llp.setMargins(0, 5, 0, 5);
-			tvIpmi.setLayoutParams(llp);
+			tvTemperature.setLayoutParams(llp);
 			
-			tvIpmi.setBackgroundColor(Color.parseColor("#444242"));
-			llPlugins.addView(tvIpmi);
+			tvTemperature.setBackgroundColor(Color.parseColor("#444242"));
+			llPlugins.addView(tvTemperature);
 			
-			tvIpmi.setOnClickListener(this);
+			tvTemperature.setOnClickListener(this);
 			
 			//content
-			LinearLayout llImpi = new LinearLayout(this);
-			llImpi.setId(R.id.llIpmi);
-			llImpi.setOrientation(LinearLayout.VERTICAL);
-			llPlugins.addView(llImpi);
+			LinearLayout llTemperature = new LinearLayout(this);
+			llTemperature.setId(R.id.llTemperature);
+			llTemperature.setOrientation(LinearLayout.VERTICAL);
+			llPlugins.addView(llTemperature);
 			
 			//populate IMPI content
-			for (String mapKey : entry.getImpi().keySet()) {
+			for (String mapKey : entry.getTemperature().keySet()) {
 				TextView tvItem = new TextView(this);
-				tvItem.setText(Html.fromHtml("<b>" + mapKey + "</b>: " + entry.getImpi().get(mapKey)));
-				llImpi.addView(tvItem);
+				tvItem.setText(Html.fromHtml("<b>" + mapKey + "</b>: " + entry.getTemperature().get(mapKey)));
+				llTemperature.addView(tvItem);
 			}
 		}
 	}

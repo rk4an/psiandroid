@@ -12,6 +12,9 @@ public class PSIXmlParse extends DefaultHandler {
 	private boolean inPluginImpi = false;
 	private boolean inPluginImpiTemperature = false;
 	
+	private boolean inMbInfo = false;
+	private boolean inMbInfoTemperature = false;
+	
 	@Override
 	public void processingInstruction(String target, String data) throws SAXException {
 		super.processingInstruction(target, data);
@@ -56,6 +59,11 @@ public class PSIXmlParse extends DefaultHandler {
 		else if (localName.equalsIgnoreCase("Generation")){
 			this.entry.setPsiVersion(attributes.getValue("version"));
 		}
+		else if (localName.equalsIgnoreCase("CpuCore")){
+			this.entry.setCpu(attributes.getValue("Model"));
+		}
+		
+		//ipmi
 		else if (localName.equalsIgnoreCase("Plugin_ipmi")){
 			inPluginImpi = true;
 		}
@@ -64,7 +72,20 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 		else if (inPluginImpiTemperature){
 			if(localName.equalsIgnoreCase("Item")) {
-				this.entry.addImpi(attributes.getValue("Label"), attributes.getValue("Value"));
+				this.entry.addTemperature(attributes.getValue("Label"), attributes.getValue("Value"));
+			}
+		}
+		
+		//mb
+		else if (localName.equalsIgnoreCase("MBInfo")){
+			inMbInfo = true;
+		}
+		else if (inMbInfo && localName.equalsIgnoreCase("Temperature")){
+			inMbInfoTemperature = true;
+		}
+		else if (inMbInfoTemperature){
+			if(localName.equalsIgnoreCase("Item")) {
+				this.entry.addTemperature(attributes.getValue("Label"), attributes.getValue("Value"));
 			}
 		}
 	}
@@ -73,9 +94,11 @@ public class PSIXmlParse extends DefaultHandler {
 	public void endElement(String uri, String localName, String name) throws SAXException {
 		if (localName.equalsIgnoreCase("Plugin_ipmi")){
 			inPluginImpi = false;
+			inMbInfo = false;
 		}
 		else if(localName.equalsIgnoreCase("Temperature")){
 			inPluginImpiTemperature = false;
+			inMbInfoTemperature = false;
 		}
 	}
 

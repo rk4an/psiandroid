@@ -13,13 +13,14 @@ public class PSIHostData {
 	private String distro = "";
 	private String Ip = "";
 	private String psiVersion = "";
+	private String cpu = "";
 
 	private List<PSIMountPoint> mountPoint = new ArrayList<PSIMountPoint>();
 	private int appMemoryPercent = 0;
 	private int appMemoryUsed= 0;
 	private int appMemoryTotal = 0;
 	
-	private HashMap<String,String> impi = new HashMap<String,String>();
+	private HashMap<String,String> temperature = new HashMap<String,String>();
 
 	public String getHostname() {
 		return hostname;
@@ -93,6 +94,14 @@ public class PSIHostData {
 		this.psiVersion = psiVersion;
 	}
 	
+	public String getCpu() {
+		return cpu;
+	}
+
+	public void setCpu(String processor) {
+		this.cpu = processor;
+	}
+	
 	public void addMountPoint(String name, String percentUsed, String used, String total) {
 		int _percentUsed = Integer.parseInt(percentUsed);
 		int _used = (int) (Long.parseLong(used)/1024/1024);
@@ -122,11 +131,11 @@ public class PSIHostData {
 		this.appMemoryTotal = (int) (Long.parseLong(appMemoryTotal)/1024/1024);
 	}
 	
-	public void addImpi(String key, String value) {
-		impi.put(key, value);
+	public void addTemperature(String label, String value) {
+		temperature.put(label, value);
 	}
 	
-	public HashMap<String, String> getImpi() {
-		return impi;
+	public HashMap<String, String> getTemperature() {
+		return temperature;
 	}
 }

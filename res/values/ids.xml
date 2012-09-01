@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <resources>
-        <item type="id" name="tvIpmi"/>
-        <item type="id" name="llIpmi"/>
+        <item type="id" name="tvTemperature"/>
+        <item type="id" name="llTemperature"/>
     </resources>

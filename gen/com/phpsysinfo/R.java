@@ -39,11 +39,11 @@ public final class R {
         public static final int linearLayout4=0x7f04002c;
         public static final int listView1=0x7f04002f;
         public static final int llContent=0x7f04000d;
-        public static final int llIpmi=0x7f040001;
         public static final int llLoading=0x7f040009;
         public static final int llLogo=0x7f040026;
         public static final int llMain=0x7f040008;
         public static final int llPlugins=0x7f040025;
+        public static final int llTemperature=0x7f040001;
         public static final int llTitle=0x7f04000b;
         public static final int pgLoading=0x7f04000a;
         public static final int scrollView1=0x7f040007;
@@ -59,9 +59,9 @@ public final class R {
         public static final int trLoad=0x7f04001b;
         public static final int trUptime=0x7f040018;
         public static final int trVersion=0x7f04001e;
-        public static final int tvIpmi=0x7f040000;
         public static final int tvMemoryUsage=0x7f040021;
         public static final int tvMountPoints=0x7f040023;
+        public static final int tvTemperature=0x7f040000;
         public static final int txtDistro=0x7f040011;
         public static final int txtHostname=0x7f04000c;
         public static final int txtIp=0x7f040017;
@@ -87,6 +87,7 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int lblAbout=0x7f05000e;
         public static final int lblAdd=0x7f05000d;
+        public static final int lblCpu=0x7f050015;
         public static final int lblDistro=0x7f050006;
         public static final int lblGio=0x7f05000c;
         public static final int lblHosts=0x7f050010;
