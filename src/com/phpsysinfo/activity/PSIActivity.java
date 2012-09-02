@@ -1,6 +1,7 @@
 package com.phpsysinfo.activity;
 
 import java.text.NumberFormat;
+import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -354,8 +355,11 @@ implements OnClickListener, View.OnTouchListener
 			llTemperature.setId(R.id.llTemperature);
 			llTemperature.setOrientation(LinearLayout.VERTICAL);
 			
+			TreeSet<String> keys = new TreeSet<String>(entry.getTemperature().keySet());
+			
+			
 			//populate IMPI content
-			for (String mapKey : entry.getTemperature().keySet()) {
+			for (String mapKey : keys) {
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + "</b>: "));
 				
