@@ -22,4 +22,5 @@
     <string name="lblMemoryUsage">Memory Usage</string>
     <string name="lblMountPoints">Mounted File Systems</string>
     <string name="lblCpu">Processor:</string>
+    <string name="lblTemperatures">Temperatures</string>
 </resources>

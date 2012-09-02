@@ -327,10 +327,12 @@ implements OnClickListener, View.OnTouchListener
 		
 		//IMPI section
 		if(entry.getTemperature().size() > 0) {
+				
+			
 			//header
 			TextView tvTemperature = new TextView(this);
 			tvTemperature.setId(R.id.tvTemperature);
-			tvTemperature.setText("Temperature");
+			tvTemperature.setText(getString(R.string.lblTemperatures));
 			tvTemperature.setTypeface(null,Typeface.BOLD);
 			tvTemperature.setPadding(5, 5, 5, 5);
 		
@@ -344,17 +346,31 @@ implements OnClickListener, View.OnTouchListener
 			tvTemperature.setOnClickListener(this);
 			
 			//content
+			TableLayout tTemperature = new TableLayout(this);
+			tTemperature.setColumnShrinkable(0, true);
+			tTemperature.setId(R.id.tTemperature);
+			
 			LinearLayout llTemperature = new LinearLayout(this);
 			llTemperature.setId(R.id.llTemperature);
 			llTemperature.setOrientation(LinearLayout.VERTICAL);
-			llPlugins.addView(llTemperature);
 			
 			//populate IMPI content
 			for (String mapKey : entry.getTemperature().keySet()) {
-				TextView tvItem = new TextView(this);
-				tvItem.setText(Html.fromHtml("<b>" + mapKey + "</b>: " + entry.getTemperature().get(mapKey)));
-				llTemperature.addView(tvItem);
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + "</b>: "));
+				
+				TextView tvItemValue = new TextView(this);
+				tvItemValue.setText(entry.getTemperature().get(mapKey));
+				
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+				
+				tTemperature.addView(trItem);
 			}
+			
+			llTemperature.addView(tTemperature);
+			llPlugins.addView(llTemperature);
 		}
 	}
 
