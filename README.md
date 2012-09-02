@@ -7,8 +7,9 @@ Features:
 
  * Operating System Information (Version, Uptime, ...)
  * CPU, Memory and Disk usage
- * Multi-host (add, remove, edit)
+ * Multi-host (Add, Remove and Edit)
  * HTTPS
  * Basic Authentification
+ * Temperatures (MotherBoard and IPMI)
  * Networks information (coming soon)
- * SMART, Fans, Temperatures, ...  (coming soon)
+ * Other plugins (coming soon)
