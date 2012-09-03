@@ -361,7 +361,7 @@ implements OnClickListener, View.OnTouchListener
 			//populate IMPI content
 			for (String mapKey : keys) {
 				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + "</b>: "));
+				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
 				
 				TextView tvItemValue = new TextView(this);
 				tvItemValue.setText(entry.getTemperature().get(mapKey));
