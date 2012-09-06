@@ -11,10 +11,10 @@ public class PSIXmlParse extends DefaultHandler {
 
 	private boolean inPluginImpi = false;
 	private boolean inPluginImpiTemperature = false;
-	
+
 	private boolean inMbInfo = false;
 	private boolean inMbInfoTemperature = false;
-	
+
 	@Override
 	public void processingInstruction(String target, String data) throws SAXException {
 		super.processingInstruction(target, data);
@@ -51,7 +51,26 @@ public class PSIXmlParse extends DefaultHandler {
 			this.entry.setAppMemoryUsed(attributes.getValue("App"));
 		}
 		else if(localName.equalsIgnoreCase("Mount")){
-			this.entry.addMountPoint(attributes.getValue("MountPoint"), 
+
+			//		 	/home
+			String mountPointName = attributes.getValue("MountPoint");
+			
+			// 			/dev/sda5
+			String mountPointPath = attributes.getValue("Name");		
+
+			//if PSI_SHOW_MOUNT_POINT set to false
+			if(mountPointName == null) { 
+				mountPointName = mountPointPath;
+			}
+
+			//display "SWAP"
+			if(mountPointPath != null) {
+				if(mountPointPath.equals("SWAP")) {
+					mountPointName = "SWAP";
+				}
+			}
+
+			this.entry.addMountPoint(mountPointName, 
 					attributes.getValue("Percent"), 
 					attributes.getValue("Used"), 
 					attributes.getValue("Total"));
@@ -62,7 +81,7 @@ public class PSIXmlParse extends DefaultHandler {
 		else if (localName.equalsIgnoreCase("CpuCore")){
 			this.entry.setCpu(attributes.getValue("Model"));
 		}
-		
+
 		//ipmi
 		else if (localName.equalsIgnoreCase("Plugin_ipmi")){
 			inPluginImpi = true;
@@ -75,7 +94,7 @@ public class PSIXmlParse extends DefaultHandler {
 				this.entry.addTemperature(attributes.getValue("Label"), attributes.getValue("Value"));
 			}
 		}
-		
+
 		//mb
 		else if (localName.equalsIgnoreCase("MBInfo")){
 			inMbInfo = true;
