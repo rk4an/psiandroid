@@ -13,3 +13,4 @@ Features:
  * Temperatures (MotherBoard and IPMI)
  * Networks information (coming soon)
  * Other plugins (coming soon)
+ * ...
