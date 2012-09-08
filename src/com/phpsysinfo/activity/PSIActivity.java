@@ -51,8 +51,6 @@ implements OnClickListener, View.OnTouchListener
 	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
 	private Dialog aboutDialog = null;
-	private Dialog errorDialog = null;
-	private TextView textError = null;
 	private ScrollView scrollView;
 
 	//current selected url
@@ -126,16 +124,6 @@ implements OnClickListener, View.OnTouchListener
 		image.setImageResource(R.drawable.ic_launcher);
 		image.setOnClickListener(this);
 
-		//create error dialog
-		errorDialog = new Dialog(this);
-		errorDialog.setContentView(R.layout.error_dialog);
-		errorDialog.setTitle("Error");
-		textError = (TextView) errorDialog.findViewById(R.id.textError);
-		textError.setText("");
-		ImageView imageError = (ImageView) errorDialog.findViewById(R.id.imageError);
-		imageError.setImageResource(R.drawable.ic_launcher);
-		imageError.setOnClickListener(this);
-
 		((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
 		((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
 
@@ -145,9 +133,6 @@ implements OnClickListener, View.OnTouchListener
 	public void onClick(View event) {
 		if(event.getId() == R.id.image) {
 			aboutDialog.hide();
-		}
-		else if(event.getId() == R.id.imageError) {
-			errorDialog.hide();
 		}
 		else if(event.getId() == R.id.tvMemoryUsage) {
 			TableLayout tMemory = (TableLayout) findViewById(R.id.tMemory);
@@ -189,7 +174,7 @@ implements OnClickListener, View.OnTouchListener
 	 */
 	public void displayInfo(PSIHostData entry) {
 
-		this.enableButton();
+		this.loadingStop();
 		
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
@@ -329,7 +314,6 @@ implements OnClickListener, View.OnTouchListener
 		//IMPI section
 		if(entry.getTemperature().size() > 0) {
 				
-			
 			//header
 			TextView tvTemperature = new TextView(this);
 			tvTemperature.setId(R.id.tvTemperature);
@@ -382,36 +366,39 @@ implements OnClickListener, View.OnTouchListener
 	 * 
 	 * @param error
 	 */
-	public void displayError(PSIErrorCode error) {
-		textError.setText(error.toString());
-		this.errorDialog.show();
-
-		this.enableButton();
+	public void displayError(String host, PSIErrorCode error) {
+		loadingStop();
+		
+		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
+		llContent.setVisibility(LinearLayout.GONE);
+		
+		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
+		txtHostname.setText(Html.fromHtml(host + "<br/><br/><b>" + "Error: " + error.toString()+"</b>"));
 	}
 
 	/**
-	 * enable refresh button
+	 * hide loader
 	 */
-	public void enableButton() {
+	public void loadingStop() {
 
 		ProgressBar pgLoading = (ProgressBar) findViewById(R.id.pgLoading);
 		pgLoading.setVisibility(View.INVISIBLE);	
 
+		//hide logo at first startup
 		if(ivLogoDisplay) {
 			LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
 			llLogo.setVisibility(LinearLayout.GONE);
-
-			LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
-			llContent.setVisibility(LinearLayout.VISIBLE);
-
 			ivLogoDisplay = false;
 		}
+		
+		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
+		llContent.setVisibility(LinearLayout.VISIBLE);
 	}
 
 	/**
-	 * disable refresh button
+	 *show loader
 	 */
-	public void disableButton() {
+	public void loadingStart() {
 
 		ProgressBar pgLoading = (ProgressBar) findViewById(R.id.pgLoading);
 		pgLoading.setVisibility(View.VISIBLE);
@@ -420,6 +407,7 @@ implements OnClickListener, View.OnTouchListener
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 
+			
 			//load new selected host
 			currentHost = data.getExtras().getString("host");
 			getData(currentHost);
@@ -429,6 +417,8 @@ implements OnClickListener, View.OnTouchListener
 			Editor editor = pref.edit();
 			editor.putString(PSIConfig.JSON_CURRENT_HOST,currentHost);
 			editor.commit();
+			
+
 		}
 		else {
 			//just update list of hosts

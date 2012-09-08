@@ -31,6 +31,7 @@ extends AsyncTask<String, Void, Void>
 	private PSIErrorCode errorCode = PSIErrorCode.NO_ERROR;
 	private PSIActivity activity;
 	private PSIHostData psiObject;
+	private String address = "";
 
 	public PSIDownloadData(PSIActivity psiaa) {
 		super();
@@ -39,7 +40,7 @@ extends AsyncTask<String, Void, Void>
 
 	@Override
 	protected Void doInBackground(String... strs) {
-		String address = strs[0];
+		address = strs[0];
 		String user = strs[1];
 		String password = strs[2];
 
@@ -49,7 +50,7 @@ extends AsyncTask<String, Void, Void>
 			input = getUrl(address,user,password);
 		}
 		catch (Exception e) {
-			Log.d("PSIAndroid", "Url error", e);
+			Log.d("PSIAndroid", "BAD_URL", e);
 			errorCode = PSIErrorCode.BAD_URL;
 			return null;
 		}
@@ -58,7 +59,7 @@ extends AsyncTask<String, Void, Void>
 			parser = SAXParserFactory.newInstance().newSAXParser();
 		}
 		catch (Exception e) {
-			Log.d("PSIAndroid", "Error while creating xml parser", e);
+			Log.d("PSIAndroid", "XML_PARSER_CREATE", e);
 			errorCode = PSIErrorCode.XML_PARSER_CREATE;
 			return null;
 		}
@@ -66,7 +67,7 @@ extends AsyncTask<String, Void, Void>
 		DefaultHandler handler = new PSIXmlParse();
 		try {
 			if(input == null) {
-				Log.d("PSIAndroid", "Cannot retrieve xml file");
+				Log.d("PSIAndroid", "CANNOT_GET_XML");
 				errorCode = PSIErrorCode.CANNOT_GET_XML;
 				return null;
 			}
@@ -76,7 +77,7 @@ extends AsyncTask<String, Void, Void>
 			}
 		}
 		catch (Exception e) {
-			Log.d("PSIAndroid", "Error while parsing xml", e);
+			Log.d("PSIAndroid", "XML_PARSER_ERRORl", e);
 			errorCode = PSIErrorCode.XML_PARSER_ERROR;
 			return null;
 		}
@@ -86,16 +87,18 @@ extends AsyncTask<String, Void, Void>
 
 	@Override
 	protected void onPostExecute(Void result) {
-		if (this.errorCode.equals(PSIErrorCode.NO_ERROR))
+		if (this.errorCode.equals(PSIErrorCode.NO_ERROR)) {
 			this.activity.displayInfo(psiObject);
-		else
-			this.activity.displayError(errorCode);
+		}
+		else {
+			this.activity.displayError(address, errorCode);
+		}
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		this.activity.disableButton();
+		this.activity.loadingStart();
 	}
 
 	private static InputStream getUrl(String url, String user, String password)
