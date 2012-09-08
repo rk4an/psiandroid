@@ -7,7 +7,7 @@ Features:
 
  * Operating System Information (Version, Uptime, ...)
  * CPU, Memory and Disk usage
- * Multi-host (Add, Remove and Edit)
+ * Multi-host
  * HTTPS
  * Basic Authentification
  * Temperatures (MotherBoard and IPMI)
