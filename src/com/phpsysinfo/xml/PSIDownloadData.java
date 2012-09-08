@@ -77,7 +77,7 @@ extends AsyncTask<String, Void, Void>
 			}
 		}
 		catch (Exception e) {
-			Log.d("PSIAndroid", "XML_PARSER_ERRORl", e);
+			Log.d("PSIAndroid", "XML_PARSER_ERROR", e);
 			errorCode = PSIErrorCode.XML_PARSER_ERROR;
 			return null;
 		}
