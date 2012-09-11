@@ -13,6 +13,7 @@
     <string name="lblNodata"></string>
     <string name="lblMio">MiB</string>
     <string name="lblGio">GiB</string>
+    <string name="lblTio">TiB</string>
     <string name="lblAdd">Add</string>
     <string name="lblAbout">About</string>
     <string name="lblUrlHint">http://</string>
@@ -23,4 +24,5 @@
     <string name="lblMountPoints">Mounted File Systems</string>
     <string name="lblCpu">Processor:</string>
     <string name="lblTemperatures">Temperatures</string>
+    <string name="lblNetwork">Networks</string>
 </resources>

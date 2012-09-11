@@ -81,6 +81,12 @@ public class PSIXmlParse extends DefaultHandler {
 		else if (localName.equalsIgnoreCase("CpuCore")){
 			this.entry.setCpu(attributes.getValue("Model"));
 		}
+		else if(localName.equalsIgnoreCase("NetDevice")){
+			this.entry.addNetworkInterface(
+					attributes.getValue("Name"),
+					attributes.getValue("RxBytes"),
+					attributes.getValue("TxBytes"));
+		}
 
 		//ipmi
 		else if (localName.equalsIgnoreCase("Plugin_ipmi")){

@@ -21,6 +21,9 @@ public class PSIHostData {
 	private int appMemoryTotal = 0;
 	
 	private HashMap<String,String> temperature = new HashMap<String,String>();
+	
+	private List<PSINetworkInterface> networkInterface = new ArrayList<PSINetworkInterface>();
+	
 
 	public String getHostname() {
 		return hostname;
@@ -137,5 +140,24 @@ public class PSIHostData {
 	
 	public HashMap<String, String> getTemperature() {
 		return temperature;
+	}
+	
+	public List<PSINetworkInterface> getNetworkInterface() {
+		return networkInterface;
+	}
+
+	public void addNetworkInterface(String name, String rxBytes, String txBytes) {
+		int _rxBytes = 0;
+		int _txBytes = 0;
+		
+		if(rxBytes != null && !rxBytes.equals("")) {
+			_rxBytes = (int) (Long.parseLong(rxBytes)/1024/1024);
+		}
+			
+		if(txBytes != null && !txBytes.equals("")) {
+			_txBytes =  (int) (Long.parseLong(txBytes)/1024/1024);
+		}
+		
+		networkInterface.add(new PSINetworkInterface(name, _rxBytes, _txBytes));
 	}
 }
