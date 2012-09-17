@@ -11,5 +11,5 @@ Features:
  * HTTPS
  * Basic Authentification
  * Temperatures (MotherBoard and IPMI)
- * Networks information (coming soon)
+ * Networks information
  * Other plugins (coming soon)
