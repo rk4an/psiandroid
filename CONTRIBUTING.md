@@ -1,7 +1,9 @@
 # How to contribute
 
-## Getting Started
+## Edit sources
 
  * Install [Android SDK](http://developer.android.com/sdk/installing/index.html)
-  
-## Submitting Changes
+ * Use Android API level >= 8 (Froyo)
+ * Submit a Pull Request
+
+## Report an issue
