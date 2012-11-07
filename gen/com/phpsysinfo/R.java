@@ -89,29 +89,28 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f050000;
-        public static final int lblAbout=0x7f05000f;
-        public static final int lblAdd=0x7f05000e;
-        public static final int lblCpu=0x7f050016;
+        public static final int lblAbout=0x7f05000e;
+        public static final int lblAdd=0x7f05000d;
+        public static final int lblCpu=0x7f050015;
         public static final int lblDistro=0x7f050006;
-        public static final int lblGio=0x7f05000c;
-        public static final int lblHosts=0x7f050011;
+        public static final int lblGio=0x7f05000b;
+        public static final int lblHosts=0x7f050010;
         public static final int lblIp=0x7f050007;
         public static final int lblKernel=0x7f050005;
         public static final int lblLoad=0x7f050003;
         public static final int lblMemory=0x7f050002;
-        public static final int lblMemoryUsage=0x7f050014;
-        public static final int lblMio=0x7f05000b;
-        public static final int lblMountPoints=0x7f050015;
-        public static final int lblNetwork=0x7f050018;
-        public static final int lblNodata=0x7f05000a;
-        public static final int lblPassword=0x7f050013;
+        public static final int lblMemoryUsage=0x7f050013;
+        public static final int lblMio=0x7f05000a;
+        public static final int lblMountPoints=0x7f050014;
+        public static final int lblNetwork=0x7f050017;
+        public static final int lblPassword=0x7f050012;
         public static final int lblRefresh=0x7f050008;
         public static final int lblSettings=0x7f050009;
-        public static final int lblTemperatures=0x7f050017;
-        public static final int lblTio=0x7f05000d;
+        public static final int lblTemperatures=0x7f050016;
+        public static final int lblTio=0x7f05000c;
         public static final int lblUptime=0x7f050001;
-        public static final int lblUrlHint=0x7f050010;
-        public static final int lblUser=0x7f050012;
+        public static final int lblUrlHint=0x7f05000f;
+        public static final int lblUser=0x7f050011;
         public static final int lblVersion=0x7f050004;
     }
     public static final class style {

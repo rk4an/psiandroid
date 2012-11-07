@@ -10,7 +10,6 @@
     <string name="lblIp">IP:</string>
     <string name="lblRefresh">Refresh</string>
     <string name="lblSettings">Settings</string>
-    <string name="lblNodata"></string>
     <string name="lblMio">MiB</string>
     <string name="lblGio">GiB</string>
     <string name="lblTio">TiB</string>
