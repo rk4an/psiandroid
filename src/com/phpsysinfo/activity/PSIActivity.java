@@ -1,6 +1,7 @@
 package com.phpsysinfo.activity;
 
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.TreeSet;
 
 import org.json.JSONArray;
@@ -171,6 +172,15 @@ implements OnClickListener, View.OnTouchListener
 				llNetwork.setVisibility(LinearLayout.VISIBLE);
 			}
 		}
+		else if(event.getId() == R.id.tvProcessStatus) {
+			LinearLayout llProcessStatus = (LinearLayout) findViewById(R.id.llProcessStatus);
+			if(llProcessStatus.getVisibility() == LinearLayout.VISIBLE) {
+				llProcessStatus.setVisibility(LinearLayout.GONE);
+			}
+			else {
+				llProcessStatus.setVisibility(LinearLayout.VISIBLE);
+			}
+		}
 	}
 
 	@Override
@@ -325,6 +335,9 @@ implements OnClickListener, View.OnTouchListener
 		
 		//network section
 		showNetworkInterface(entry);
+		
+		//ps status
+		showPsStatus(entry);
 	}
 
 	/**
@@ -583,7 +596,7 @@ implements OnClickListener, View.OnTouchListener
 			llNetwork.setOrientation(LinearLayout.VERTICAL);
 
 
-			//populate IMPI content
+			//populate
 			for (PSINetworkInterface pni : entry.getNetworkInterface()) {
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>" + pni.getName() + ": </b>"));
@@ -613,7 +626,6 @@ implements OnClickListener, View.OnTouchListener
 
 		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
 
-		//IMPI section
 		if(entry.getTemperature().size() > 0) {
 
 			//header
@@ -643,8 +655,7 @@ implements OnClickListener, View.OnTouchListener
 
 			TreeSet<String> keys = new TreeSet<String>(entry.getTemperature().keySet());
 
-
-			//populate IMPI content
+			//populate
 			for (String mapKey : keys) {
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
@@ -664,4 +675,70 @@ implements OnClickListener, View.OnTouchListener
 		}
 	}
 
+	public void showPsStatus(PSIHostData entry) {
+
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+
+		if(entry.getProcessStatus().size() > 0) {
+
+			//header
+			TextView tvProcessStatus = new TextView(this);
+			tvProcessStatus.setId(R.id.tvProcessStatus);
+			tvProcessStatus.setText(getString(R.string.lblProcessStatus));
+			tvProcessStatus.setTypeface(null,Typeface.BOLD);
+			tvProcessStatus.setPadding(5, 5, 5, 5);
+
+			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			llp.setMargins(0, 5, 0, 5);
+			tvProcessStatus.setLayoutParams(llp);
+
+			tvProcessStatus.setBackgroundColor(Color.parseColor("#444242"));
+			llPlugins.addView(tvProcessStatus);
+
+			tvProcessStatus.setOnClickListener(this);
+
+			//content
+			TableLayout tProcessStatus = new TableLayout(this);
+			tProcessStatus.setColumnShrinkable(0, true);
+			tProcessStatus.setId(R.id.tProcessStatus);
+
+			LinearLayout llProcessStatus = new LinearLayout(this);
+			llProcessStatus.setId(R.id.llProcessStatus);
+			llProcessStatus.setOrientation(LinearLayout.VERTICAL);
+
+
+			HashMap<String, String> psStatus = entry.getProcessStatus();
+
+			for (String mapKey : psStatus.keySet()) {
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				
+				String value = psStatus.get(mapKey);
+				if(value != null) {
+					if(value.equals("1")) {
+						tvItemValue.setText("UP");
+						tvItemValue.setTextColor(PSIConfig.COLOR_OK);
+					}
+					else {
+						tvItemValue.setText("DOWN");
+						tvItemValue.setTextColor(PSIConfig.COLOR_HARD);
+					}
+				}
+				
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tProcessStatus.addView(trItem);
+			}
+
+			llProcessStatus.addView(tProcessStatus);
+			llPlugins.addView(llProcessStatus);
+		}
+	}
+	
+	
 }

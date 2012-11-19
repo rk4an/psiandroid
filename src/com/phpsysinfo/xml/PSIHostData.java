@@ -24,6 +24,7 @@ public class PSIHostData {
 	
 	private List<PSINetworkInterface> networkInterface = new ArrayList<PSINetworkInterface>();
 	
+	private HashMap<String,String> processStatus = new HashMap<String,String>();
 
 	public String getHostname() {
 		return hostname;
@@ -160,4 +161,13 @@ public class PSIHostData {
 		
 		networkInterface.add(new PSINetworkInterface(name, _rxBytes, _txBytes));
 	}
+	
+	public void addProcessStatus(String label, String value) {
+		processStatus.put(label, value);
+	}
+	
+	public HashMap<String, String> getProcessStatus() {
+		return processStatus;
+	}	
+	
 }

@@ -9,4 +9,5 @@ public class PSIConfig {
 	public final static int MEMORY_HARD_THR = 90;
 	public final static int COLOR_SOFT = 0xFFFF530D;
 	public final static int COLOR_HARD = 0xFFE80E0C;
+	public final static int COLOR_OK = 0xFF0CE88E;
 }

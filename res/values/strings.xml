@@ -24,4 +24,5 @@
     <string name="lblCpu">Processor:</string>
     <string name="lblTemperatures">Temperatures</string>
     <string name="lblNetwork">Networks</string>
+    <string name="lblProcessStatus">Process Status</string>
 </resources>

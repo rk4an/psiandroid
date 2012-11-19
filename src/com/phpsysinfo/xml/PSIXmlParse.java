@@ -14,6 +14,8 @@ public class PSIXmlParse extends DefaultHandler {
 
 	private boolean inMbInfo = false;
 	private boolean inMbInfoTemperature = false;
+	
+	private boolean inPsStatus = false;
 
 	@Override
 	public void processingInstruction(String target, String data) throws SAXException {
@@ -113,6 +115,16 @@ public class PSIXmlParse extends DefaultHandler {
 				this.entry.addTemperature(attributes.getValue("Label"), attributes.getValue("Value"));
 			}
 		}
+		
+		//process status
+		else if (localName.equalsIgnoreCase("Plugin_PSStatus")){
+			inPsStatus = true;
+		}
+		else if (inPsStatus){
+			if(localName.equalsIgnoreCase("Process")) {
+				this.entry.addProcessStatus(attributes.getValue("Name"), attributes.getValue("Status"));
+			}
+		}			
 	}
 
 	@Override
@@ -124,6 +136,9 @@ public class PSIXmlParse extends DefaultHandler {
 		else if(localName.equalsIgnoreCase("Temperature")){
 			inPluginImpiTemperature = false;
 			inMbInfoTemperature = false;
+		}
+		else if(localName.equalsIgnoreCase("Plugin_PSStatus")){
+			inPsStatus = false;
 		}
 	}
 

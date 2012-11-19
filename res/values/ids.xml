@@ -6,4 +6,7 @@
         <item type="id" name="tvNetwork"/>
         <item type="id" name="llNetwork"/>
         <item type="id" name="tNetwork"/>
+        <item type="id" name="tvProcessStatus"/>
+        <item type="id" name="llProcessStatus"/>
+        <item type="id" name="tProcessStatus"/>
     </resources>
