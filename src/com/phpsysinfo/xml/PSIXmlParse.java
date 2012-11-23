@@ -14,6 +14,7 @@ public class PSIXmlParse extends DefaultHandler {
 
 	private boolean inMbInfo = false;
 	private boolean inMbInfoTemperature = false;
+	private boolean inMbInfoFans = false;
 	
 	private boolean inPsStatus = false;
 
@@ -110,9 +111,17 @@ public class PSIXmlParse extends DefaultHandler {
 		else if (inMbInfo && localName.equalsIgnoreCase("Temperature")){
 			inMbInfoTemperature = true;
 		}
+		else if (inMbInfo && localName.equalsIgnoreCase("Fans")){
+			inMbInfoFans = true;
+		}
 		else if (inMbInfoTemperature){
 			if(localName.equalsIgnoreCase("Item")) {
 				this.entry.addTemperature(attributes.getValue("Label"), attributes.getValue("Value"));
+			}
+		}
+		else if (inMbInfoFans){
+			if(localName.equalsIgnoreCase("Item")) {
+				this.entry.addFans(attributes.getValue("Label"), attributes.getValue("Value"));
 			}
 		}
 		
@@ -131,11 +140,16 @@ public class PSIXmlParse extends DefaultHandler {
 	public void endElement(String uri, String localName, String name) throws SAXException {
 		if (localName.equalsIgnoreCase("Plugin_ipmi")){
 			inPluginImpi = false;
+		}
+		else if(localName.equalsIgnoreCase("MBInfo")) {
 			inMbInfo = false;
 		}
 		else if(localName.equalsIgnoreCase("Temperature")){
 			inPluginImpiTemperature = false;
 			inMbInfoTemperature = false;
+		}
+		else if(localName.equalsIgnoreCase("Fans")){
+			inMbInfoFans = false;
 		}
 		else if(localName.equalsIgnoreCase("Plugin_PSStatus")){
 			inPsStatus = false;

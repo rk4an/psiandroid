@@ -9,4 +9,7 @@
         <item type="id" name="tvProcessStatus"/>
         <item type="id" name="llProcessStatus"/>
         <item type="id" name="tProcessStatus"/>
+        <item type="id" name="tvFans"/>
+        <item type="id" name="llFans"/>
+        <item type="id" name="tFans"/>
     </resources>

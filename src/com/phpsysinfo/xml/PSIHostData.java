@@ -21,6 +21,7 @@ public class PSIHostData {
 	private int appMemoryTotal = 0;
 	
 	private HashMap<String,String> temperature = new HashMap<String,String>();
+	private HashMap<String,String> fans = new HashMap<String,String>();
 	
 	private List<PSINetworkInterface> networkInterface = new ArrayList<PSINetworkInterface>();
 	
@@ -141,6 +142,14 @@ public class PSIHostData {
 	
 	public HashMap<String, String> getTemperature() {
 		return temperature;
+	}
+	
+	public void addFans(String label, String value) {
+		fans.put(label, value);
+	}
+	
+	public HashMap<String, String> getFans() {
+		return fans;
 	}
 	
 	public List<PSINetworkInterface> getNetworkInterface() {

@@ -25,4 +25,5 @@
     <string name="lblTemperatures">Temperatures</string>
     <string name="lblNetwork">Networks</string>
     <string name="lblProcessStatus">Process Status</string>
+    <string name="lblFans">Fans</string>
 </resources>

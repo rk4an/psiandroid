@@ -181,6 +181,15 @@ implements OnClickListener, View.OnTouchListener
 				llProcessStatus.setVisibility(LinearLayout.VISIBLE);
 			}
 		}
+		else if(event.getId() == R.id.tvFans) {
+			LinearLayout llFans = (LinearLayout) findViewById(R.id.llFans);
+			if(llFans.getVisibility() == LinearLayout.VISIBLE) {
+				llFans.setVisibility(LinearLayout.GONE);
+			}
+			else {
+				llFans.setVisibility(LinearLayout.VISIBLE);
+			}
+		}
 	}
 
 	@Override
@@ -332,6 +341,9 @@ implements OnClickListener, View.OnTouchListener
 
 		//ipmi section
 		showIpmi(entry);
+		
+		//mb fans speed
+		showFans(entry);
 		
 		//network section
 		showNetworkInterface(entry);
@@ -517,10 +529,6 @@ implements OnClickListener, View.OnTouchListener
 		}
 	}
 
-	/**
-	 * 
-	 * @param currentHost
-	 */
 	public void getData(String currentHost) {
 		PSIDownloadData task = new PSIDownloadData(this);
 
@@ -539,12 +547,6 @@ implements OnClickListener, View.OnTouchListener
 		}
 	}
 
-
-	/**
-	 * 
-	 * @param memory
-	 * @return
-	 */
 	public String getFormatedMemory(int memory) {
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(1);
@@ -562,7 +564,6 @@ implements OnClickListener, View.OnTouchListener
 
 		return value;
 	}
-
 
 	public void showNetworkInterface(PSIHostData entry) {
 
@@ -740,5 +741,59 @@ implements OnClickListener, View.OnTouchListener
 		}
 	}
 	
+	public void showFans(PSIHostData entry) {
+
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+
+		if(entry.getFans().size() > 0) {
+
+			//header
+			TextView tvFans = new TextView(this);
+			tvFans.setId(R.id.tvFans);
+			tvFans.setText(getString(R.string.lblFans));
+			tvFans.setTypeface(null,Typeface.BOLD);
+			tvFans.setPadding(5, 5, 5, 5);
+
+			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			llp.setMargins(0, 5, 0, 5);
+			tvFans.setLayoutParams(llp);
+
+			tvFans.setBackgroundColor(Color.parseColor("#444242"));
+			llPlugins.addView(tvFans);
+
+			tvFans.setOnClickListener(this);
+
+			//content
+			TableLayout tFans = new TableLayout(this);
+			tFans.setColumnShrinkable(0, true);
+			tFans.setId(R.id.tFans);
+
+			LinearLayout llFans = new LinearLayout(this);
+			llFans.setId(R.id.llFans);
+			llFans.setOrientation(LinearLayout.VERTICAL);
+
+
+			HashMap<String, String> fans = entry.getFans();
+
+			for (String mapKey : fans.keySet()) {
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				
+				String value = fans.get(mapKey);
+				tvItemValue.setText(value);
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tFans.addView(trItem);
+			}
+
+			llFans.addView(tFans);
+			llPlugins.addView(llFans);
+		}
+	}
 	
 }
