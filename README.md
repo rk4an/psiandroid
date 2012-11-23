@@ -11,5 +11,7 @@ Features:
  * HTTPS
  * Basic Authentification
  * Temperatures (MotherBoard and IPMI)
- * Networks information
+ * Fans speed (MotherBoard)
+ * Network informations
+ * PSStatus
  * Other plugins (coming soon)
