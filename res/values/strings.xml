@@ -21,7 +21,7 @@
     <string name="lblPassword">password</string>
     <string name="lblMemoryUsage">Memory Usage</string>
     <string name="lblMountPoints">Mounted File Systems</string>
-    <string name="lblCpu">Processor:</string>
+    <!-- <string name="lblCpu">Processor:</string> -->
     <string name="lblTemperatures">Temperatures</string>
     <string name="lblNetwork">Networks</string>
     <string name="lblProcessStatus">Process Status</string>
