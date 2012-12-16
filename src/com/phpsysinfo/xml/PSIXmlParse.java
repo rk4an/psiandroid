@@ -15,7 +15,7 @@ public class PSIXmlParse extends DefaultHandler {
 	private boolean inMbInfo = false;
 	private boolean inMbInfoTemperature = false;
 	private boolean inMbInfoFans = false;
-	
+
 	private boolean inPsStatus = false;
 
 	@Override
@@ -57,7 +57,7 @@ public class PSIXmlParse extends DefaultHandler {
 
 			//		 	/home
 			String mountPointName = attributes.getValue("MountPoint");
-			
+
 			// 			/dev/sda5
 			String mountPointPath = attributes.getValue("Name");		
 
@@ -124,7 +124,7 @@ public class PSIXmlParse extends DefaultHandler {
 				this.entry.addFans(attributes.getValue("Label"), attributes.getValue("Value"));
 			}
 		}
-		
+
 		//process status
 		else if (localName.equalsIgnoreCase("Plugin_PSStatus")){
 			inPsStatus = true;
@@ -133,7 +133,29 @@ public class PSIXmlParse extends DefaultHandler {
 			if(localName.equalsIgnoreCase("Process")) {
 				this.entry.addProcessStatus(attributes.getValue("Name"), attributes.getValue("Status"));
 			}
-		}			
+		}
+
+		else if(localName.equalsIgnoreCase("UPS")){
+
+			PSIUps ups = new PSIUps();
+
+			ups.setName(attributes.getValue("Name"));
+			ups.setModel(attributes.getValue("Model"));
+			ups.setMode(attributes.getValue("Mode"));
+			ups.setStartTime(attributes.getValue("StartTime"));
+			ups.setStatus(attributes.getValue("Status"));
+			ups.setTemperature(attributes.getValue("Temperature"));
+			ups.setOutagesCount(attributes.getValue("OutagesCount"));
+			ups.setLastOutage(attributes.getValue("LastOutage"));
+			ups.setLastOutageFinish(attributes.getValue("LastOutageFinish"));
+			ups.setLineVoltage(attributes.getValue("LineVoltage"));
+			ups.setLoadPercent(attributes.getValue("LoadPercent"));
+			ups.setBatteryVoltage(attributes.getValue("BatteryVoltage"));
+			ups.setBatteryChargePercent(attributes.getValue("BatteryChargePercent"));
+			ups.setTimeLeftMinutes(attributes.getValue("TimeLeftMinutes"));
+
+			this.entry.setUps(ups);
+		}
 	}
 
 	@Override

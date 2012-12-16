@@ -26,4 +26,12 @@
     <string name="lblNetwork">Networks</string>
     <string name="lblProcessStatus">Process Status</string>
     <string name="lblFans">Fans</string>
+    <string name="lblUps">UPS</string>
+    <string name="lblUpsName">Name</string>
+    <string name="lblUpsModel">Model</string>
+    <string name="lblUpsBatteryCharge">Battery charge</string>
+    <string name="lblUpsLoad">Load</string>
+    <string name="lblUpsTime">Time left</string>
+    <string name="lblUpsBattery">Battery voltage</string>
+    <string name="lblUpsLine">Line voltage</string>
 </resources>

@@ -12,4 +12,7 @@
         <item type="id" name="tvFans"/>
         <item type="id" name="llFans"/>
         <item type="id" name="tFans"/>
+        <item type="id" name="tvUps"/>
+        <item type="id" name="llUps"/>
+        <item type="id" name="tUps"/>
     </resources>

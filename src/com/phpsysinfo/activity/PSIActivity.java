@@ -42,6 +42,7 @@ import com.phpsysinfo.xml.PSIErrorCode;
 import com.phpsysinfo.xml.PSIHostData;
 import com.phpsysinfo.xml.PSIMountPoint;
 import com.phpsysinfo.xml.PSINetworkInterface;
+import com.phpsysinfo.xml.PSIUps;
 
 public class PSIActivity 
 extends Activity
@@ -188,6 +189,15 @@ implements OnClickListener, View.OnTouchListener
 			}
 			else {
 				llFans.setVisibility(LinearLayout.VISIBLE);
+			}
+		}
+		else if(event.getId() == R.id.tvUps) {
+			LinearLayout llUps = (LinearLayout) findViewById(R.id.llUps);
+			if(llUps.getVisibility() == LinearLayout.VISIBLE) {
+				llUps.setVisibility(LinearLayout.GONE);
+			}
+			else {
+				llUps.setVisibility(LinearLayout.VISIBLE);
 			}
 		}
 	}
@@ -350,6 +360,9 @@ implements OnClickListener, View.OnTouchListener
 		
 		//ps status
 		showPsStatus(entry);
+		
+		//ups section
+		showUps(entry);
 	}
 
 	/**
@@ -795,5 +808,150 @@ implements OnClickListener, View.OnTouchListener
 			llPlugins.addView(llFans);
 		}
 	}
+	
+	
+	public void showUps(PSIHostData entry) {
+
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+
+		if(entry.getUps() != null) {
+
+			//header
+			TextView tvUps = new TextView(this);
+			tvUps.setId(R.id.tvUps);
+			tvUps.setText(getString(R.string.lblUps));
+			tvUps.setTypeface(null,Typeface.BOLD);
+			tvUps.setPadding(5, 5, 5, 5);
+
+			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			llp.setMargins(0, 5, 0, 5);
+			tvUps.setLayoutParams(llp);
+
+			tvUps.setBackgroundColor(Color.parseColor("#444242"));
+			llPlugins.addView(tvUps);
+
+			tvUps.setOnClickListener(this);
+
+			//content
+			TableLayout tUps = new TableLayout(this);
+			tUps.setColumnShrinkable(1, true);
+			tUps.setId(R.id.tUps);
+
+			LinearLayout llUps = new LinearLayout(this);
+			llUps.setId(R.id.llUps);
+			llUps.setOrientation(LinearLayout.VERTICAL);
+
+			PSIUps ups = entry.getUps();
+
+			if(ups.getName() != null) {
+				
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsName)+"</b>" ));
+
+				TextView tvItemValue = new TextView(this);
+				tvItemValue.setText(ups.getName());
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tUps.addView(trItem);
+			}
+			
+			if(ups.getModel() != null) {
+				
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsModel)+" </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				tvItemValue.setText(ups.getModel());
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tUps.addView(trItem);
+			}
+			
+			if(ups.getBatteryChargePercent() != null) {
+				
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsBatteryCharge)+" </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				tvItemValue.setText(ups.getBatteryChargePercent() + "%");
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tUps.addView(trItem);
+			}
+			
+			if(ups.getLoadPercent() != null) {
+				
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsLoad)+" </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				tvItemValue.setText(ups.getLoadPercent() + "%");
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tUps.addView(trItem);
+			}
+			
+			if(ups.getTimeLeftMinutes() != null) {
+				
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsTime)+" </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				tvItemValue.setText(ups.getTimeLeftMinutes() + "min");
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tUps.addView(trItem);
+			}
+			
+			if(ups.getBatteryVoltage() != null) {
+				
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsBattery)+" </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				tvItemValue.setText(ups.getBatteryVoltage() + "V");
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tUps.addView(trItem);
+			}
+			
+			if(ups.getLineVoltage() != null) {
+				
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsLine)+" </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				tvItemValue.setText(ups.getLineVoltage() + "V");
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tUps.addView(trItem);
+			}
+			
+			llUps.addView(tUps);
+			llPlugins.addView(llUps);
+		}
+	}	
+	
 	
 }

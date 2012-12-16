@@ -27,6 +27,8 @@ public class PSIHostData {
 	
 	private HashMap<String,String> processStatus = new HashMap<String,String>();
 
+	private PSIUps ups = null;
+
 	public String getHostname() {
 		return hostname;
 	}
@@ -178,5 +180,13 @@ public class PSIHostData {
 	public HashMap<String, String> getProcessStatus() {
 		return processStatus;
 	}	
+	
+	public PSIUps getUps() {
+		return ups;
+	}
+
+	public void setUps(PSIUps ups) {
+		this.ups = ups;
+	}
 	
 }
