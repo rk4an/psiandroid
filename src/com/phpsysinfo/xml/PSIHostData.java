@@ -27,6 +27,8 @@ public class PSIHostData {
 	
 	private HashMap<String,String> processStatus = new HashMap<String,String>();
 
+	private HashMap<String,String> smart = new HashMap<String,String>();
+	
 	private PSIUps ups = null;
 
 	public String getHostname() {
@@ -180,6 +182,14 @@ public class PSIHostData {
 	public HashMap<String, String> getProcessStatus() {
 		return processStatus;
 	}	
+	
+	public void addSmart(String attr, String value) {
+		smart.put(attr, value);
+	}
+	
+	public HashMap<String, String> getSmart() {
+		return smart;
+	}
 	
 	public PSIUps getUps() {
 		return ups;

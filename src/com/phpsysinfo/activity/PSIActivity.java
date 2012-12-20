@@ -200,6 +200,15 @@ implements OnClickListener, View.OnTouchListener
 				llUps.setVisibility(LinearLayout.VISIBLE);
 			}
 		}
+		else if(event.getId() == R.id.tvSmart) {
+			LinearLayout llSmart = (LinearLayout) findViewById(R.id.llSmart);
+			if(llSmart.getVisibility() == LinearLayout.VISIBLE) {
+				llSmart.setVisibility(LinearLayout.GONE);
+			}
+			else {
+				llSmart.setVisibility(LinearLayout.VISIBLE);
+			}
+		}
 	}
 
 	@Override
@@ -363,6 +372,9 @@ implements OnClickListener, View.OnTouchListener
 		
 		//ups section
 		showUps(entry);
+		
+		//smart section
+		showSmart(entry);
 	}
 
 	/**
@@ -953,5 +965,58 @@ implements OnClickListener, View.OnTouchListener
 		}
 	}	
 	
-	
+	public void showSmart(PSIHostData entry) {
+
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+
+		if(entry.getSmart().size() > 0) {
+
+			//header
+			TextView tvSmart = new TextView(this);
+			tvSmart.setId(R.id.tvSmart);
+			tvSmart.setText(getString(R.string.lblSmart));
+			tvSmart.setTypeface(null,Typeface.BOLD);
+			tvSmart.setPadding(5, 5, 5, 5);
+
+			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			llp.setMargins(0, 5, 0, 5);
+			tvSmart.setLayoutParams(llp);
+
+			tvSmart.setBackgroundColor(Color.parseColor("#444242"));
+			llPlugins.addView(tvSmart);
+
+			tvSmart.setOnClickListener(this);
+
+			//content
+			TableLayout tSmart = new TableLayout(this);
+			tSmart.setColumnShrinkable(1, true);
+			tSmart.setId(R.id.tSmart);
+
+			LinearLayout llSmart = new LinearLayout(this);
+			llSmart.setId(R.id.llSmart);
+			llSmart.setOrientation(LinearLayout.VERTICAL);
+
+			//HashMap<String, String> smart = entry.getSmart();
+			TreeSet<String> keys = new TreeSet<String>(entry.getSmart().keySet());
+			
+			for (String mapKey : keys) {
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				
+				String value = entry.getSmart().get(mapKey);
+				tvItemValue.setText(value);
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tSmart.addView(trItem);
+			}
+			
+			llSmart.addView(tSmart);
+			llPlugins.addView(llSmart);
+		}
+	}
 }

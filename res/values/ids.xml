@@ -15,4 +15,7 @@
         <item type="id" name="tvUps"/>
         <item type="id" name="llUps"/>
         <item type="id" name="tUps"/>
+        <item type="id" name="tvSmart"/>
+        <item type="id" name="llSmart"/>
+        <item type="id" name="tSmart"/>
     </resources>

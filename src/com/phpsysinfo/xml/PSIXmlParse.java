@@ -4,6 +4,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.util.Log;
+
 
 public class PSIXmlParse extends DefaultHandler {
 
@@ -17,6 +19,9 @@ public class PSIXmlParse extends DefaultHandler {
 	private boolean inMbInfoFans = false;
 
 	private boolean inPsStatus = false;
+	
+	private boolean inDisk = false;
+	private int numDisk = 0;
 
 	@Override
 	public void processingInstruction(String target, String data) throws SAXException {
@@ -134,6 +139,21 @@ public class PSIXmlParse extends DefaultHandler {
 				this.entry.addProcessStatus(attributes.getValue("Name"), attributes.getValue("Status"));
 			}
 		}
+		
+		//smart
+		else if (localName.equalsIgnoreCase("disk")){
+			inDisk = true;
+			numDisk++;
+			//attributes.getValue("name");
+		}
+		
+		else if (inDisk){
+			if (localName.equalsIgnoreCase("attribute")) {
+				String attr = attributes.getValue("attribute_name");
+				String value = attributes.getValue("raw_value");
+				this.entry.addSmart(numDisk +" " + attr, value);
+			}
+		}
 
 		else if(localName.equalsIgnoreCase("UPS")){
 
@@ -175,6 +195,9 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 		else if(localName.equalsIgnoreCase("Plugin_PSStatus")){
 			inPsStatus = false;
+		}
+		else if(localName.equalsIgnoreCase("disk")){
+			inDisk = false;
 		}
 	}
 

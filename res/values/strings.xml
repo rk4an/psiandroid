@@ -34,4 +34,5 @@
     <string name="lblUpsTime">Time left</string>
     <string name="lblUpsBattery">Battery voltage</string>
     <string name="lblUpsLine">Line voltage</string>
+    <string name="lblSmart">SMART</string>
 </resources>
