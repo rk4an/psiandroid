@@ -14,5 +14,7 @@ Features:
  * Fans speed (MotherBoard)
  * Network informations
  * PSStatus
- * UPS (beta)
+ * SMART
+ * RAID
+ * UPS
  * Other plugins (coming soon)
