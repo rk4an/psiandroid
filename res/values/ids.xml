@@ -18,4 +18,7 @@
         <item type="id" name="tvSmart"/>
         <item type="id" name="llSmart"/>
         <item type="id" name="tSmart"/>
+        <item type="id" name="tvRaid"/>
+        <item type="id" name="llRaid"/>
+        <item type="id" name="tRaid"/>
     </resources>

@@ -42,6 +42,7 @@ import com.phpsysinfo.xml.PSIErrorCode;
 import com.phpsysinfo.xml.PSIHostData;
 import com.phpsysinfo.xml.PSIMountPoint;
 import com.phpsysinfo.xml.PSINetworkInterface;
+import com.phpsysinfo.xml.PSIRaid;
 import com.phpsysinfo.xml.PSIUps;
 
 public class PSIActivity 
@@ -207,6 +208,15 @@ implements OnClickListener, View.OnTouchListener
 			}
 			else {
 				llSmart.setVisibility(LinearLayout.VISIBLE);
+			}
+		}
+		else if(event.getId() == R.id.tvRaid) {
+			LinearLayout llRaid = (LinearLayout) findViewById(R.id.llRaid);
+			if(llRaid.getVisibility() == LinearLayout.VISIBLE) {
+				llRaid.setVisibility(LinearLayout.GONE);
+			}
+			else {
+				llRaid.setVisibility(LinearLayout.VISIBLE);
 			}
 		}
 	}
@@ -375,6 +385,9 @@ implements OnClickListener, View.OnTouchListener
 		
 		//smart section
 		showSmart(entry);
+		
+		//raid section
+		showRaid(entry);
 	}
 
 	/**
@@ -1017,6 +1030,72 @@ implements OnClickListener, View.OnTouchListener
 			
 			llSmart.addView(tSmart);
 			llPlugins.addView(llSmart);
+		}
+	}
+	
+	public void showRaid(PSIHostData entry) {
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+
+		if(entry.getRaid().size() > 0) {
+
+			//header
+			TextView tvRaid = new TextView(this);
+			tvRaid.setId(R.id.tvRaid);
+			tvRaid.setText(getString(R.string.lblRaid));
+			tvRaid.setTypeface(null,Typeface.BOLD);
+			tvRaid.setPadding(5, 5, 5, 5);
+
+			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			llp.setMargins(0, 5, 0, 5);
+			tvRaid.setLayoutParams(llp);
+
+			tvRaid.setBackgroundColor(Color.parseColor("#444242"));
+			llPlugins.addView(tvRaid);
+
+			tvRaid.setOnClickListener(this);
+
+			//content
+			TableLayout tRaid = new TableLayout(this);
+			tRaid.setColumnShrinkable(0, true);
+			tRaid.setId(R.id.tRaid);
+
+			LinearLayout llRaid = new LinearLayout(this);
+			llRaid.setId(R.id.llRaid);
+			llRaid.setOrientation(LinearLayout.VERTICAL);
+
+			//header
+			/*TextView tvItemLabelHeader = new TextView(this);
+			tvItemLabelHeader.setText(Html.fromHtml(
+					"<b><i>"+getString(R.string.lblRaidDevice)+" </i></b>"));
+
+			TextView tvItemValueHeader = new TextView(this);
+			tvItemValueHeader.setText(Html.fromHtml(
+					"<i>"+getString(R.string.lblRaidActiveRegistered)+"</i>"));
+
+			TableRow trItemHeader = new TableRow(this);
+			trItemHeader.addView(tvItemLabelHeader);
+			trItemHeader.addView(tvItemValueHeader);
+
+			tRaid.addView(trItemHeader);*/
+			
+
+			//populate
+			for (PSIRaid psiRaid : entry.getRaid()) {
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>" + psiRaid.getName() + ": </b>"));
+
+				TextView tvItemValue = new TextView(this);
+				tvItemValue.setText(psiRaid.getDisks_active()+"/"+psiRaid.getDisks_registered());
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tRaid.addView(trItem);
+			}
+
+			llRaid.addView(tRaid);
+			llPlugins.addView(llRaid);
 		}
 	}
 }

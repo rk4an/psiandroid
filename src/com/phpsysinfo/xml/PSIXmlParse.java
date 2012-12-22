@@ -4,8 +4,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import android.util.Log;
-
 
 public class PSIXmlParse extends DefaultHandler {
 
@@ -175,6 +173,13 @@ public class PSIXmlParse extends DefaultHandler {
 			ups.setTimeLeftMinutes(attributes.getValue("TimeLeftMinutes"));
 
 			this.entry.setUps(ups);
+		}
+		
+		else if(localName.equalsIgnoreCase("Raid")){
+			this.entry.addRaid(
+					attributes.getValue("Device_Name") + " ("  + attributes.getValue("Level") + ")",
+					attributes.getValue("Disks_Active"),
+					attributes.getValue("Disks_Registered"));
 		}
 	}
 

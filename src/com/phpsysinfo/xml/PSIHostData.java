@@ -28,9 +28,11 @@ public class PSIHostData {
 	private HashMap<String,String> processStatus = new HashMap<String,String>();
 
 	private HashMap<String,String> smart = new HashMap<String,String>();
+
+	private List<PSIRaid> raid = new ArrayList<PSIRaid>();
 	
 	private PSIUps ups = null;
-
+	
 	public String getHostname() {
 		return hostname;
 	}
@@ -197,6 +199,26 @@ public class PSIHostData {
 
 	public void setUps(PSIUps ups) {
 		this.ups = ups;
+	}
+	
+	
+	public List<PSIRaid> getRaid() {
+		return raid;
+	}
+
+	public void addRaid(String name, String active, String registered) {
+		int _active = 0;
+		int _registered = 0;
+		
+		if(active != null && !active.equals("")) {
+			_active = Integer.parseInt(active);
+		}
+			
+		if(registered != null && !registered.equals("")) {
+			_registered =  Integer.parseInt(registered);
+		}
+		
+		raid.add(new PSIRaid(name,_active,_registered));
 	}
 	
 }
