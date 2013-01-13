@@ -219,6 +219,15 @@ implements OnClickListener, View.OnTouchListener
 				llRaid.setVisibility(LinearLayout.VISIBLE);
 			}
 		}
+		else if(event.getId() == R.id.tvUpdate) {
+			LinearLayout llUpdate = (LinearLayout) findViewById(R.id.llUpdate);
+			if(llUpdate.getVisibility() == LinearLayout.VISIBLE) {
+				llUpdate.setVisibility(LinearLayout.GONE);
+			}
+			else {
+				llUpdate.setVisibility(LinearLayout.VISIBLE);
+			}
+		}
 	}
 
 	@Override
@@ -388,6 +397,9 @@ implements OnClickListener, View.OnTouchListener
 		
 		//raid section
 		showRaid(entry);
+		
+		//update section
+		showUpdate(entry);
 	}
 
 	/**
@@ -1096,6 +1108,70 @@ implements OnClickListener, View.OnTouchListener
 
 			llRaid.addView(tRaid);
 			llPlugins.addView(llRaid);
+		}
+	}
+	
+	public void showUpdate(PSIHostData entry) {
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+
+		if(entry.getNormalUpdate() != -1) {
+
+			//header
+			TextView tvUpdate = new TextView(this);
+			tvUpdate.setId(R.id.tvUpdate);
+			tvUpdate.setText(getString(R.string.lblUpdate));
+			tvUpdate.setTypeface(null,Typeface.BOLD);
+			tvUpdate.setPadding(5, 5, 5, 5);
+
+			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+			llp.setMargins(0, 5, 0, 5);
+			tvUpdate.setLayoutParams(llp);
+
+			tvUpdate.setBackgroundColor(Color.parseColor("#444242"));
+			llPlugins.addView(tvUpdate);
+
+			tvUpdate.setOnClickListener(this);
+
+			//content
+			TableLayout tUpdate = new TableLayout(this);
+			tUpdate.setColumnShrinkable(0, true);
+			tUpdate.setId(R.id.tUpdate);
+
+			LinearLayout llUpdate = new LinearLayout(this);
+			llUpdate.setId(R.id.llUpdate);
+			llUpdate.setOrientation(LinearLayout.VERTICAL);
+
+			//populate
+			
+			//normal
+			TextView tvItemLabel = new TextView(this);
+			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblPackages) + " </b>"));
+
+			TextView tvItemValue = new TextView(this);
+			tvItemValue.setText(entry.getNormalUpdate()+"");
+
+			TableRow trItem = new TableRow(this);
+			trItem.addView(tvItemLabel);
+			trItem.addView(tvItemValue);
+
+			tUpdate.addView(trItem);
+
+			//security
+			tvItemLabel = new TextView(this);
+			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblSecurity) + " </b>"));
+
+			tvItemValue = new TextView(this);
+			tvItemValue.setText(entry.getSecurityUpdate()+"");
+
+			trItem = new TableRow(this);
+			trItem.addView(tvItemLabel);
+			trItem.addView(tvItemValue);
+
+			
+			tUpdate.addView(trItem);			
+			
+			llUpdate.addView(tUpdate);
+			llPlugins.addView(llUpdate);
 		}
 	}
 }

@@ -17,4 +17,5 @@ Features:
  * SMART
  * RAID
  * UPS
+ * UpdateNotifier
  * Other plugins (coming soon)

@@ -33,6 +33,9 @@ public class PSIHostData {
 	
 	private PSIUps ups = null;
 	
+	private int normalUpdate = -1;
+	private int securityUpdate = -1;
+
 	public String getHostname() {
 		return hostname;
 	}
@@ -219,6 +222,22 @@ public class PSIHostData {
 		}
 		
 		raid.add(new PSIRaid(name,_active,_registered));
+	}
+	
+	public int getNormalUpdate() {
+		return normalUpdate;
+	}
+
+	public void setNormalUpdate(int normalUpdate) {
+		this.normalUpdate = normalUpdate;
+	}
+
+	public int getSecurityUpdate() {
+		return securityUpdate;
+	}
+
+	public void setSecurityUpdate(int securityUpdate) {
+		this.securityUpdate = securityUpdate;
 	}
 	
 }

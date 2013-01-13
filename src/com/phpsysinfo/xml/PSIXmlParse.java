@@ -21,6 +21,10 @@ public class PSIXmlParse extends DefaultHandler {
 	private boolean inDisk = false;
 	private int numDisk = 0;
 
+	private boolean inPackageUpdate = false;
+	private boolean inSecurityUpdate = false;
+	private StringBuffer buffer = new StringBuffer();
+	
 	@Override
 	public void processingInstruction(String target, String data) throws SAXException {
 		super.processingInstruction(target, data);
@@ -181,8 +185,32 @@ public class PSIXmlParse extends DefaultHandler {
 					attributes.getValue("Disks_Active"),
 					attributes.getValue("Disks_Registered"));
 		}
+		
+		else if(localName.equalsIgnoreCase("packages")){
+			inPackageUpdate = true;
+			buffer = new StringBuffer();
+		}
+		
+		else if(localName.equalsIgnoreCase("security")){
+			inSecurityUpdate = true;
+			buffer = new StringBuffer();
+		}
 	}
 
+	@Override
+	public void characters(char[] ch, int start, int length)
+			throws SAXException {
+		super.characters(ch, start, length);
+		
+		if(inPackageUpdate) {
+			buffer.append(ch);
+		}
+		
+		if(inSecurityUpdate) {
+			buffer.append(ch);
+		}
+	}
+	
 	@Override
 	public void endElement(String uri, String localName, String name) throws SAXException {
 		if (localName.equalsIgnoreCase("Plugin_ipmi")){
@@ -203,6 +231,24 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 		else if(localName.equalsIgnoreCase("disk")){
 			inDisk = false;
+		}
+		else if(localName.equalsIgnoreCase("packages")){
+			inPackageUpdate = false;
+			try {
+				entry.setNormalUpdate(Integer.parseInt(buffer.toString()));
+			}
+			catch(Exception e) {
+				entry.setNormalUpdate(-1);
+			}
+		}
+		else if(localName.equalsIgnoreCase("security")){
+			inSecurityUpdate = false;
+			try {
+				entry.setSecurityUpdate(Integer.parseInt(buffer.toString()));
+			}
+			catch(Exception e) {
+				entry.setSecurityUpdate(-1);
+			}
 		}
 	}
 

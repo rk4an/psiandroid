@@ -21,4 +21,7 @@
         <item type="id" name="tvRaid"/>
         <item type="id" name="llRaid"/>
         <item type="id" name="tRaid"/>
+        <item type="id" name="tvUpdate"/>
+        <item type="id" name="llUpdate"/>
+        <item type="id" name="tUpdate"/>
     </resources>
