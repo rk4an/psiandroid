@@ -2,14 +2,12 @@ package com.phpsysinfo.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
@@ -17,10 +15,26 @@ import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
-import android.util.Base64;
 import android.util.Log;
 
 import com.phpsysinfo.activity.PSIActivity;
@@ -32,6 +46,7 @@ extends AsyncTask<String, Void, Void>
 	private PSIActivity activity;
 	private PSIHostData psiObject;
 	private String address = "";
+	private static AndroidHttpClient httpClient = null;
 
 	public PSIDownloadData(PSIActivity psiaa) {
 		super();
@@ -46,12 +61,14 @@ extends AsyncTask<String, Void, Void>
 
 		SAXParser parser = null;
 		InputStream input = null;
+		
 		try {
 			input = getUrl(address,user,password);
 		}
 		catch (Exception e) {
-			Log.d("PSIAndroid", "BAD_URL", e);
+			Log.d("PSIAndroid", "BAD_URL");
 			errorCode = PSIErrorCode.BAD_URL;
+			httpClient.close();
 			return null;
 		}
 
@@ -59,7 +76,7 @@ extends AsyncTask<String, Void, Void>
 			parser = SAXParserFactory.newInstance().newSAXParser();
 		}
 		catch (Exception e) {
-			Log.d("PSIAndroid", "XML_PARSER_CREATE", e);
+			Log.d("PSIAndroid", "XML_PARSER_CREATE");
 			errorCode = PSIErrorCode.XML_PARSER_CREATE;
 			return null;
 		}
@@ -69,6 +86,7 @@ extends AsyncTask<String, Void, Void>
 			if(input == null) {
 				Log.d("PSIAndroid", "CANNOT_GET_XML");
 				errorCode = PSIErrorCode.CANNOT_GET_XML;
+				httpClient.close();
 				return null;
 			}
 			else {
@@ -77,10 +95,13 @@ extends AsyncTask<String, Void, Void>
 			}
 		}
 		catch (Exception e) {
-			Log.d("PSIAndroid", "XML_PARSER_ERROR", e);
+			Log.d("PSIAndroid", "XML_PARSER_ERROR");
 			errorCode = PSIErrorCode.XML_PARSER_ERROR;
+			httpClient.close();
 			return null;
 		}
+		
+		httpClient.close();
 
 		return null;
 	}
@@ -104,37 +125,64 @@ extends AsyncTask<String, Void, Void>
 	private static InputStream getUrl(String url, String user, String password)
 			throws MalformedURLException, IOException
 			{
+		try
+		{
+			//user agent
+			httpClient = AndroidHttpClient.newInstance("PSIAndroid");
 
-		int code = 0;
-		URL u = new URL(url); 
-		HttpURLConnection huc = null;
+			URL urlObj = new URL(url);
+			HttpHost host = new HttpHost(urlObj.getHost(), urlObj.getPort(), urlObj.getProtocol());
+			AuthScope scope = new AuthScope(urlObj.getHost(), urlObj.getPort());
 
-		//check if https url
-		if (u.getProtocol().toLowerCase().equals("https")) {
-			trustAllHosts();
-			huc = (HttpsURLConnection) u.openConnection();
-			((HttpsURLConnection)huc).setHostnameVerifier(DO_NOT_VERIFY);
-		}
-		else {
-			huc = (HttpURLConnection) u.openConnection(); 
-		}
+			//ssl
+			if (urlObj.getProtocol().toLowerCase().equals("https")) {
 
-		//if a username is set
-		if(!user.equals("")) {
-			huc.setRequestMethod("GET");
-			huc.setRequestProperty("Authorization", 
-					"Basic " + Base64.encodeToString((user+":"+password).getBytes(), Base64.NO_WRAP));
-		}
+				X509TrustManager tm = new X509TrustManager() { 
+					public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+					}
 
-		huc.connect();
-		code = huc.getResponseCode();
+					public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+					}
 
-		if (code == 200)
-			return huc.getInputStream();
-		else
-			return null;
+					public X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+				};
+				SSLContext ctx = SSLContext.getInstance("TLS");
+				ctx.init(null, new TrustManager[]{tm}, null);
+				SSLSocketFactory ssf = new MySSLSocketFactory(ctx);
+				ClientConnectionManager ccm = httpClient.getConnectionManager();
+				SchemeRegistry sr = ccm.getSchemeRegistry();
+				sr.register(new Scheme("https", ssf, 443));
+
 			}
 
+			//credentials
+			UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, password);
+			CredentialsProvider cp = new BasicCredentialsProvider();
+			cp.setCredentials(scope, creds);
+			HttpContext credContext = new BasicHttpContext();
+			credContext.setAttribute(ClientContext.CREDS_PROVIDER, cp);
+
+			//get request
+			HttpGet job = new HttpGet(url);
+			HttpResponse response = httpClient.execute(host,job,credContext);
+			HttpEntity entity = response.getEntity();
+			InputStream instream = entity.getContent();
+			StatusLine status = response.getStatusLine();
+
+			if(status.getStatusCode() == 200) {
+				return instream;
+			}
+			else {
+				return null;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+			}
 
 
 	// always verify the host - don't check for certificate
@@ -143,37 +191,5 @@ extends AsyncTask<String, Void, Void>
 			return true;
 		}
 	};
-
-
-	/**
-	 * Trust every server - don't check for any certificate
-	 */
-	private static void trustAllHosts() {
-		// Create a trust manager that does not validate certificate chains
-		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-				return new java.security.cert.X509Certificate[] {};
-			}
-
-			public void checkClientTrusted(X509Certificate[] chain,
-					String authType) throws CertificateException {
-			}
-
-			public void checkServerTrusted(X509Certificate[] chain,
-					String authType) throws CertificateException {
-			}
-		} };
-
-		// Install the all-trusting trust manager
-		try {
-			SSLContext sc = SSLContext.getInstance("TLS");
-			sc.init(null, trustAllCerts, new java.security.SecureRandom());
-			HttpsURLConnection
-			.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 
 }
