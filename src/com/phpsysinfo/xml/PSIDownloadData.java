@@ -184,12 +184,4 @@ extends AsyncTask<String, Void, Void>
 		return null;
 			}
 
-
-	// always verify the host - don't check for certificate
-	final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
-		public boolean verify(String hostname, SSLSession session) {
-			return true;
-		}
-	};
-
 }
