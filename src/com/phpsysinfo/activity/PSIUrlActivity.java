@@ -86,6 +86,23 @@ OnItemLongClickListener, OnClickListener {
 				listStringUrls);
 		listViewUrls.setAdapter(arrayAdapterUrlList);
 
+		//select the current URL
+		/*String currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
+		String currentHostUrl = "";
+		try {
+			JSONTokener tokener = new JSONTokener(currentHost);
+			JSONObject sHost = new JSONObject(tokener);
+			currentHostUrl = sHost.getString("url");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		for(int i = 0; i<listStringUrls.size(); i++) {
+			if(listStringUrls.get(i).equals(currentHostUrl)) {
+				listViewUrls.setItemChecked(i, true);
+			}
+		}*/
+		
 	}
 
 	@Override

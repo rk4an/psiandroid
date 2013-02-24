@@ -27,6 +27,7 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.xml.sax.helpers.DefaultHandler;
@@ -127,6 +128,9 @@ extends AsyncTask<String, Void, Void>
 		{
 			//user agent
 			httpClient = AndroidHttpClient.newInstance("PSIAndroid");
+			
+			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 3000);
+			HttpConnectionParams.setSoTimeout(httpClient.getParams(), 3000);
 
 			URL urlObj = new URL(url);
 			HttpHost host = new HttpHost(urlObj.getHost(), urlObj.getPort(), urlObj.getProtocol());
