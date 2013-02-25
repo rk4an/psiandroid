@@ -118,7 +118,7 @@ extends AsyncTask<String, Void, Void>
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		this.activity.loadingStart();
+		this.activity.setLoaderVisible(true);
 	}
 
 	private static InputStream getUrl(String url, String user, String password)
