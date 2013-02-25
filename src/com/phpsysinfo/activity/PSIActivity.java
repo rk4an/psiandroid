@@ -14,6 +14,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -38,11 +39,16 @@ import com.phpsysinfo.xml.PSINetworkInterface;
 import com.phpsysinfo.xml.PSIRaid;
 import com.phpsysinfo.xml.PSIUps;
 
+enum ViewType {
+    NONE, LOGO, ERROR, DATA
+}
+
 public class PSIActivity 
     extends SherlockActivity
     implements OnClickListener
 {
-	private ImageView ivLogo = null;
+    private ViewType viewType = ViewType.NONE;
+    
 	boolean ivLogoDisplay = true;
 	private Dialog aboutDialog = null;
 
@@ -56,12 +62,6 @@ public class PSIActivity
 
 		setContentView(R.layout.main);
 
-		ivLogo = new ImageView(this);
-		ivLogo.setImageResource(R.drawable.psilogo);
-
-		LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
-		llLogo.addView(ivLogo);
-
 		//create about dialog
 		aboutDialog = new Dialog(this);
 		aboutDialog.setContentView(R.layout.about_dialog);
@@ -71,9 +71,8 @@ public class PSIActivity
 		ImageView image = (ImageView) aboutDialog.findViewById(R.id.image);
 		image.setImageResource(R.drawable.ic_launcher);
 		image.setOnClickListener(this);
-
-		((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
-		((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
+		
+		displayLogo();
 	}
 	
 	@Override
@@ -86,12 +85,7 @@ public class PSIActivity
 	    
 	    if (this.enabledHost == -1)
         {
-            // TODO show logo
-            LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
-            llLogo.setVisibility(LinearLayout.VISIBLE);
-            ivLogoDisplay = true;
-            
-            //TODO hide other informations
+	        displayLogo();
         }
         else
         {
@@ -196,13 +190,30 @@ public class PSIActivity
 		}
 	}
 
+	public void displayLogo()
+	{
+	    if (this.viewType == ViewType.LOGO)
+	        return;
+	    
+	    loadDynamicLayout(R.layout.logo);
+	}
+	
 	/**
 	 * fill label with data
 	 * @param entry
 	 */
 	public void displayInfo(PSIHostData entry) 
 	{
-		this.loadingStop();
+		setLoaderVisible(false);
+		
+		if (viewType != ViewType.DATA)
+		{
+		    loadDynamicLayout(R.layout.data_view);
+		    
+		    // Set listeners
+		    ((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
+	        ((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
+		}
 
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
@@ -366,46 +377,52 @@ public class PSIActivity
 	}
 
 	/**
-	 * 
-	 * @param error
+	 * Display an error view
+	 * @param error the error to display
 	 */
 	public void displayError(String host, PSIErrorCode error) 
 	{
-		loadingStop();
-
-		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
-		llContent.setVisibility(LinearLayout.GONE);
-
-		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
-		txtHostname.setText(Html.fromHtml(host + "<br/><br/><b>" + "Error: " + error.toString()+"</b>"));
-	}
-
-	/**
-	 * hide loader
-	 */
-	public void loadingStop() {
-
-		ProgressBar pgLoading = (ProgressBar) findViewById(R.id.pgLoading);
-		pgLoading.setVisibility(View.INVISIBLE);	
-
-		//hide logo at first startup
-		if(ivLogoDisplay) {
-			LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
-			llLogo.setVisibility(LinearLayout.GONE);
-			ivLogoDisplay = false;
+		setLoaderVisible(false);
+		
+		if (this.viewType != ViewType.ERROR)
+		{
+		    loadDynamicLayout(R.layout.error);
 		}
 
-		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
-		llContent.setVisibility(LinearLayout.VISIBLE);
+		TextView txtHostname = (TextView) findViewById(R.id.errortxt);
+		txtHostname.setText(Html.fromHtml(host));
+		
+		TextView errorCode = (TextView) findViewById(R.id.errorcode);
+		errorCode.setText("Error: " + error.toString());
+	}
+	
+	private void loadDynamicLayout(int layoutID)
+	{
+	    // Get a reference to the main layout object in main.xml
+        LinearLayout llmain = (LinearLayout) findViewById(R.id.llMain);
+        llmain.removeAllViews();
+        
+        /*
+         *  Create new LayoutInflater - this has to be done this way, as you
+         *  can't directly inflate an XML without creating an inflater object
+         *  first 
+         */
+        LayoutInflater inflater = getLayoutInflater();
+        llmain.addView(inflater.inflate(layoutID, null));
 	}
 
 	/**
-	 *show loader
+	 * Loader management
+	 * @param visible set loader visible or not
 	 */
-	public void loadingStart() {
+	public void setLoaderVisible(boolean visible)
+	{
 
 		ProgressBar pgLoading = (ProgressBar) findViewById(R.id.pgLoading);
-		pgLoading.setVisibility(View.VISIBLE);
+		if (visible)
+		    pgLoading.setVisibility(View.VISIBLE);
+		else
+		    pgLoading.setVisibility(View.INVISIBLE);	
 	}
 	
 	@Override
