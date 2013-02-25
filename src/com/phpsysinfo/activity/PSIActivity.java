@@ -4,29 +4,21 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.TreeSet;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
@@ -48,19 +40,14 @@ import com.phpsysinfo.xml.PSIUps;
 
 public class PSIActivity 
     extends SherlockActivity
-    implements OnClickListener, View.OnTouchListener
+    implements OnClickListener
 {
-	private SharedPreferences pref;
-	private JSONArray hostsJsonArray = new JSONArray();
-
 	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
 	private Dialog aboutDialog = null;
-	private ScrollView scrollView;
 
-	//current selected url
-	private String currentHost = "";
-	private int selectedIndex = 0 ;
+	// Enabled host
+	private int enabledHost = -1;
 
 
 	@Override
@@ -69,55 +56,11 @@ public class PSIActivity
 
 		setContentView(R.layout.main);
 
-		scrollView = (ScrollView) findViewById(R.id.scrollView1);
 		ivLogo = new ImageView(this);
 		ivLogo.setImageResource(R.drawable.psilogo);
 
 		LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
 		llLogo.addView(ivLogo);
-
-
-		//get preference
-		pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-
-		/***************************************************************/
-		//convert old format of storing
-		String oldUrl = pref.getString("listUrl", "");
-		if(!oldUrl.equals("")) {
-			String[] ou = oldUrl.split(";");
-
-			for (int i = 0; i<ou.length; i++) {
-				if(!ou[i].equals("")) {
-					try {
-						JSONObject host = new JSONObject();
-						host.put("url",ou[i]);
-						host.put("username", "");
-						host.put("password", "");
-						hostsJsonArray.put(host);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			//save new store and erase old
-			Editor editor = pref.edit();
-			editor.putString(PSIConfig.HOSTS_JSON_STORE, hostsJsonArray.toString());
-			editor.putString("listUrl", "");
-			editor.commit();
-		}
-		/***************************************************************/
-
-
-		//get preference
-		currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
-
-		//load data
-		getData(currentHost);
-		loadHostsArray();
-
-		scrollView.setOnTouchListener(this);
 
 		//create about dialog
 		aboutDialog = new Dialog(this);
@@ -131,7 +74,29 @@ public class PSIActivity
 
 		((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
 		((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
-
+	}
+	
+	@Override
+	protected void onResume()
+	{
+	    super.onResume();
+	    
+	    // Get enabled host
+	    this.enabledHost = PSIConfig.getInstance().getEnabledHost();
+	    
+	    if (this.enabledHost == -1)
+        {
+            // TODO show logo
+            LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
+            llLogo.setVisibility(LinearLayout.VISIBLE);
+            ivLogoDisplay = true;
+            
+            //TODO hide other informations
+        }
+        else
+        {
+            updateData();
+        }
 	}
 
 	@Override
@@ -231,28 +196,25 @@ public class PSIActivity
 		}
 	}
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-	}
-
 	/**
 	 * fill label with data
 	 * @param entry
 	 */
-	public void displayInfo(PSIHostData entry) {
-
+	public void displayInfo(PSIHostData entry) 
+	{
 		this.loadingStop();
 
 		//hostname
 		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
 
-		String url = "";
-		try {
-			JSONTokener tokener = new JSONTokener(currentHost);
-			JSONObject sHost = new JSONObject(tokener);
+		String url = "#";
+		try 
+		{
+			JSONObject sHost = PSIConfig.getInstance().getHost(enabledHost);
 			url = sHost.getString("url");
-		} catch (JSONException e) {
+		}
+		catch (JSONException e) 
+		{
 			e.printStackTrace();
 		}
 
@@ -407,7 +369,8 @@ public class PSIActivity
 	 * 
 	 * @param error
 	 */
-	public void displayError(String host, PSIErrorCode error) {
+	public void displayError(String host, PSIErrorCode error) 
+	{
 		loadingStop();
 
 		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
@@ -444,29 +407,6 @@ public class PSIActivity
 		ProgressBar pgLoading = (ProgressBar) findViewById(R.id.pgLoading);
 		pgLoading.setVisibility(View.VISIBLE);
 	}
-
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_OK) {
-
-
-			//load new selected host
-			currentHost = data.getExtras().getString("host");
-			getData(currentHost);
-			loadHostsArray();
-
-			//save new selected host
-			Editor editor = pref.edit();
-			editor.putString(PSIConfig.JSON_CURRENT_HOST,currentHost);
-			editor.commit();
-
-
-		}
-		else {
-			//just update list of hosts
-			loadHostsArray();
-		}
-	}
-	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -483,7 +423,7 @@ public class PSIActivity
 			aboutDialog.show();
 			return true;
 		case R.id.iRefresh:
-			getData(currentHost);
+			updateData();
 			return true;
 		case R.id.iSettings:
 			Intent i = new Intent(this, HostsListActivity.class);
@@ -494,110 +434,26 @@ public class PSIActivity
 		}
 	}
 
-	Float firstX = null;
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-
-		scrollView.onTouchEvent(event);
-
-		if (hostsJsonArray.length() <= 1) {
-			return true;
-		}
-
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			firstX = event.getX();
-		} else {
-			if (firstX != null) {
-				float x = event.getX();
-				float diff = firstX - x;
-				if (Math.abs(diff) > 150) {
-
-					if (diff > 0) {
-						selectedIndex++;
-						if (selectedIndex >= hostsJsonArray.length()) {
-							selectedIndex = 0;
-						}
-					}
-
-					if (diff < 0) {
-						selectedIndex--;
-						if (selectedIndex < 0) {
-							selectedIndex = hostsJsonArray.length() -1;
-						}
-					}
-
-					try {
-						currentHost = hostsJsonArray.get(selectedIndex).toString();
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-
-					//load the previous/next host
-					getData(currentHost);
-
-					Editor editor = pref.edit();
-					editor.putString(PSIConfig.JSON_CURRENT_HOST,currentHost);
-					editor.commit();
-
-					firstX = null;
-					return false;
-				}
-			}	
-		}
-
-		return true;
-	}
-
-
-	/**
-	 * load list of hosts
-	 */
-	public void loadHostsArray() {
-		try {
-			String dataStore = pref.getString(PSIConfig.HOSTS_JSON_STORE, "");
-
-			if (dataStore.equals("")) {
-				hostsJsonArray = new JSONArray();
-			}
-			else {
-				JSONTokener tokener = new JSONTokener(dataStore);
-				hostsJsonArray = new JSONArray(tokener);
-			}
-
-			JSONTokener tokener = new JSONTokener(currentHost);
-			JSONObject sHost = new JSONObject(tokener);
-
-			//get index of current selected host
-			for(int i=0; i<hostsJsonArray.length(); i++) {
-				String u = ((JSONObject)hostsJsonArray.get(i)).getString("url");
-
-				String url = sHost.getString("url");
-				if(u.equals(url)) {
-					selectedIndex = i;
-				}
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void getData(String currentHost) {
-		PSIDownloadData task = new PSIDownloadData(this);
-
-		try {
-			JSONTokener tokener = new JSONTokener(currentHost);
-			JSONObject sHost = new JSONObject(tokener);
+	public void updateData()
+	{
+	    try 
+		{
+			JSONObject sHost = PSIConfig.getInstance().getHost(this.enabledHost);
 			String url = sHost.getString("url");
 			String user = sHost.getString("username");
 			String password = sHost.getString("password");
 
-			if(!url.equals("")) {
+			if(!url.equals(""))
+			{
+			    PSIDownloadData task = new PSIDownloadData(this);
 				task.execute(url + PSIConfig.SCRIPT_NAME, user, password);
 			}
-		} catch (JSONException e) {
+		} 
+	    catch (JSONException e) 
+	    {
 			e.printStackTrace();
 		}
+	    catch (NullPointerException ne) {;}
 	}
 
 	public String getFormatedMemory(int memory) {
