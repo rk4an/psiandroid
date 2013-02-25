@@ -36,6 +36,7 @@ import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
+import com.phpsysinfo.PSIConfig;
 import com.phpsysinfo.R;
 import com.phpsysinfo.xml.PSIDownloadData;
 import com.phpsysinfo.xml.PSIErrorCode;
@@ -483,7 +484,7 @@ implements OnClickListener, View.OnTouchListener
 			getData(currentHost);
 			return true;
 		case R.id.iSettings:
-			Intent i = new Intent(this, PSIUrlActivity.class);
+			Intent i = new Intent(this, HostsListActivity.class);
 			startActivityForResult(i,0);
 			return true;
 		default:
