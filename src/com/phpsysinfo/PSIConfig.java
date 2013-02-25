@@ -57,7 +57,6 @@ public class PSIConfig {
     
     public JSONObject getHost(int index)
     {
-        Log.v("PSIConfig", "Try to get host with index:" + index + " (count: " + this.hostsList.length() + ")");
         return this.hostsList.optJSONObject(index);
     }
     
