@@ -1,48 +1,42 @@
 package com.phpsysinfo.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.phpsysinfo.PSIConfig;
 import com.phpsysinfo.R;
 
-public class HostsListActivity extends Activity implements OnItemClickListener,
-OnItemLongClickListener, OnClickListener {
-
-	List<String> listStringUrls = null;
+public class HostsListActivity
+    extends SherlockActivity 
+    implements OnItemClickListener, OnItemLongClickListener 
+{
 	ListView listViewUrls = null;
 	ArrayAdapter<String> arrayAdapterUrlList = null;
 	int pos = 0;
 
-	private JSONArray hostsJsonArray = null;
-
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.url);
+		setContentView(R.layout.hosts_list);
+		
+	    ActionBar bar = getSupportActionBar();
+	    bar.setTitle(getString(R.string.lblHosts));
 
 		listViewUrls = (ListView) findViewById(R.id.listView1);
 		listViewUrls.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -50,74 +44,51 @@ OnItemLongClickListener, OnClickListener {
 		listViewUrls.setOnItemClickListener(this);
 		listViewUrls.setOnItemLongClickListener(this);
 
-		listStringUrls = new ArrayList<String>();
+		arrayAdapterUrlList = new ArrayAdapter<String>(this, R.layout.mylist);
+	}
+	/**
+	 * onResume, reset the list of saved hosts
+	 */
+	@Override
+	protected void onResume()
+	{
+	    super.onResume();
+	    
+	    arrayAdapterUrlList.clear();
+	    
+        JSONArray hostsJsonArray = PSIConfig.getInstance().getHostsList();
+        
+        for (int i = 0; i < hostsJsonArray.length(); i++) 
+        {
+            try 
+            {
+                String url = hostsJsonArray.getJSONObject(i).getString("url");
+                arrayAdapterUrlList.add(url);
+            }
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+            }
+        }
 
-		Button btnAdd = (Button) findViewById(R.id.btnAdd);
-		btnAdd.setOnClickListener(this);
+        
+        listViewUrls.setAdapter(arrayAdapterUrlList);
+        
+        // Check the currently used host
+        int enabledHost = PSIConfig.getInstance().getEnabledHost();
+        if (enabledHost != -1)
+        {
+            listViewUrls.setItemChecked(enabledHost, true);
+        }
 
-		SharedPreferences pref = PreferenceManager
-				.getDefaultSharedPreferences(this);
-
-		try {
-			String dataStore = pref.getString(PSIConfig.HOSTS_JSON_STORE, "");
-
-			if (dataStore.equals("")) {
-				hostsJsonArray = new JSONArray();
-			}
-			else {
-				JSONTokener tokener = new JSONTokener(dataStore);
-				hostsJsonArray = new JSONArray(tokener);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		for (int i = 0; i < hostsJsonArray.length(); i++) {
-			try {
-				String url = ((JSONObject)hostsJsonArray.get(i)).getString("url");
-				if (!url.equals("")) {
-					listStringUrls.add(url);
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-
-		arrayAdapterUrlList = new ArrayAdapter<String>(this, R.layout.mylist,
-				listStringUrls);
-		listViewUrls.setAdapter(arrayAdapterUrlList);
-
-		//select the current URL
-		/*String currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
-		String currentHostUrl = "";
-		try {
-			JSONTokener tokener = new JSONTokener(currentHost);
-			JSONObject sHost = new JSONObject(tokener);
-			currentHostUrl = sHost.getString("url");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
-		for(int i = 0; i<listStringUrls.size(); i++) {
-			if(listStringUrls.get(i).equals(currentHostUrl)) {
-				listViewUrls.setItemChecked(i, true);
-			}
-		}*/
-		
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-			long arg3) {
-
-		Intent i = new Intent();
-		try {
-			i.putExtra("host", hostsJsonArray.get(position).toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		setResult(Activity.RESULT_OK, i);
+			long arg3) 
+	{
+	    // Save selected host
+	    PSIConfig.getInstance().setEnabledHost(position);
 		finish();
 	}
 
@@ -126,52 +97,30 @@ OnItemLongClickListener, OnClickListener {
 	 */
 	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			switch (which) {
-			case DialogInterface.BUTTON_POSITIVE:
-				// delete item and save the list
-
-				boolean find = false;
-				JSONArray temp = new JSONArray();
-				for (int i = 0; i < hostsJsonArray.length() && !find; i++) {
-					try {
-						if (i != pos) {
-							temp.put(hostsJsonArray.get(i));
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-				
-				hostsJsonArray = temp;
-
-				arrayAdapterUrlList.remove((String) listViewUrls
-						.getItemAtPosition(pos));
-
-				saveList();
-				break;
-			case DialogInterface.BUTTON_NEUTRAL:
-				
-				//get json at position pos
-				
-				JSONObject editHost = null;
-				try {
-					editHost = (JSONObject) hostsJsonArray.get(pos);
-					
-					((EditText) findViewById(R.id.txtUrl)).setText(
-							editHost.get("url").toString());
-					((EditText) findViewById(R.id.txtUser)).setText(
-							editHost.get("username").toString());
-					((EditText) findViewById(R.id.txtPassword)).setText(
-							editHost.get("password").toString());
-					
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				
-				break;
-			case DialogInterface.BUTTON_NEGATIVE:
-				break;
+		public void onClick(DialogInterface dialog, int which) 
+		{
+			switch (which)
+			{
+        		case DialogInterface.BUTTON_POSITIVE:
+        			// delete item and save the list
+                    PSIConfig.getInstance().deleteHostAtIndex(pos);
+                    arrayAdapterUrlList.remove((String) listViewUrls.getItemAtPosition(pos));
+                    
+                    // If we remove an enabled host, unselect it
+                    int enabled = PSIConfig.getInstance().getEnabledHost();
+                    if (enabled == pos)
+                        PSIConfig.getInstance().setEnabledHost(-1);
+        			break;
+        			
+        		case DialogInterface.BUTTON_NEUTRAL:
+                    // Edit item
+                    Intent i = new Intent(getApplicationContext(), HostEditActivity.class);
+                    i.putExtra(HostEditActivity.ENTRY_EDIT_ID_KEY, pos);
+                    startActivityForResult(i, 0);
+        			break;
+        			
+        		case DialogInterface.BUTTON_NEGATIVE:
+        			break;
 			}
 		}
 	};
@@ -192,56 +141,24 @@ OnItemLongClickListener, OnClickListener {
 
 		return true;
 	}
-
+	
 	@Override
-	public void onClick(View arg0) {
-		EditText txtUrl = (EditText) findViewById(R.id.txtUrl);
-		EditText txtUser = (EditText) findViewById(R.id.txtUser);
-		EditText txtPasword = (EditText) findViewById(R.id.txtPassword);
-
-		// add URL to the list
-		if (!txtUrl.getText().toString().equals("")) {
-			arrayAdapterUrlList.add(txtUrl.getText().toString());
-
-			try {
-				JSONObject host = new JSONObject();
-				host.put("url", txtUrl.getText().toString());
-				host.put("username", txtUser.getText().toString());
-				host.put("password", txtPasword.getText().toString());
-
-				hostsJsonArray.put(host);
-
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-			//clear
-			txtUrl.setText("http://");
-			txtUser.setText("");
-			txtPasword.setText("");
-			
-			saveList();
-		}
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+	    MenuInflater inflater = getSupportMenuInflater();
+	    inflater.inflate(R.menu.hosts_list, menu);
+	    return super.onCreateOptionsMenu(menu);
 	}
-
-	/**
-	 * save the list into a string in the preference
-	 */
-	public void saveList() {
-
-		SharedPreferences pref = PreferenceManager
-				.getDefaultSharedPreferences(this);
-
-		String dataStore = "";
-		try {
-			dataStore = hostsJsonArray.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		Editor editor = pref.edit();
-		editor.putString(PSIConfig.HOSTS_JSON_STORE, dataStore);
-		editor.commit();
-	}
-
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (item.getItemId() == R.id.aiAddHost)
+        {
+            Intent i = new Intent(this, HostEditActivity.class);
+            startActivityForResult(i,0);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

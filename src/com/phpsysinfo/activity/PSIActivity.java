@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,9 +20,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +32,10 @@ import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.phpsysinfo.PSIConfig;
 import com.phpsysinfo.R;
 import com.phpsysinfo.xml.PSIDownloadData;
@@ -47,8 +47,8 @@ import com.phpsysinfo.xml.PSIRaid;
 import com.phpsysinfo.xml.PSIUps;
 
 public class PSIActivity 
-extends Activity
-implements OnClickListener, View.OnTouchListener
+    extends SherlockActivity
+    implements OnClickListener, View.OnTouchListener
 {
 	private SharedPreferences pref;
 	private JSONArray hostsJsonArray = new JSONArray();
@@ -466,13 +466,15 @@ implements OnClickListener, View.OnTouchListener
 			loadHostsArray();
 		}
 	}
-
+	
+	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu, menu);
-		return true;
-	} 
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+	    MenuInflater inflater = getSupportMenuInflater();
+	    inflater.inflate(R.menu.menu, menu);
+	    return true;
+	};
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

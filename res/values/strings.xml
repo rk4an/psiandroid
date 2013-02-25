@@ -41,4 +41,11 @@
     <string name="lblUpdate">Update</string>
     <string name="lblPackages">Packages</string>
     <string name="lblSecurity">Security</string>
+        
+    <string name="lblSave">Save</string>
+    <string name="lblCredentials">Login Credentials</string>
+    
+    <string name="errPleaseEnterUrl">Please enter a valid URL</string>
+    <string name="errSaveHost">Error while saving host</string>
+    
 </resources>

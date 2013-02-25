@@ -11,9 +11,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+        android:name="com.phpsysinfo.PSIAndroid"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:allowBackup="false">
+        android:allowBackup="false"
+        android:theme="@style/Theme.Sherlock">
         <activity
             android:label="@string/app_name"
             android:name=".activity.PSIActivity"
@@ -25,9 +27,17 @@
             </intent-filter>
         </activity>
         
-          <activity
+        <activity
             android:label="@string/app_name"
-            android:name=".activity.PSIUrlActivity"
+            android:name=".activity.HostsListActivity"
+            android:configChanges="orientation|keyboardHidden">
+            <intent-filter >
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:label="@string/app_name"
+            android:name=".activity.HostEditActivity"
             android:configChanges="orientation|keyboardHidden">
             <intent-filter >
                 <category android:name="android.intent.category.LAUNCHER" />
