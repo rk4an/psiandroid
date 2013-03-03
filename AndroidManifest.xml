@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.phpsysinfo"
-    android:versionCode="370"
-    android:versionName="0.37" >
+    android:versionCode="380"
+    android:versionName="0.38" >
 
     <uses-sdk 
         android:minSdkVersion="8"
@@ -13,6 +13,7 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:theme="@style/Theme.Sherlock"
         android:allowBackup="false">
         <activity
             android:label="@string/app_name"

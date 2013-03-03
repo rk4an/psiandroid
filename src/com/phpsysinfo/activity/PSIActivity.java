@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,9 +20,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +32,10 @@ import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.phpsysinfo.R;
 import com.phpsysinfo.xml.PSIDownloadData;
 import com.phpsysinfo.xml.PSIErrorCode;
@@ -46,7 +46,7 @@ import com.phpsysinfo.xml.PSIRaid;
 import com.phpsysinfo.xml.PSIUps;
 
 public class PSIActivity 
-extends Activity
+extends SherlockActivity
 implements OnClickListener, View.OnTouchListener
 {
 	private SharedPreferences pref;
@@ -121,7 +121,7 @@ implements OnClickListener, View.OnTouchListener
 		//create about dialog
 		aboutDialog = new Dialog(this);
 		aboutDialog.setContentView(R.layout.about_dialog);
-		aboutDialog.setTitle("About PSIAndroid");
+		aboutDialog.setTitle("PSIAndroid");
 		TextView text = (TextView) aboutDialog.findViewById(R.id.text);
 		text.setText("http://phpsysinfo.sf.net");
 		ImageView image = (ImageView) aboutDialog.findViewById(R.id.image);
@@ -468,7 +468,7 @@ implements OnClickListener, View.OnTouchListener
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
 		return true;
 	} 

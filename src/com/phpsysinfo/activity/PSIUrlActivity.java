@@ -26,9 +26,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.phpsysinfo.R;
 
-public class PSIUrlActivity extends Activity implements OnItemClickListener,
+public class PSIUrlActivity extends SherlockActivity implements OnItemClickListener,
 OnItemLongClickListener, OnClickListener {
 
 	List<String> listStringUrls = null;
