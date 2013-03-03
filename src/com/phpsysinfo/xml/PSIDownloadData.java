@@ -129,8 +129,8 @@ extends AsyncTask<String, Void, Void>
 			//user agent
 			httpClient = AndroidHttpClient.newInstance("PSIAndroid");
 			
-			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(httpClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 10000);
+			HttpConnectionParams.setSoTimeout(httpClient.getParams(), 10000);
 
 			URL urlObj = new URL(url);
 			HttpHost host = new HttpHost(urlObj.getHost(), urlObj.getPort(), urlObj.getProtocol());
