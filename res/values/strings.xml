@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PSIAndroid</string>
+    <string name="lblLoading">Loading...</string>
     <string name="lblUptime">Uptime:</string>
     <string name="lblMemory">Memory</string>
     <string name="lblLoad">Load:</string>

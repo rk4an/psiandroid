@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -20,9 +21,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -60,13 +66,18 @@ implements OnClickListener, View.OnTouchListener
 	//current selected url
 	private String currentHost = "";
 	private int selectedIndex = 0 ;
+	private boolean isReady = false;
 
+	private MenuItem refreshItem;
+	private ImageView iv;
+	private Animation rotation;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.main);
+		setContentView(R.layout.main_view);
 
 		scrollView = (ScrollView) findViewById(R.id.scrollView1);
 		ivLogo = new ImageView(this);
@@ -75,47 +86,15 @@ implements OnClickListener, View.OnTouchListener
 		LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
 		llLogo.addView(ivLogo);
 
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		iv = (ImageView) inflater.inflate(R.layout.action_refresh, null);
+
+		rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
+		rotation.setAnimationListener(rotateListener);
 
 		//get preference
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-
-		/***************************************************************/
-		//convert old format of storing
-		String oldUrl = pref.getString("listUrl", "");
-		if(!oldUrl.equals("")) {
-			String[] ou = oldUrl.split(";");
-
-			for (int i = 0; i<ou.length; i++) {
-				if(!ou[i].equals("")) {
-					try {
-						JSONObject host = new JSONObject();
-						host.put("url",ou[i]);
-						host.put("username", "");
-						host.put("password", "");
-						hostsJsonArray.put(host);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			//save new store and erase old
-			Editor editor = pref.edit();
-			editor.putString(PSIConfig.HOSTS_JSON_STORE, hostsJsonArray.toString());
-			editor.putString("listUrl", "");
-			editor.commit();
-		}
-		/***************************************************************/
-
-
-		//get preference
 		currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
-
-		//load data
-		getData(currentHost);
-		loadHostsArray();
-
 		scrollView.setOnTouchListener(this);
 
 		//create about dialog
@@ -131,6 +110,15 @@ implements OnClickListener, View.OnTouchListener
 		((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
 		((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
 
+		//load data
+		getData(currentHost);
+		loadHostsArray();
+
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
 	}
 
 	@Override
@@ -241,10 +229,10 @@ implements OnClickListener, View.OnTouchListener
 	 */
 	public void displayInfo(PSIHostData entry) {
 
-		this.loadingStop();
+		isReady = true;
 
-		//hostname
-		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
+		//title
+		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
 
 		String url = "";
 		try {
@@ -255,9 +243,9 @@ implements OnClickListener, View.OnTouchListener
 			e.printStackTrace();
 		}
 
-		txtHostname.setText(
+		txtTitle.setText(
 				Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
-		txtHostname.setMovementMethod(LinkMovementMethod.getInstance());
+		txtTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
 		//uptime
 		TextView txtUptime = (TextView) findViewById(R.id.txtUptime);
@@ -379,25 +367,25 @@ implements OnClickListener, View.OnTouchListener
 
 		//ipmi section
 		showIpmi(entry);
-		
+
 		//mb fans speed
 		showFans(entry);
-		
+
 		//network section
 		showNetworkInterface(entry);
-		
+
 		//ps status
 		showPsStatus(entry);
-		
+
 		//ups section
 		showUps(entry);
-		
+
 		//smart section
 		showSmart(entry);
-		
+
 		//raid section
 		showRaid(entry);
-		
+
 		//update section
 		showUpdate(entry);
 	}
@@ -407,22 +395,27 @@ implements OnClickListener, View.OnTouchListener
 	 * @param error
 	 */
 	public void displayError(String host, PSIErrorCode error) {
-		loadingStop();
+
+		isReady = true;
 
 		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
 		llContent.setVisibility(LinearLayout.GONE);
 
-		TextView txtHostname = (TextView) findViewById(R.id.txtHostname);
-		txtHostname.setText(Html.fromHtml(host + "<br/><br/><b>" + "Error: " + error.toString()+"</b>"));
+		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
+		txtTitle.setText(Html.fromHtml(host + "<br/><br/><b>" + "Error: " + error.toString()+"</b>"));
 	}
 
-	/**
-	 * hide loader
-	 */
-	public void loadingStop() {
 
-		ProgressBar pgLoading = (ProgressBar) findViewById(R.id.pgLoading);
-		pgLoading.setVisibility(View.INVISIBLE);	
+	public void refresh() {
+		iv.startAnimation(rotation);
+		isReady = false;
+		if(refreshItem != null) {
+			refreshItem.setActionView(iv);
+		}
+	}
+
+
+	public void completeRefresh() {
 
 		//hide logo at first startup
 		if(ivLogoDisplay) {
@@ -433,22 +426,20 @@ implements OnClickListener, View.OnTouchListener
 
 		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
 		llContent.setVisibility(LinearLayout.VISIBLE);
-	}
 
-	/**
-	 *show loader
-	 */
-	public void loadingStart() {
-
-		ProgressBar pgLoading = (ProgressBar) findViewById(R.id.pgLoading);
-		pgLoading.setVisibility(View.VISIBLE);
+		if(refreshItem != null) {
+			if(refreshItem.getActionView() != null) {
+				refreshItem.getActionView().clearAnimation();
+				refreshItem.setActionView(null);
+			}
+		}
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 
-
 			//load new selected host
+			displayLoadingMessage();
 			currentHost = data.getExtras().getString("host");
 			getData(currentHost);
 			loadHostsArray();
@@ -457,19 +448,19 @@ implements OnClickListener, View.OnTouchListener
 			Editor editor = pref.edit();
 			editor.putString(PSIConfig.JSON_CURRENT_HOST,currentHost);
 			editor.commit();
-
-
 		}
 		else {
 			//just update list of hosts
 			loadHostsArray();
 		}
 	}
-
+ 
+  
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.menu, menu);
+		inflater.inflate(R.menu.main, menu);
+		refreshItem = menu.findItem(R.id.iRefresh);
 		return true;
 	} 
 
@@ -496,6 +487,11 @@ implements OnClickListener, View.OnTouchListener
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
+		if(!isReady) {
+			Log.d("PSIAndroid","Cancel swipe");
+			return false;
+		}
+		
 		scrollView.onTouchEvent(event);
 
 		if (hostsJsonArray.length() <= 1) {
@@ -531,6 +527,7 @@ implements OnClickListener, View.OnTouchListener
 					}
 
 					//load the previous/next host
+					displayLoadingMessage();
 					getData(currentHost);
 
 					Editor editor = pref.edit();
@@ -546,6 +543,14 @@ implements OnClickListener, View.OnTouchListener
 		return true;
 	}
 
+
+	private void displayLoadingMessage() {
+		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
+		llContent.setVisibility(LinearLayout.GONE);
+
+		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
+		txtTitle.setText(Html.fromHtml("<b>"+getString(R.string.lblLoading)+"</b>"));
+	}
 
 	/**
 	 * load list of hosts
@@ -580,6 +585,9 @@ implements OnClickListener, View.OnTouchListener
 	}
 
 	public void getData(String currentHost) {
+
+		this.refresh();
+
 		PSIDownloadData task = new PSIDownloadData(this);
 
 		try {
@@ -765,7 +773,7 @@ implements OnClickListener, View.OnTouchListener
 				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
 
 				TextView tvItemValue = new TextView(this);
-				
+
 				String value = psStatus.get(mapKey);
 				if(value != null) {
 					if(value.equals("1")) {
@@ -777,7 +785,7 @@ implements OnClickListener, View.OnTouchListener
 						tvItemValue.setTextColor(PSIConfig.COLOR_HARD);
 					}
 				}
-				
+
 
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
@@ -790,7 +798,7 @@ implements OnClickListener, View.OnTouchListener
 			llPlugins.addView(llProcessStatus);
 		}
 	}
-	
+
 	public void showFans(PSIHostData entry) {
 
 		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
@@ -830,7 +838,7 @@ implements OnClickListener, View.OnTouchListener
 				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
 
 				TextView tvItemValue = new TextView(this);
-				
+
 				String value = fans.get(mapKey);
 				tvItemValue.setText(value);
 
@@ -845,8 +853,8 @@ implements OnClickListener, View.OnTouchListener
 			llPlugins.addView(llFans);
 		}
 	}
-	
-	
+
+
 	public void showUps(PSIHostData entry) {
 
 		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
@@ -881,7 +889,7 @@ implements OnClickListener, View.OnTouchListener
 			PSIUps ups = entry.getUps();
 
 			if(ups.getName() != null) {
-				
+
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsName)+"</b>" ));
 
@@ -894,9 +902,9 @@ implements OnClickListener, View.OnTouchListener
 
 				tUps.addView(trItem);
 			}
-			
+
 			if(ups.getModel() != null) {
-				
+
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsModel)+" </b>"));
 
@@ -909,9 +917,9 @@ implements OnClickListener, View.OnTouchListener
 
 				tUps.addView(trItem);
 			}
-			
+
 			if(ups.getBatteryChargePercent() != null) {
-				
+
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsBatteryCharge)+" </b>"));
 
@@ -924,9 +932,9 @@ implements OnClickListener, View.OnTouchListener
 
 				tUps.addView(trItem);
 			}
-			
+
 			if(ups.getLoadPercent() != null) {
-				
+
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsLoad)+" </b>"));
 
@@ -939,9 +947,9 @@ implements OnClickListener, View.OnTouchListener
 
 				tUps.addView(trItem);
 			}
-			
+
 			if(ups.getTimeLeftMinutes() != null) {
-				
+
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsTime)+" </b>"));
 
@@ -954,9 +962,9 @@ implements OnClickListener, View.OnTouchListener
 
 				tUps.addView(trItem);
 			}
-			
+
 			if(ups.getBatteryVoltage() != null) {
-				
+
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsBattery)+" </b>"));
 
@@ -969,9 +977,9 @@ implements OnClickListener, View.OnTouchListener
 
 				tUps.addView(trItem);
 			}
-			
+
 			if(ups.getLineVoltage() != null) {
-				
+
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsLine)+" </b>"));
 
@@ -984,12 +992,12 @@ implements OnClickListener, View.OnTouchListener
 
 				tUps.addView(trItem);
 			}
-			
+
 			llUps.addView(tUps);
 			llPlugins.addView(llUps);
 		}
 	}	
-	
+
 	public void showSmart(PSIHostData entry) {
 
 		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
@@ -1023,13 +1031,13 @@ implements OnClickListener, View.OnTouchListener
 
 			//HashMap<String, String> smart = entry.getSmart();
 			TreeSet<String> keys = new TreeSet<String>(entry.getSmart().keySet());
-			
+
 			for (String mapKey : keys) {
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
 
 				TextView tvItemValue = new TextView(this);
-				
+
 				String value = entry.getSmart().get(mapKey);
 				tvItemValue.setText(value);
 
@@ -1039,12 +1047,12 @@ implements OnClickListener, View.OnTouchListener
 
 				tSmart.addView(trItem);
 			}
-			
+
 			llSmart.addView(tSmart);
 			llPlugins.addView(llSmart);
 		}
 	}
-	
+
 	public void showRaid(PSIHostData entry) {
 		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
 
@@ -1089,7 +1097,7 @@ implements OnClickListener, View.OnTouchListener
 			trItemHeader.addView(tvItemValueHeader);
 
 			tRaid.addView(trItemHeader);*/
-			
+
 
 			//populate
 			for (PSIRaid psiRaid : entry.getRaid()) {
@@ -1110,7 +1118,7 @@ implements OnClickListener, View.OnTouchListener
 			llPlugins.addView(llRaid);
 		}
 	}
-	
+
 	public void showUpdate(PSIHostData entry) {
 		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
 
@@ -1142,7 +1150,7 @@ implements OnClickListener, View.OnTouchListener
 			llUpdate.setOrientation(LinearLayout.VERTICAL);
 
 			//populate
-			
+
 			//normal
 			TextView tvItemLabel = new TextView(this);
 			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblPackages) + " </b>"));
@@ -1167,11 +1175,31 @@ implements OnClickListener, View.OnTouchListener
 			trItem.addView(tvItemLabel);
 			trItem.addView(tvItemValue);
 
-			
+
 			tUpdate.addView(trItem);			
-			
+
 			llUpdate.addView(tUpdate);
 			llPlugins.addView(llUpdate);
 		}
 	}
+
+	private AnimationListener rotateListener = new AnimationListener() {
+
+		@Override
+		public void onAnimationStart(Animation animation) {}
+
+		@Override
+		public void onAnimationRepeat(Animation animation) {}
+
+		@Override
+		public void onAnimationEnd(Animation animation) {
+			if(isReady) {
+				iv.clearAnimation();
+				refreshItem.setActionView(null);
+			}
+			else { 
+				iv.startAnimation(rotation);
+			}
+		}
+	};
 }

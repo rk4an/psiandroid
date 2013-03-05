@@ -107,6 +107,7 @@ extends AsyncTask<String, Void, Void>
 
 	@Override
 	protected void onPostExecute(Void result) {
+		this.activity.completeRefresh();
 		if (this.errorCode.equals(PSIErrorCode.NO_ERROR)) {
 			this.activity.displayInfo(psiObject);
 		}
@@ -118,7 +119,6 @@ extends AsyncTask<String, Void, Void>
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		this.activity.loadingStart();
 	}
 
 	private static InputStream getUrl(String url, String user, String password)

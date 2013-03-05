@@ -42,7 +42,7 @@ OnItemLongClickListener, OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.url);
+		setContentView(R.layout.hosts_view);
 
 		listViewUrls = (ListView) findViewById(R.id.listView1);
 		listViewUrls.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -87,8 +87,8 @@ OnItemLongClickListener, OnClickListener {
 				listStringUrls);
 		listViewUrls.setAdapter(arrayAdapterUrlList);
 
-		//select the current URL
-		/*String currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
+		//FIXME: select the current URL
+		String currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
 		String currentHostUrl = "";
 		try {
 			JSONTokener tokener = new JSONTokener(currentHost);
@@ -102,7 +102,7 @@ OnItemLongClickListener, OnClickListener {
 			if(listStringUrls.get(i).equals(currentHostUrl)) {
 				listViewUrls.setItemChecked(i, true);
 			}
-		}*/
+		}
 		
 	}
 
