@@ -9,7 +9,7 @@ Features:
  * CPU, Memory and Disk usage
  * Multi-host
  * HTTPS
- * Basic Authentification
+ * Basic/Digest Authentification
  * Temperatures (MotherBoard and IPMI)
  * Fans speed (MotherBoard)
  * Network informations
