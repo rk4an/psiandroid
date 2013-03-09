@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -271,6 +272,23 @@ implements OnClickListener, View.OnTouchListener
 		TextView txtDistro = (TextView) findViewById(R.id.txtDistro);
 		txtDistro.setText(entry.getDistro());
 
+		ImageView ivDistro = (ImageView) findViewById(R.id.ivDistro);
+		
+		//distro icon
+		try {
+			Resources res = getResources();
+			String tname = entry.getDistroIcon().toLowerCase();
+			int ext = tname.indexOf('.');
+			String name = tname.substring(0, ext);
+			int resourceId = res.getIdentifier(name, "drawable", getPackageName());
+		
+			ivDistro.setImageResource(resourceId);
+		}
+		catch (Exception e) {
+			//clear
+			ivDistro.setImageBitmap(null);
+		}
+		
 		//ip address
 		TextView txtIp = (TextView) findViewById(R.id.txtIp);
 		txtIp.setText(entry.getIp());

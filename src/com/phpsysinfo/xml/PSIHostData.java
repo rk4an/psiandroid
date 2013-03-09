@@ -11,6 +11,7 @@ public class PSIHostData {
 	private String loadAvg = "";
 	private String kernel = "";
 	private String distro = "";
+	private String distroIcon = "";
 	private String Ip = "";
 	private String psiVersion = "";
 	private String cpu = "";
@@ -92,6 +93,14 @@ public class PSIHostData {
 		this.distro = distro;
 	}
 
+	public String getDistroIcon() {
+		return distroIcon;
+	}
+
+	public void setDistroIcon(String distroIcon) {
+		this.distroIcon = distroIcon;
+	}	
+	
 	public String getIp() {
 		return Ip;
 	}
