@@ -1,6 +1,5 @@
 package com.phpsysinfo.activity;
 
-import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -44,6 +43,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.phpsysinfo.R;
+import com.phpsysinfo.utils.FormatUtils;
 import com.phpsysinfo.xml.PSIDownloadData;
 import com.phpsysinfo.xml.PSIErrorCode;
 import com.phpsysinfo.xml.PSIHostData;
@@ -306,8 +306,8 @@ implements OnClickListener, View.OnTouchListener
 		tvNameMemory.setText(Html.fromHtml(
 				"<b>"+getString(R.string.lblMemory) + "</b>" +
 
-		" (" + getFormatedMemory(entry.getAppMemoryUsed()) + 
-		" of " + getFormatedMemory(entry.getAppMemoryTotal()) + ") <i>" + 
+		" (" + FormatUtils.getFormatedMemory(this,entry.getAppMemoryUsed()) + 
+		" of " + FormatUtils.getFormatedMemory(this,entry.getAppMemoryTotal()) + ") <i>" + 
 		entry.getAppMemoryPercent()+"%</i>"));
 
 
@@ -352,8 +352,8 @@ implements OnClickListener, View.OnTouchListener
 
 			String lblMountText = "<b>" + psiMp.getName() + "</b>";
 
-			lblMountText += " (" + getFormatedMemory(psiMp.getUsed()) + 
-					"&nbsp;of&nbsp;" + getFormatedMemory(psiMp.getTotal()) + ")&nbsp;<i>"+ psiMp.getPercentUsed()+"%</i>";
+			lblMountText += " (" + FormatUtils.getFormatedMemory(this,psiMp.getUsed()) + 
+					"&nbsp;of&nbsp;" + FormatUtils.getFormatedMemory(this,psiMp.getTotal()) + ")&nbsp;<i>"+ psiMp.getPercentUsed()+"%</i>";
 
 			tvName.setText(Html.fromHtml(lblMountText));
 
@@ -623,24 +623,6 @@ implements OnClickListener, View.OnTouchListener
 		}
 	}
 
-	public String getFormatedMemory(int memory) {
-		NumberFormat nf = NumberFormat.getInstance();
-		nf.setMaximumFractionDigits(1);
-		String value = "0";
-
-		if(memory > 1024*1024) {
-			value = nf.format((float)memory/1024/1024) + "&nbsp;" + getString(R.string.lblTio);
-		}
-		else if(memory > 1024) {
-			value = nf.format((float)memory/1024) + "&nbsp;" + getString(R.string.lblGio);
-		}
-		else {
-			value = nf.format(memory) + "&nbsp;" + getString(R.string.lblMio);
-		}
-
-		return value;
-	}
-
 	public void showNetworkInterface(PSIHostData entry) {
 
 		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
@@ -680,11 +662,11 @@ implements OnClickListener, View.OnTouchListener
 
 				TextView tvItemValueRx = new TextView(this);
 				tvItemValueRx.setText(Html.fromHtml(
-						"&darr; " + getFormatedMemory((int)pni.getRxBytes())));
+						"&darr; " + FormatUtils.getFormatedMemory(this,(int)pni.getRxBytes())));
 
 				TextView tvItemValueTx = new TextView(this);
 				tvItemValueTx.setText(Html.fromHtml( 
-						"&uarr; " + getFormatedMemory((int)pni.getTxBytes())));
+						"&uarr; " + FormatUtils.getFormatedMemory(this,(int)pni.getTxBytes())));
 
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
