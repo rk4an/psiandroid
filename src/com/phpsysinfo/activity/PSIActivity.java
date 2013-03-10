@@ -492,7 +492,7 @@ implements OnClickListener, View.OnTouchListener
 			getData(currentHost);
 			return true;
 		case R.id.iSettings:
-			Intent i = new Intent(this, PSIUrlActivity.class);
+			Intent i = new Intent(this, HostListActivity.class);
 			startActivityForResult(i,0);
 			return true;
 		default:

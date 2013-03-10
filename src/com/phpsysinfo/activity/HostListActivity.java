@@ -29,7 +29,7 @@ import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.phpsysinfo.R;
 
-public class PSIUrlActivity extends SherlockActivity implements OnItemClickListener,
+public class HostListActivity extends SherlockActivity implements OnItemClickListener,
 OnItemLongClickListener, OnClickListener {
 
 	List<String> listStringUrls = null;
@@ -182,7 +182,7 @@ OnItemLongClickListener, OnClickListener {
 		pos = position;
 
 		// create and display the remove dialog
-		AlertDialog.Builder adb = new AlertDialog.Builder(PSIUrlActivity.this);
+		AlertDialog.Builder adb = new AlertDialog.Builder(HostListActivity.this);
 		adb.setMessage("Action for " + listViewUrls.getItemAtPosition(position)
 				+ " ?");
 		adb.setPositiveButton("Remove", dialogClickListener);
