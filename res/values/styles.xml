@@ -1,0 +1,7 @@
+<resources>
+    <style name="CustomProgressBarHorizontal" >
+          <item name="android:minHeight">2dip</item>
+          <item name="android:maxHeight">2dip</item>
+          <item name="android:progressDrawable">@drawable/custom_progress_bar_horizontal</item>
+    </style>
+</resources>

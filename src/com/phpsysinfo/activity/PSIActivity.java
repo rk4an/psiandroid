@@ -298,9 +298,11 @@ implements OnClickListener, View.OnTouchListener
 		tMountPoints.removeAllViews();
 
 		//memory
-		ProgressBar pbMemory = new ProgressBar(
-				this,null,android.R.attr.progressBarStyleHorizontal);
-
+		LayoutInflater inflater = getLayoutInflater();
+	
+		ProgressBar pbMemory = (ProgressBar) inflater.inflate(R.layout.pg, null);
+		//pbMemory.setProgressDrawable(getResources().getDrawable(R.drawable.custom_progress_bar_horizontal));
+		
 		TextView tvNameMemory = new TextView(this);
 		pbMemory.setProgress(entry.getAppMemoryPercent());
 		tvNameMemory.setText(Html.fromHtml(
@@ -344,8 +346,7 @@ implements OnClickListener, View.OnTouchListener
 		for (PSIMountPoint psiMp: entry.getMountPoint()) {
 
 			//build row
-			ProgressBar pgPercent = new ProgressBar(
-					this,null,android.R.attr.progressBarStyleHorizontal);
+			ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);;
 
 			TextView tvName = new TextView(this);
 			pgPercent.setProgress(psiMp.getPercentUsed());
