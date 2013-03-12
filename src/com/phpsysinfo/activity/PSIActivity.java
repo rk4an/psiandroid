@@ -301,7 +301,6 @@ implements OnClickListener, View.OnTouchListener
 		LayoutInflater inflater = getLayoutInflater();
 	
 		ProgressBar pbMemory = (ProgressBar) inflater.inflate(R.layout.pg, null);
-		//pbMemory.setProgressDrawable(getResources().getDrawable(R.drawable.custom_progress_bar_horizontal));
 		
 		TextView tvNameMemory = new TextView(this);
 		pbMemory.setProgress(entry.getAppMemoryPercent());
