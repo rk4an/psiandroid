@@ -80,7 +80,7 @@ implements OnClickListener, View.OnTouchListener
 
 		setContentView(R.layout.main_view);
 
-		scrollView = (ScrollView) findViewById(R.id.scrollView1);
+		scrollView = (ScrollView) findViewById(R.id.svMain);
 		ivLogo = new ImageView(this);
 		ivLogo.setImageResource(R.drawable.psilogo);
 

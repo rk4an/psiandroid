@@ -44,7 +44,7 @@ OnItemLongClickListener, OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.hosts_view);
 
-		listViewUrls = (ListView) findViewById(R.id.listView1);
+		listViewUrls = (ListView) findViewById(R.id.lvHostsList);
 		listViewUrls.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		listViewUrls.setSelection(0);
 		listViewUrls.setOnItemClickListener(this);
@@ -83,7 +83,7 @@ OnItemLongClickListener, OnClickListener {
 			}
 		}
 
-		arrayAdapterUrlList = new ArrayAdapter<String>(this, R.layout.mylist,
+		arrayAdapterUrlList = new ArrayAdapter<String>(this, R.layout.hosts_list,
 				listStringUrls);
 		listViewUrls.setAdapter(arrayAdapterUrlList);
 

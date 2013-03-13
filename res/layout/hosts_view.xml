@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/llUrl"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" 
@@ -32,6 +32,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llCredentials"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -58,7 +59,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/llHostsListTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -67,7 +68,7 @@
         android:gravity="center" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/tvHostsListTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lblHosts" />
@@ -75,13 +76,13 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/llHostsList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <ListView
-            android:id="@+id/listView1"
+            android:id="@+id/lvHostsList"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
         </ListView>
