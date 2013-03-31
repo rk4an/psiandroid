@@ -52,6 +52,10 @@ import com.phpsysinfo.xml.PSINetworkInterface;
 import com.phpsysinfo.xml.PSIRaid;
 import com.phpsysinfo.xml.PSIUps;
 
+enum ViewType {
+    NONE, LOGO, ERROR, DATA, LOADING
+}
+
 public class PSIActivity 
 extends SherlockActivity
 implements OnClickListener, View.OnTouchListener
@@ -59,7 +63,6 @@ implements OnClickListener, View.OnTouchListener
 	private SharedPreferences pref;
 	private JSONArray hostsJsonArray = new JSONArray();
 
-	private ImageView ivLogo = null;
 	boolean ivLogoDisplay = true;
 	private Dialog aboutDialog = null;
 	private ScrollView scrollView;
@@ -73,6 +76,7 @@ implements OnClickListener, View.OnTouchListener
 	private ImageView iv;
 	private Animation rotation;
 	
+	private ViewType viewType = ViewType.NONE;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,11 +85,6 @@ implements OnClickListener, View.OnTouchListener
 		setContentView(R.layout.main_view);
 
 		scrollView = (ScrollView) findViewById(R.id.svMain);
-		ivLogo = new ImageView(this);
-		ivLogo.setImageResource(R.drawable.psilogo);
-
-		LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
-		llLogo.addView(ivLogo);
 
 		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		iv = (ImageView) inflater.inflate(R.layout.action_refresh, null);
@@ -108,13 +107,11 @@ implements OnClickListener, View.OnTouchListener
 		image.setImageResource(R.drawable.ic_launcher);
 		image.setOnClickListener(this);
 
-		((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
-		((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
-
+		displayLogo();
+		
 		//load data
 		getData(currentHost);
 		loadHostsArray();
-
 	}
 	
 	@Override
@@ -122,6 +119,14 @@ implements OnClickListener, View.OnTouchListener
 		super.onStart();
 	}
 
+	public void displayLogo(){
+	    if (this.viewType == ViewType.LOGO) {
+	        return;
+	    }
+
+	    loadDynamicLayout(R.layout.logo);
+	}
+	
 	@Override
 	public void onClick(View event) {
 		if(event.getId() == R.id.image) {
@@ -232,6 +237,14 @@ implements OnClickListener, View.OnTouchListener
 
 		isReady = true;
 
+		if (viewType != ViewType.DATA) {
+		    loadDynamicLayout(R.layout.data_view);
+		    ((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
+	        ((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
+	        viewType = ViewType.DATA;
+	        scrollView.setOnTouchListener(this);
+		}
+		
 		//title
 		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
 
@@ -416,11 +429,15 @@ implements OnClickListener, View.OnTouchListener
 
 		isReady = true;
 
-		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
-		llContent.setVisibility(LinearLayout.GONE);
+		if (this.viewType != ViewType.ERROR) {
+		    loadDynamicLayout(R.layout.error_view);
+		}
+		
+		TextView txtHostname = (TextView) findViewById(R.id.errortxt);
+		txtHostname.setText(Html.fromHtml(host));
 
-		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
-		txtTitle.setText(Html.fromHtml(host + "<br/><br/><b>" + "Error: " + error.toString()+"</b>"));
+		TextView errorCode = (TextView) findViewById(R.id.errorcode);
+		errorCode.setText("Error: " + error.toString());
 	}
 
 
@@ -435,15 +452,6 @@ implements OnClickListener, View.OnTouchListener
 
 	public void completeRefresh() {
 
-		//hide logo at first startup
-		if(ivLogoDisplay) {
-			LinearLayout llLogo = (LinearLayout) findViewById(R.id.llLogo);
-			llLogo.setVisibility(LinearLayout.GONE);
-			ivLogoDisplay = false;
-		}
-
-		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
-		llContent.setVisibility(LinearLayout.VISIBLE);
 
 		if(refreshItem != null) {
 			if(refreshItem.getActionView() != null) {
@@ -563,11 +571,8 @@ implements OnClickListener, View.OnTouchListener
 
 
 	private void displayLoadingMessage() {
-		LinearLayout llContent = (LinearLayout) findViewById(R.id.llContent);
-		llContent.setVisibility(LinearLayout.GONE);
-
-		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
-		txtTitle.setText(Html.fromHtml("<b>"+getString(R.string.lblLoading)+"</b>"));
+		loadDynamicLayout(R.layout.loading);
+		viewType = ViewType.LOADING;
 	}
 
 	/**
@@ -1183,6 +1188,15 @@ implements OnClickListener, View.OnTouchListener
 		}
 	}
 
+	private void loadDynamicLayout(int layoutID){
+	    // Get a reference to the main layout object in main.xml
+        LinearLayout llmain = (LinearLayout) findViewById(R.id.llMain);
+        llmain.removeAllViews();
+        
+        LayoutInflater inflater = getLayoutInflater();
+        llmain.addView(inflater.inflate(layoutID, null));
+	}
+	
 	private AnimationListener rotateListener = new AnimationListener() {
 
 		@Override

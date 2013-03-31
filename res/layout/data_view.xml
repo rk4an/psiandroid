@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llWrap"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/llTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llContent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TableLayout
+            android:id="@+id/tableVitals"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:shrinkColumns="1"
+            android:stretchColumns="1" >
+
+            <TableRow
+                android:id="@+id/trDistro"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/lblDistro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblDistro"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/txtDistro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/ivDistro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trKernel"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/lblKernel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblKernel"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtKernel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <!--
+                <TableRow
+                    android:id="@+id/trCpu"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_weight="1" >
+
+                     <TextView
+                        android:id="@+id/lblCpu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lblCpu"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtCpu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </TableRow>
+            -->
+
+            <TableRow
+                android:id="@+id/trIp"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/lblIp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblIp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtIp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trUptime"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/lblUptime"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblUptime"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtUptime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trLoad"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/lblLoad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblLoad"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtLoad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trVersion"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/lblVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblVersion"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/tvMemoryUsage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="#444242"
+            android:padding="5dp"
+            android:text="@string/lblMemoryUsage"
+            android:textStyle="bold" />
+
+        <TableLayout
+            android:id="@+id/tMemory"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:stretchColumns="0,1" >
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/tvMountPoints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="#444242"
+            android:padding="5dp"
+            android:text="@string/lblMountPoints"
+            android:textStyle="bold" />
+
+        <TableLayout
+            android:id="@+id/tMountPoints"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:shrinkColumns="0"
+            android:stretchColumns="0,1" >
+        </TableLayout>
+
+        <LinearLayout
+            android:id="@+id/llPlugins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llLogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</LinearLayout>
