@@ -518,7 +518,7 @@ implements OnClickListener, View.OnTouchListener
 			return false;
 		}
 		
-		scrollView.onTouchEvent(event);
+		v.onTouchEvent(event);
 
 		if (hostsJsonArray.length() <= 1) {
 			return true;
