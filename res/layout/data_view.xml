@@ -186,7 +186,7 @@
             </TableRow>
         </TableLayout>
 
-        <com.phpsysinfo.activity.HeaderTextView
+        <ui.HeaderTextView
             android:id="@+id/tvMemoryUsage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -199,7 +199,7 @@
             android:stretchColumns="0,1" >
         </TableLayout>
 
-        <com.phpsysinfo.activity.HeaderTextView
+        <ui.HeaderTextView
             android:id="@+id/tvMountPoints"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

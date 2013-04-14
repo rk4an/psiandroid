@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import ui.HeaderTextView;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
