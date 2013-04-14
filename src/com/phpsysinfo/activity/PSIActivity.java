@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import ui.HeaderTextView;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -45,6 +44,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.phpsysinfo.R;
+import com.phpsysinfo.ui.HeaderTextView;
 import com.phpsysinfo.utils.FormatUtils;
 import com.phpsysinfo.xml.PSIDownloadData;
 import com.phpsysinfo.xml.PSIErrorCode;
