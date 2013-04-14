@@ -635,17 +635,10 @@ implements OnClickListener, View.OnTouchListener
 		if(entry.getNetworkInterface().size() > 0) {
 
 			//header
-			TextView tvNetwork = new TextView(this);
+			HeaderTextView tvNetwork = new HeaderTextView(this);
 			tvNetwork.setId(R.id.tvNetwork);
 			tvNetwork.setText(getString(R.string.lblNetwork));
-			tvNetwork.setTypeface(null,Typeface.BOLD);
-			tvNetwork.setPadding(5, 5, 5, 5);
-
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-			llp.setMargins(0, 5, 0, 5);
-			tvNetwork.setLayoutParams(llp);
-
-			tvNetwork.setBackgroundColor(Color.parseColor("#444242"));
+			
 			llPlugins.addView(tvNetwork);
 
 			tvNetwork.setOnClickListener(this);
@@ -693,17 +686,9 @@ implements OnClickListener, View.OnTouchListener
 		if(entry.getTemperature().size() > 0) {
 
 			//header
-			TextView tvTemperature = new TextView(this);
+			HeaderTextView tvTemperature = new HeaderTextView(this);
 			tvTemperature.setId(R.id.tvTemperature);
 			tvTemperature.setText(getString(R.string.lblTemperatures));
-			tvTemperature.setTypeface(null,Typeface.BOLD);
-			tvTemperature.setPadding(5, 5, 5, 5);
-
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-			llp.setMargins(0, 5, 0, 5);
-			tvTemperature.setLayoutParams(llp);
-
-			tvTemperature.setBackgroundColor(Color.parseColor("#444242"));
 			llPlugins.addView(tvTemperature);
 
 			tvTemperature.setOnClickListener(this);
@@ -746,17 +731,9 @@ implements OnClickListener, View.OnTouchListener
 		if(entry.getProcessStatus().size() > 0) {
 
 			//header
-			TextView tvProcessStatus = new TextView(this);
+			HeaderTextView tvProcessStatus = new HeaderTextView(this);
 			tvProcessStatus.setId(R.id.tvProcessStatus);
 			tvProcessStatus.setText(getString(R.string.lblProcessStatus));
-			tvProcessStatus.setTypeface(null,Typeface.BOLD);
-			tvProcessStatus.setPadding(5, 5, 5, 5);
-
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-			llp.setMargins(0, 5, 0, 5);
-			tvProcessStatus.setLayoutParams(llp);
-
-			tvProcessStatus.setBackgroundColor(Color.parseColor("#444242"));
 			llPlugins.addView(tvProcessStatus);
 
 			tvProcessStatus.setOnClickListener(this);
@@ -811,17 +788,10 @@ implements OnClickListener, View.OnTouchListener
 		if(entry.getFans().size() > 0) {
 
 			//header
-			TextView tvFans = new TextView(this);
+			HeaderTextView tvFans = new HeaderTextView(this);
 			tvFans.setId(R.id.tvFans);
 			tvFans.setText(getString(R.string.lblFans));
-			tvFans.setTypeface(null,Typeface.BOLD);
-			tvFans.setPadding(5, 5, 5, 5);
-
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-			llp.setMargins(0, 5, 0, 5);
-			tvFans.setLayoutParams(llp);
-
-			tvFans.setBackgroundColor(Color.parseColor("#444242"));
+			
 			llPlugins.addView(tvFans);
 
 			tvFans.setOnClickListener(this);
@@ -867,17 +837,9 @@ implements OnClickListener, View.OnTouchListener
 		if(entry.getUps() != null) {
 
 			//header
-			TextView tvUps = new TextView(this);
+			HeaderTextView tvUps = new HeaderTextView(this);
 			tvUps.setId(R.id.tvUps);
 			tvUps.setText(getString(R.string.lblUps));
-			tvUps.setTypeface(null,Typeface.BOLD);
-			tvUps.setPadding(5, 5, 5, 5);
-
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-			llp.setMargins(0, 5, 0, 5);
-			tvUps.setLayoutParams(llp);
-
-			tvUps.setBackgroundColor(Color.parseColor("#444242"));
 			llPlugins.addView(tvUps);
 
 			tvUps.setOnClickListener(this);
@@ -1010,17 +972,9 @@ implements OnClickListener, View.OnTouchListener
 		if(entry.getSmart().size() > 0) {
 
 			//header
-			TextView tvSmart = new TextView(this);
+			HeaderTextView tvSmart = new HeaderTextView(this);
 			tvSmart.setId(R.id.tvSmart);
-			tvSmart.setText(getString(R.string.lblSmart));
-			tvSmart.setTypeface(null,Typeface.BOLD);
-			tvSmart.setPadding(5, 5, 5, 5);
-
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-			llp.setMargins(0, 5, 0, 5);
-			tvSmart.setLayoutParams(llp);
-
-			tvSmart.setBackgroundColor(Color.parseColor("#444242"));
+			tvSmart.setText(R.string.lblSmart);
 			llPlugins.addView(tvSmart);
 
 			tvSmart.setOnClickListener(this);
@@ -1064,17 +1018,9 @@ implements OnClickListener, View.OnTouchListener
 		if(entry.getRaid().size() > 0) {
 
 			//header
-			TextView tvRaid = new TextView(this);
+			HeaderTextView tvRaid = new HeaderTextView(this);
 			tvRaid.setId(R.id.tvRaid);
 			tvRaid.setText(getString(R.string.lblRaid));
-			tvRaid.setTypeface(null,Typeface.BOLD);
-			tvRaid.setPadding(5, 5, 5, 5);
-
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-			llp.setMargins(0, 5, 0, 5);
-			tvRaid.setLayoutParams(llp);
-
-			tvRaid.setBackgroundColor(Color.parseColor("#444242"));
 			llPlugins.addView(tvRaid);
 
 			tvRaid.setOnClickListener(this);
@@ -1130,17 +1076,9 @@ implements OnClickListener, View.OnTouchListener
 		if(entry.getNormalUpdate() != -1) {
 
 			//header
-			TextView tvUpdate = new TextView(this);
+			HeaderTextView tvUpdate = new HeaderTextView(this);
 			tvUpdate.setId(R.id.tvUpdate);
 			tvUpdate.setText(getString(R.string.lblUpdate));
-			tvUpdate.setTypeface(null,Typeface.BOLD);
-			tvUpdate.setPadding(5, 5, 5, 5);
-
-			LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-			llp.setMargins(0, 5, 0, 5);
-			tvUpdate.setLayoutParams(llp);
-
-			tvUpdate.setBackgroundColor(Color.parseColor("#444242"));
 			llPlugins.addView(tvUpdate);
 
 			tvUpdate.setOnClickListener(this);
@@ -1179,7 +1117,6 @@ implements OnClickListener, View.OnTouchListener
 			trItem = new TableRow(this);
 			trItem.addView(tvItemLabel);
 			trItem.addView(tvItemValue);
-
 
 			tUpdate.addView(trItem);			
 

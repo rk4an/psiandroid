@@ -186,16 +186,11 @@
             </TableRow>
         </TableLayout>
 
-        <TextView
+        <com.phpsysinfo.activity.HeaderTextView
             android:id="@+id/tvMemoryUsage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="#444242"
-            android:padding="5dp"
-            android:text="@string/lblMemoryUsage"
-            android:textStyle="bold" />
+            android:text="@string/lblMemoryUsage" />
 
         <TableLayout
             android:id="@+id/tMemory"
@@ -204,16 +199,11 @@
             android:stretchColumns="0,1" >
         </TableLayout>
 
-        <TextView
+        <com.phpsysinfo.activity.HeaderTextView
             android:id="@+id/tvMountPoints"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="#444242"
-            android:padding="5dp"
-            android:text="@string/lblMountPoints"
-            android:textStyle="bold" />
+            android:text="@string/lblMountPoints" />
 
         <TableLayout
             android:id="@+id/tMountPoints"
