@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PSIAndroid</string>
+    <string name="lblLoading">Ielādē...</string>
+    <string name="lblUptime">Darbspējas laiks:</string>
+    <string name="lblMemory">Atmiņa</string>
+    <string name="lblLoad">Noslodze:</string>
+    <string name="lblVersion">PSI versija:</string>
+    <string name="lblKernel">Kodols:</string>
+    <string name="lblDistro">Distribūcija:</string>
+    <string name="lblIp">IP:</string>
+    <string name="lblRefresh">Atjaunot</string>
+    <string name="lblSettings">Iestatījumi</string>
+    <string name="lblMio">MiB</string>
+    <string name="lblGio">GiB</string>
+    <string name="lblTio">TiB</string>
+    <string name="lblAdd">Pievienot</string>
+    <string name="lblAbout">Par</string>
+    <string name="lblUrlHint">http://</string>
+    <string name="lblHosts">Resursdators</string>
+    <string name="lblUser">lietotājs</string>
+    <string name="lblPassword">parole</string>
+    <string name="lblMemoryUsage">Atmiņas izlietojums</string>
+    <string name="lblMountPoints">Uzmountotās failu sistēmas</string>
+    <!-- <string name="lblCpu">Procesors:</string> -->
+    <string name="lblTemperatures">Temperatūras</string>
+    <string name="lblNetwork">Tīkli</string>
+    <string name="lblProcessStatus">Procesa Status</string>
+    <string name="lblFans">Ventilatori</string>
+    <string name="lblUps">UPS</string>
+    <string name="lblUpsName">Nosaukums</string>
+    <string name="lblUpsModel">Modelis</string>
+    <string name="lblUpsBatteryCharge">Batereja uzlāde</string>
+    <string name="lblUpsLoad">Noslodze</string>
+    <string name="lblUpsTime">Atlikušais laiks</string>
+    <string name="lblUpsBattery">Baterejas voltāža</string>
+    <string name="lblUpsLine">Līnijas voltāža</string>
+    <string name="lblSmart">SMART</string>
+    <string name="lblRaid">RAID</string>
+    <string name="lblRaidDevice">Ierīce</string>
+    <string name="lblRaidActiveRegistered">Aktīvs/Reģistrēts</string>
+    <string name="lblUpdate">Atjaunot</string>
+    <string name="lblPackages">Pakotnes</string>
+    <string name="lblSecurity">Drošība</string>
+</resources>

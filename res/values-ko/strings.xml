@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Korean translation by Dong-bum, Kim (admin@83rpm.com)
+-->
+<resources>
+    <string name="app_name">PSIAndroid</string>
+    <string name="lblLoading">불러오는 중입니다...</string>
+    <string name="lblUptime">작동시간:</string>
+    <string name="lblMemory">메모리</string>
+    <string name="lblLoad">로드:</string>
+    <string name="lblVersion">PSI 버전:</string>
+    <string name="lblKernel">커널:</string>
+    <string name="lblDistro">배포판:</string>
+    <string name="lblIp">IP:</string>
+    <string name="lblRefresh">갱신</string>
+    <string name="lblSettings">설정</string>
+    <string name="lblMio">MB</string>
+    <string name="lblGio">GB</string>
+    <string name="lblTio">TB</string>
+    <string name="lblAdd">추가</string>
+    <string name="lblAbout">이 프로그램에 대하여</string>
+    <string name="lblUrlHint">http://</string>
+    <string name="lblHosts">호스트</string>
+    <string name="lblUser">사용자명</string>
+    <string name="lblPassword">암호</string>
+    <string name="lblMemoryUsage">메모리 사용량</string>
+    <string name="lblMountPoints">파일시스템 마운트정보</string>
+    <!-- <string name="lblCpu">프로세서:</string> -->
+    <string name="lblTemperatures">온도</string>
+    <string name="lblNetwork">네트워크</string>
+    <string name="lblProcessStatus">프로세스 상태</string>
+    <string name="lblFans">팬</string>
+    <string name="lblUps">UPS</string>
+    <string name="lblUpsName">이름</string>
+    <string name="lblUpsModel">모델명</string>
+    <string name="lblUpsBatteryCharge">배터리 충전</string>
+    <string name="lblUpsLoad">로드</string>
+    <string name="lblUpsTime">시간경과</string>
+    <string name="lblUpsBattery">배터리 전압</string>
+    <string name="lblUpsLine">선로 전압</string>
+    <string name="lblSmart">SMART</string>
+    <string name="lblRaid">RAID</string>
+    <string name="lblRaidDevice">장치</string>
+    <string name="lblRaidActiveRegistered">활성/등록</string>
+    <string name="lblUpdate">업데이트</string>
+    <string name="lblPackages">패키지</string>
+    <string name="lblSecurity">보안</string>
+</resources>
