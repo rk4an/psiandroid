@@ -2,12 +2,13 @@ package com.phpsysinfo.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
+
+import com.phpsysinfo.R;
 
 public class HeaderTextView extends TextView {
 
@@ -31,7 +32,7 @@ public class HeaderTextView extends TextView {
 	}
 	
 	public void custom() {
-		this.setBackgroundColor(Color.parseColor("#444242"));
+		this.setBackgroundColor(getResources().getColor(R.color.header));
 		this.setTypeface(null,Typeface.BOLD);
 		this.setPadding(5, 5, 5, 5);
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
