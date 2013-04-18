@@ -185,9 +185,9 @@ OnItemLongClickListener, OnClickListener {
 		AlertDialog.Builder adb = new AlertDialog.Builder(HostListActivity.this);
 		adb.setMessage("Action for " + listViewUrls.getItemAtPosition(position)
 				+ " ?");
-		adb.setPositiveButton("Remove", dialogClickListener);
-		adb.setNegativeButton("Cancel", dialogClickListener);
-		adb.setNeutralButton("Edit", dialogClickListener);
+		adb.setPositiveButton(getString(R.string.lblRemove), dialogClickListener);
+		adb.setNegativeButton(getString(R.string.lblCancel), dialogClickListener);
+		adb.setNeutralButton(getString(R.string.lblEdit), dialogClickListener);
 		adb.show();
 
 		return true;

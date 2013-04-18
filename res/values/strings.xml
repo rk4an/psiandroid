@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PSIAndroid</string>
+    
     <string name="lblLoading">Loading...</string>
-    <string name="lblUptime">Uptime:</string>
-    <string name="lblMemory">Memory</string>
-    <string name="lblLoad">Load:</string>
-    <string name="lblVersion">PSI version:</string>
+    <string name="lblRefresh">Refresh</string>
+    <string name="lblSettings">Settings</string>
+    <string name="lblAbout">About</string>
+    
     <string name="lblKernel">Kernel:</string>
     <string name="lblDistro">Distro:</string>
     <string name="lblIp">IP:</string>
-    <string name="lblRefresh">Refresh</string>
-    <string name="lblSettings">Settings</string>
-    <string name="lblMio">MiB</string>
-    <string name="lblGio">GiB</string>
-    <string name="lblTio">TiB</string>
-    <string name="lblAdd">Add</string>
-    <string name="lblAbout">About</string>
+    <string name="lblUptime">Uptime:</string>
+    <string name="lblLoad">Load:</string>
+    <string name="lblVersion">PSI version:</string>
+    <string name="lblMemory">Memory</string>
+    
+    <string name="lblMemoryUsage">Memory Usage</string>
+    <string name="lblMountPoints">Mounted File Systems</string>
+    <string name="lblNetwork">Networks</string>
+    <string name="lblTemperatures">Temperatures</string>
+    <string name="lblFans">Fans</string>
+    
     <string name="lblUrlHint">http://</string>
     <string name="lblHosts">Hosts</string>
     <string name="lblUser">username</string>
     <string name="lblPassword">password</string>
-    <string name="lblMemoryUsage">Memory Usage</string>
-    <string name="lblMountPoints">Mounted File Systems</string>
-    <!-- <string name="lblCpu">Processor:</string> -->
-    <string name="lblTemperatures">Temperatures</string>
-    <string name="lblNetwork">Networks</string>
+    
+    <string name="lblMio">MiB</string>
+    <string name="lblGio">GiB</string>
+    <string name="lblTio">TiB</string>
+    
+    <string name="lblAdd">Add</string>
+    <string name="lblCancel">Cancel</string>
+    <string name="lblEdit">Edit</string>
+    <string name="lblRemove">Remove</string>
+    
     <string name="lblProcessStatus">Process Status</string>
-    <string name="lblFans">Fans</string>
+    
     <string name="lblUps">UPS</string>
     <string name="lblUpsName">Name</string>
     <string name="lblUpsModel">Model</string>
@@ -35,10 +45,13 @@
     <string name="lblUpsTime">Time left</string>
     <string name="lblUpsBattery">Battery voltage</string>
     <string name="lblUpsLine">Line voltage</string>
+    
     <string name="lblSmart">SMART</string>
+    
     <string name="lblRaid">RAID</string>
     <string name="lblRaidDevice">Device</string>
     <string name="lblRaidActiveRegistered">Active/Registered</string>
+    
     <string name="lblUpdate">Update</string>
     <string name="lblPackages">Packages</string>
     <string name="lblSecurity">Security</string>
