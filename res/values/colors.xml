@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
    <color name="header">#444242</color>
+   
    <color name="state_ok">#0CE88E</color>
    <color name="state_hard">#E80E0C</color>
    <color name="state_soft">#FF530D</color>
+   
+   <color name="pg_background_start">#ff2A2D30</color>
+   <color name="pg_background_center">#ff2A2D30</color>
+   <color name="pg_sec_start">#770e75af</color>
+   <color name="pg_sec_end">#771997e1</color>
+   <color name="pg_start">#ff0e75af</color>
+   <color name="pg_end">#ff1997e1</color>
 </resources>
