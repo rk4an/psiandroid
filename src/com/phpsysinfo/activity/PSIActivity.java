@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +15,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -329,12 +326,12 @@ implements OnClickListener, View.OnTouchListener
 
 		//text in yellow if memory usage is high
 		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_SOFT_THR) {
-			tvNameMemory.setTextColor(PSIConfig.COLOR_SOFT);
+			tvNameMemory.setTextColor(getResources().getColor(R.color.state_soft));
 		}
 
 		//text in red if memory usage is very high
 		if(entry.getAppMemoryPercent() > PSIConfig.MEMORY_HARD_THR) {
-			tvNameMemory.setTextColor(PSIConfig.COLOR_HARD);
+			tvNameMemory.setTextColor(getResources().getColor(R.color.state_hard));
 		}
 
 		LayoutParams p = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -374,12 +371,12 @@ implements OnClickListener, View.OnTouchListener
 
 			//text in yellow if mount point usage is high
 			if(psiMp.getPercentUsed() > PSIConfig.MEMORY_SOFT_THR) {
-				tvName.setTextColor(PSIConfig.COLOR_SOFT);
+				tvName.setTextColor(getResources().getColor(R.color.state_soft));
 			}
 
 			//text in red if mount point usage is very high
 			if(psiMp.getPercentUsed() > PSIConfig.MEMORY_HARD_THR) {
-				tvName.setTextColor(PSIConfig.COLOR_HARD);
+				tvName.setTextColor(getResources().getColor(R.color.state_hard));
 			}
 
 			//mount point name row
@@ -762,11 +759,11 @@ implements OnClickListener, View.OnTouchListener
 				if(value != null) {
 					if(value.equals("1")) {
 						tvItemValue.setText("UP");
-						tvItemValue.setTextColor(PSIConfig.COLOR_OK);
+						tvItemValue.setTextColor(getResources().getColor(R.color.state_ok));
 					}
 					else {
 						tvItemValue.setText("DOWN");
-						tvItemValue.setTextColor(PSIConfig.COLOR_HARD);
+						tvItemValue.setTextColor(getResources().getColor(R.color.state_hard));
 					}
 				}
 

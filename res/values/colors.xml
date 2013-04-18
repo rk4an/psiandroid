@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
    <color name="header">#444242</color>
+   <color name="state_ok">#0CE88E</color>
+   <color name="state_hard">#E80E0C</color>
+   <color name="state_soft">#FF530D</color>
 </resources>
