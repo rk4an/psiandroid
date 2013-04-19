@@ -42,4 +42,7 @@
     <string name="lblUpdate">Atjaunot</string>
     <string name="lblPackages">Pakotnes</string>
     <string name="lblSecurity">Drošība</string>
+    <string name="lblCancel">Cancel</string>
+    <string name="lblEdit">Edit</string>
+    <string name="lblRemove">Remove</string>
 </resources>

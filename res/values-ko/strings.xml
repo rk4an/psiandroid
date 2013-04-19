@@ -45,4 +45,7 @@ Korean translation by Dong-bum, Kim (admin@83rpm.com)
     <string name="lblUpdate">업데이트</string>
     <string name="lblPackages">패키지</string>
     <string name="lblSecurity">보안</string>
+    <string name="lblCancel">Cancel</string>
+    <string name="lblEdit">Edit</string>
+    <string name="lblRemove">Remove</string>
 </resources>

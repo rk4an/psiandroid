@@ -42,4 +42,7 @@
     <string name="lblUpdate">Обновить</string>
     <string name="lblPackages">Пакеты</string>
     <string name="lblSecurity">Безопасность</string>
+    <string name="lblCancel">Cancel</string>
+    <string name="lblEdit">Edit</string>
+    <string name="lblRemove">Remove</string>
 </resources>
