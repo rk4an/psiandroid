@@ -42,4 +42,7 @@
     <string name="lblUpdate">Uppdatera</string>
     <string name="lblPackages">Paket</string>
     <string name="lblSecurity">Säkerhetspaket</string>
+    <string name="lblCancel">Cancel</string>
+    <string name="lblEdit">Edit</string>
+    <string name="lblRemove">Remove</string>
 </resources>
