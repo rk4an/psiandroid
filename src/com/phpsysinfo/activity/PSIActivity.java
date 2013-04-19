@@ -357,7 +357,7 @@ implements OnClickListener, View.OnTouchListener
 		for (PSIMountPoint psiMp: entry.getMountPoint()) {
 
 			//build row
-			ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);;
+			ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
 
 			TextView tvName = new TextView(this);
 			pgPercent.setProgress(psiMp.getPercentUsed());
@@ -450,8 +450,6 @@ implements OnClickListener, View.OnTouchListener
 
 
 	public void completeRefresh() {
-
-
 		if(refreshItem != null) {
 			if(refreshItem.getActionView() != null) {
 				refreshItem.getActionView().clearAnimation();
