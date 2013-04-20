@@ -57,7 +57,6 @@ implements OnClickListener, View.OnTouchListener
 {
 	private static Context context;
 
-	boolean ivLogoDisplay = true;
 	private Dialog aboutDialog = null;
 	private ScrollView scrollView;
 
@@ -539,7 +538,6 @@ implements OnClickListener, View.OnTouchListener
 						}
 					}
 
-
 					//load the previous/next host
 					displayLoadingMessage();
 					getData(selectedIndex);
@@ -725,7 +723,6 @@ implements OnClickListener, View.OnTouchListener
 						tvItemValue.setTextColor(getResources().getColor(R.color.state_hard));
 					}
 				}
-
 
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
