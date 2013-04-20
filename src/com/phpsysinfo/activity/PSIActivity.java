@@ -48,7 +48,7 @@ import com.phpsysinfo.xml.PSIRaid;
 import com.phpsysinfo.xml.PSIUps;
 
 enum ViewType {
-    NONE, LOGO, ERROR, DATA, LOADING
+	NONE, LOGO, ERROR, DATA, LOADING
 }
 
 public class PSIActivity 
@@ -68,7 +68,7 @@ implements OnClickListener, View.OnTouchListener
 	private MenuItem refreshItem;
 	private ImageView iv;
 	private Animation rotation;
-	
+
 	private ViewType viewType = ViewType.NONE;
 
 	@Override
@@ -76,7 +76,7 @@ implements OnClickListener, View.OnTouchListener
 		super.onCreate(savedInstanceState);
 
 		PSIActivity.context = getApplicationContext();
-		
+
 		setContentView(R.layout.main_view);
 
 		scrollView = (ScrollView) findViewById(R.id.svMain);
@@ -86,7 +86,7 @@ implements OnClickListener, View.OnTouchListener
 
 		rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
 		rotation.setAnimationListener(rotateListener);
-		
+
 		lastIndex = PSIConfig.getInstance().loadLastIndex();
 		scrollView.setOnTouchListener(this);
 
@@ -101,25 +101,31 @@ implements OnClickListener, View.OnTouchListener
 		image.setOnClickListener(this);
 
 		displayLogo();
-		
+
 		//load data
 		selectedIndex = lastIndex;
 		getData(selectedIndex);
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
+		
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
 	}
 
 	public void displayLogo(){
-	    if (this.viewType == ViewType.LOGO) {
-	        return;
-	    }
+		if (this.viewType == ViewType.LOGO) {
+			return;
+		}
 
-	    loadDynamicLayout(R.layout.logo);
+		loadDynamicLayout(R.layout.logo);
 	}
-	
+
 	@Override
 	public void onClick(View event) {
 		if(event.getId() == R.id.image) {
@@ -231,13 +237,13 @@ implements OnClickListener, View.OnTouchListener
 		isReady = true;
 
 		if (viewType != ViewType.DATA) {
-		    loadDynamicLayout(R.layout.data_view);
-		    ((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
-	        ((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
-	        viewType = ViewType.DATA;
-	        scrollView.setOnTouchListener(this);
+			loadDynamicLayout(R.layout.data_view);
+			((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
+			((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
+			viewType = ViewType.DATA;
+			scrollView.setOnTouchListener(this);
 		}
-		
+
 		//title
 		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
 
@@ -245,7 +251,7 @@ implements OnClickListener, View.OnTouchListener
 		try {
 			JSONObject host = (JSONObject) PSIConfig.getInstance().loadHostsList().get(selectedIndex);
 			url = (String) host.get("url");
-			
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -279,7 +285,7 @@ implements OnClickListener, View.OnTouchListener
 		txtDistro.setText(entry.getDistro());
 
 		ImageView ivDistro = (ImageView) findViewById(R.id.ivDistro);
-		
+
 		//distro icon
 		try {
 			Resources res = getResources();
@@ -287,14 +293,14 @@ implements OnClickListener, View.OnTouchListener
 			int ext = tname.indexOf('.');
 			String name = tname.substring(0, ext);
 			int resourceId = res.getIdentifier(name, "drawable", getPackageName());
-		
+
 			ivDistro.setImageResource(resourceId);
 		}
 		catch (Exception e) {
 			//clear
 			ivDistro.setImageBitmap(null);
 		}
-		
+
 		//ip address
 		TextView txtIp = (TextView) findViewById(R.id.txtIp);
 		txtIp.setText(entry.getIp());
@@ -305,9 +311,9 @@ implements OnClickListener, View.OnTouchListener
 
 		//memory
 		LayoutInflater inflater = getLayoutInflater();
-	
+
 		ProgressBar pbMemory = (ProgressBar) inflater.inflate(R.layout.pg, null);
-		
+
 		TextView tvNameMemory = new TextView(this);
 		pbMemory.setProgress(entry.getAppMemoryPercent());
 		tvNameMemory.setText(Html.fromHtml(
@@ -423,9 +429,9 @@ implements OnClickListener, View.OnTouchListener
 		isReady = true;
 
 		if (this.viewType != ViewType.ERROR) {
-		    loadDynamicLayout(R.layout.error_view);
+			loadDynamicLayout(R.layout.error_view);
 		}
-		
+
 		TextView txtHostname = (TextView) findViewById(R.id.errortxt);
 		txtHostname.setText(Html.fromHtml(host));
 
@@ -463,11 +469,11 @@ implements OnClickListener, View.OnTouchListener
 			PSIConfig.getInstance().saveLastIndex(lastIndex);
 		}
 		else {
-			
+
 		}
 	}
- 
-  
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
@@ -500,13 +506,13 @@ implements OnClickListener, View.OnTouchListener
 	public boolean onTouch(View v, MotionEvent event) {
 
 		JSONArray hostsJsonArray = PSIConfig.getInstance().loadHostsList();
-		
-		
+
+
 		if(!isReady) {
 			Log.d("PSIAndroid","Cancel swipe");
 			return false;
 		}
-		
+
 		v.onTouchEvent(event);
 
 		if (hostsJsonArray.length() <= 1) {
@@ -560,22 +566,23 @@ implements OnClickListener, View.OnTouchListener
 
 	public void getData(int index) {
 
-		this.refresh();
-
-		PSIDownloadData task = new PSIDownloadData(this);
-		
 		JSONArray hostsList = PSIConfig.getInstance().loadHostsList();
 		JSONObject currentHost = null;
 		try {
-			currentHost = (JSONObject) hostsList.get(index);
-			String url = currentHost.getString("url");
-			String user = currentHost.getString("username");
-			String password = currentHost.getString("password");
-			
-			if(!url.equals("")) {
-				task.execute(url + PSIConfig.SCRIPT_NAME, user, password);
+			if(index < hostsList.length()) {
+
+				currentHost = (JSONObject) hostsList.get(index);
+				String url = currentHost.getString("url");
+				String user = currentHost.getString("username");
+				String password = currentHost.getString("password");
+
+				PSIDownloadData task = new PSIDownloadData(this);
+				this.refresh();
+				if(!url.equals("")) {
+					task.execute(url + PSIConfig.SCRIPT_NAME, user, password);
+				}
 			}
-			
+
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -591,7 +598,7 @@ implements OnClickListener, View.OnTouchListener
 			HeaderTextView tvNetwork = new HeaderTextView(this);
 			tvNetwork.setId(R.id.tvNetwork);
 			tvNetwork.setText(getString(R.string.lblNetwork));
-			
+
 			llPlugins.addView(tvNetwork);
 
 			tvNetwork.setOnClickListener(this);
@@ -744,7 +751,7 @@ implements OnClickListener, View.OnTouchListener
 			HeaderTextView tvFans = new HeaderTextView(this);
 			tvFans.setId(R.id.tvFans);
 			tvFans.setText(getString(R.string.lblFans));
-			
+
 			llPlugins.addView(tvFans);
 
 			tvFans.setOnClickListener(this);
@@ -1079,14 +1086,14 @@ implements OnClickListener, View.OnTouchListener
 	}
 
 	private void loadDynamicLayout(int layoutID){
-	    // Get a reference to the main layout object in main.xml
-        LinearLayout llmain = (LinearLayout) findViewById(R.id.llMain);
-        llmain.removeAllViews();
-        
-        LayoutInflater inflater = getLayoutInflater();
-        llmain.addView(inflater.inflate(layoutID, null));
+		// Get a reference to the main layout object in main.xml
+		LinearLayout llmain = (LinearLayout) findViewById(R.id.llMain);
+		llmain.removeAllViews();
+
+		LayoutInflater inflater = getLayoutInflater();
+		llmain.addView(inflater.inflate(layoutID, null));
 	}
-	
+
 	private AnimationListener rotateListener = new AnimationListener() {
 
 		@Override
@@ -1106,8 +1113,8 @@ implements OnClickListener, View.OnTouchListener
 			}
 		}
 	};
-	
-    public static Context getAppContext() {
-        return PSIActivity.context;
-    }
+
+	public static Context getAppContext() {
+		return PSIActivity.context;
+	}
 }
