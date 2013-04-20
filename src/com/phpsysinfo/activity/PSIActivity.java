@@ -59,6 +59,8 @@ public class PSIActivity
 extends SherlockActivity
 implements OnClickListener, View.OnTouchListener
 {
+	private static Context context;
+	
 	private SharedPreferences pref;
 	private JSONArray hostsJsonArray = new JSONArray();
 
@@ -81,6 +83,8 @@ implements OnClickListener, View.OnTouchListener
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		PSIActivity.context = getApplicationContext();
+		
 		setContentView(R.layout.main_view);
 
 		scrollView = (ScrollView) findViewById(R.id.svMain);
@@ -319,8 +323,8 @@ implements OnClickListener, View.OnTouchListener
 		tvNameMemory.setText(Html.fromHtml(
 				"<b>"+getString(R.string.lblMemory) + "</b>" +
 
-		" (" + FormatUtils.getFormatedMemory(this,entry.getAppMemoryUsed()) + 
-		" of " + FormatUtils.getFormatedMemory(this,entry.getAppMemoryTotal()) + ") <i>" + 
+		" (" + FormatUtils.getFormatedMemory(entry.getAppMemoryUsed()) + 
+		" of " + FormatUtils.getFormatedMemory(entry.getAppMemoryTotal()) + ") <i>" + 
 		entry.getAppMemoryPercent()+"%</i>"));
 
 
@@ -364,8 +368,8 @@ implements OnClickListener, View.OnTouchListener
 
 			String lblMountText = "<b>" + psiMp.getName() + "</b>";
 
-			lblMountText += " (" + FormatUtils.getFormatedMemory(this,psiMp.getUsed()) + 
-					"&nbsp;of&nbsp;" + FormatUtils.getFormatedMemory(this,psiMp.getTotal()) + ")&nbsp;<i>"+ psiMp.getPercentUsed()+"%</i>";
+			lblMountText += " (" + FormatUtils.getFormatedMemory(psiMp.getUsed()) + 
+					"&nbsp;of&nbsp;" + FormatUtils.getFormatedMemory(psiMp.getTotal()) + ")&nbsp;<i>"+ psiMp.getPercentUsed()+"%</i>";
 
 			tvName.setText(Html.fromHtml(lblMountText));
 
@@ -657,11 +661,11 @@ implements OnClickListener, View.OnTouchListener
 
 				TextView tvItemValueRx = new TextView(this);
 				tvItemValueRx.setText(Html.fromHtml(
-						"&darr; " + FormatUtils.getFormatedMemory(this,(int)pni.getRxBytes())));
+						"&darr; " + FormatUtils.getFormatedMemory((int)pni.getRxBytes())));
 
 				TextView tvItemValueTx = new TextView(this);
 				tvItemValueTx.setText(Html.fromHtml( 
-						"&uarr; " + FormatUtils.getFormatedMemory(this,(int)pni.getTxBytes())));
+						"&uarr; " + FormatUtils.getFormatedMemory((int)pni.getTxBytes())));
 
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
@@ -1150,4 +1154,8 @@ implements OnClickListener, View.OnTouchListener
 			}
 		}
 	};
+	
+    public static Context getAppContext() {
+        return PSIActivity.context;
+    }
 }
