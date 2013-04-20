@@ -6,17 +6,13 @@ import java.util.TreeSet;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -60,16 +56,12 @@ extends SherlockActivity
 implements OnClickListener, View.OnTouchListener
 {
 	private static Context context;
-	
-	private SharedPreferences pref;
-	private JSONArray hostsJsonArray = new JSONArray();
 
 	boolean ivLogoDisplay = true;
 	private Dialog aboutDialog = null;
 	private ScrollView scrollView;
 
-	//current selected url
-	private String currentHost = "";
+	private int lastIndex = 0;
 	private int selectedIndex = 0 ;
 	private boolean isReady = false;
 
@@ -94,10 +86,8 @@ implements OnClickListener, View.OnTouchListener
 
 		rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
 		rotation.setAnimationListener(rotateListener);
-
-		//get preference
-		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
+		
+		lastIndex = PSIConfig.getInstance().loadLastIndex();
 		scrollView.setOnTouchListener(this);
 
 		//create about dialog
@@ -113,8 +103,8 @@ implements OnClickListener, View.OnTouchListener
 		displayLogo();
 		
 		//load data
-		getData(currentHost);
-		loadHostsArray();
+		selectedIndex = lastIndex;
+		getData(selectedIndex);
 	}
 	
 	@Override
@@ -253,9 +243,9 @@ implements OnClickListener, View.OnTouchListener
 
 		String url = "";
 		try {
-			JSONTokener tokener = new JSONTokener(currentHost);
-			JSONObject sHost = new JSONObject(tokener);
-			url = sHost.getString("url");
+			JSONObject host = (JSONObject) PSIConfig.getInstance().loadHostsList().get(selectedIndex);
+			url = (String) host.get("url");
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -467,18 +457,13 @@ implements OnClickListener, View.OnTouchListener
 
 			//load new selected host
 			displayLoadingMessage();
-			currentHost = data.getExtras().getString("host");
-			getData(currentHost);
-			loadHostsArray();
+			lastIndex = data.getExtras().getInt("host");
+			getData(lastIndex);
 
-			//save new selected host
-			Editor editor = pref.edit();
-			editor.putString(PSIConfig.JSON_CURRENT_HOST,currentHost);
-			editor.commit();
+			PSIConfig.getInstance().saveLastIndex(lastIndex);
 		}
 		else {
-			//just update list of hosts
-			loadHostsArray();
+			
 		}
 	}
  
@@ -498,7 +483,7 @@ implements OnClickListener, View.OnTouchListener
 			aboutDialog.show();
 			return true;
 		case R.id.iRefresh:
-			getData(currentHost);
+			getData(selectedIndex);
 			return true;
 		case R.id.iSettings:
 			Intent i = new Intent(this, HostListActivity.class);
@@ -514,6 +499,9 @@ implements OnClickListener, View.OnTouchListener
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
+		JSONArray hostsJsonArray = PSIConfig.getInstance().loadHostsList();
+		
+		
 		if(!isReady) {
 			Log.d("PSIAndroid","Cancel swipe");
 			return false;
@@ -547,19 +535,12 @@ implements OnClickListener, View.OnTouchListener
 						}
 					}
 
-					try {
-						currentHost = hostsJsonArray.get(selectedIndex).toString();
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
 
 					//load the previous/next host
 					displayLoadingMessage();
-					getData(currentHost);
+					getData(selectedIndex);
 
-					Editor editor = pref.edit();
-					editor.putString(PSIConfig.JSON_CURRENT_HOST,currentHost);
-					editor.commit();
+					PSIConfig.getInstance().saveLastIndex(selectedIndex);
 
 					firstX = null;
 					return false;
@@ -576,56 +557,27 @@ implements OnClickListener, View.OnTouchListener
 		viewType = ViewType.LOADING;
 	}
 
-	/**
-	 * load list of hosts
-	 */
-	public void loadHostsArray() {
-		try {
-			String dataStore = pref.getString(PSIConfig.HOSTS_JSON_STORE, "");
 
-			if (dataStore.equals("")) {
-				hostsJsonArray = new JSONArray();
-			}
-			else {
-				JSONTokener tokener = new JSONTokener(dataStore);
-				hostsJsonArray = new JSONArray(tokener);
-			}
-
-			JSONTokener tokener = new JSONTokener(currentHost);
-			JSONObject sHost = new JSONObject(tokener);
-
-			//get index of current selected host
-			for(int i=0; i<hostsJsonArray.length(); i++) {
-				String u = ((JSONObject)hostsJsonArray.get(i)).getString("url");
-
-				String url = sHost.getString("url");
-				if(u.equals(url)) {
-					selectedIndex = i;
-				}
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void getData(String currentHost) {
+	public void getData(int index) {
 
 		this.refresh();
 
 		PSIDownloadData task = new PSIDownloadData(this);
-
+		
+		JSONArray hostsList = PSIConfig.getInstance().loadHostsList();
+		JSONObject currentHost = null;
 		try {
-			JSONTokener tokener = new JSONTokener(currentHost);
-			JSONObject sHost = new JSONObject(tokener);
-			String url = sHost.getString("url");
-			String user = sHost.getString("username");
-			String password = sHost.getString("password");
-
+			currentHost = (JSONObject) hostsList.get(index);
+			String url = currentHost.getString("url");
+			String user = currentHost.getString("username");
+			String password = currentHost.getString("password");
+			
 			if(!url.equals("")) {
 				task.execute(url + PSIConfig.SCRIPT_NAME, user, password);
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
+			
+		} catch (JSONException e1) {
+			e1.printStackTrace();
 		}
 	}
 

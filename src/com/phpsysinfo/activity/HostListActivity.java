@@ -6,16 +6,12 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -55,22 +51,11 @@ OnItemLongClickListener, OnClickListener {
 		Button btnAdd = (Button) findViewById(R.id.btnAdd);
 		btnAdd.setOnClickListener(this);
 
-		SharedPreferences pref = PreferenceManager
-				.getDefaultSharedPreferences(this);
-
-		try {
-			String dataStore = pref.getString(PSIConfig.HOSTS_JSON_STORE, "");
-
-			if (dataStore.equals("")) {
-				hostsJsonArray = new JSONArray();
-			}
-			else {
-				JSONTokener tokener = new JSONTokener(dataStore);
-				hostsJsonArray = new JSONArray(tokener);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	
+		
+		
+		hostsJsonArray = PSIConfig.getInstance().loadHostsList();
+	
 
 		for (int i = 0; i < hostsJsonArray.length(); i++) {
 			try {
@@ -87,23 +72,16 @@ OnItemLongClickListener, OnClickListener {
 				listStringUrls);
 		listViewUrls.setAdapter(arrayAdapterUrlList);
 
-		//FIXME: select the current URL
-		String currentHost = pref.getString(PSIConfig.JSON_CURRENT_HOST, "");
-		String currentHostUrl = "";
+		
+		int lastIndex = PSIConfig.getInstance().loadLastIndex();
+		
 		try {
-			JSONTokener tokener = new JSONTokener(currentHost);
-			JSONObject sHost = new JSONObject(tokener);
-			currentHostUrl = sHost.getString("url");
+			hostsJsonArray.get(lastIndex);
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		for(int i = 0; i<listStringUrls.size(); i++) {
-			if(listStringUrls.get(i).equals(currentHostUrl)) {
-				listViewUrls.setItemChecked(i, true);
-			}
-		}
-		
+		listViewUrls.setItemChecked(lastIndex, true);
 	}
 
 	@Override
@@ -112,7 +90,7 @@ OnItemLongClickListener, OnClickListener {
 
 		Intent i = new Intent();
 		try {
-			i.putExtra("host", hostsJsonArray.get(position).toString());
+			i.putExtra("host", position);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -148,7 +126,7 @@ OnItemLongClickListener, OnClickListener {
 				arrayAdapterUrlList.remove((String) listViewUrls
 						.getItemAtPosition(pos));
 
-				saveList();
+				PSIConfig.getInstance().saveList(hostsJsonArray);
 				break;
 			case DialogInterface.BUTTON_NEUTRAL:
 				
@@ -219,28 +197,8 @@ OnItemLongClickListener, OnClickListener {
 			txtUser.setText("");
 			txtPasword.setText("");
 			
-			saveList();
+			PSIConfig.getInstance().saveList(hostsJsonArray);
 		}
-	}
-
-	/**
-	 * save the list into a string in the preference
-	 */
-	public void saveList() {
-
-		SharedPreferences pref = PreferenceManager
-				.getDefaultSharedPreferences(this);
-
-		String dataStore = "";
-		try {
-			dataStore = hostsJsonArray.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		Editor editor = pref.edit();
-		editor.putString(PSIConfig.HOSTS_JSON_STORE, dataStore);
-		editor.commit();
 	}
 
 }
