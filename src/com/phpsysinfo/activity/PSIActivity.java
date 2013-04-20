@@ -61,7 +61,6 @@ implements OnClickListener, View.OnTouchListener
 	private Dialog aboutDialog = null;
 	private ScrollView scrollView;
 
-	private int lastIndex = 0;
 	private int selectedIndex = 0 ;
 	private boolean isReady = false;
 
@@ -87,7 +86,6 @@ implements OnClickListener, View.OnTouchListener
 		rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
 		rotation.setAnimationListener(rotateListener);
 
-		lastIndex = PSIConfig.getInstance().loadLastIndex();
 		scrollView.setOnTouchListener(this);
 
 		//create about dialog
@@ -103,7 +101,7 @@ implements OnClickListener, View.OnTouchListener
 		displayLogo();
 
 		//load data
-		selectedIndex = lastIndex;
+		int selectedIndex = PSIConfig.getInstance().loadLastIndex();
 		getData(selectedIndex);
 	}
 
@@ -463,10 +461,10 @@ implements OnClickListener, View.OnTouchListener
 
 			//load new selected host
 			displayLoadingMessage();
-			lastIndex = data.getExtras().getInt("host");
-			getData(lastIndex);
+			int index = data.getExtras().getInt("host");
+			getData(index);
 
-			PSIConfig.getInstance().saveLastIndex(lastIndex);
+			PSIConfig.getInstance().saveLastIndex(index);
 		}
 		else {
 
