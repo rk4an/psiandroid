@@ -31,6 +31,7 @@
     <string name="lblTio">TiB</string>
     
     <string name="lblAdd">Add</string>
+    <string name="lblActionFor">Action for %1$s ?</string>
     <string name="lblCancel">Cancel</string>
     <string name="lblEdit">Edit</string>
     <string name="lblRemove">Remove</string>
