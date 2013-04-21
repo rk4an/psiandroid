@@ -51,12 +51,8 @@ OnItemLongClickListener, OnClickListener {
 		Button btnAdd = (Button) findViewById(R.id.btnAdd);
 		btnAdd.setOnClickListener(this);
 
-	
-		
-		
 		hostsJsonArray = PSIConfig.getInstance().loadHostsList();
 	
-
 		for (int i = 0; i < hostsJsonArray.length(); i++) {
 			try {
 				String url = ((JSONObject)hostsJsonArray.get(i)).getString("url");
