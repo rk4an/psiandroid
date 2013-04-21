@@ -26,6 +26,7 @@
     <string name="lblUser">nom</string>
     <string name="lblPassword">mot de passe</string>
 
+    <string name="lblOf">sur</string>
     <string name="lblMio">MiB</string>
     <string name="lblGio">GiB</string>
     <string name="lblTio">TiB</string>

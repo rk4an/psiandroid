@@ -310,14 +310,19 @@ implements OnClickListener, View.OnTouchListener
 		LayoutInflater inflater = getLayoutInflater();
 
 		ProgressBar pbMemory = (ProgressBar) inflater.inflate(R.layout.pg, null);
-
+		
 		TextView tvNameMemory = new TextView(this);
 		pbMemory.setProgress(entry.getAppMemoryPercent());
+		
+		if(entry.getAppMemoryFullPercent() != 0) {
+			pbMemory.setSecondaryProgress(entry.getAppMemoryFullPercent());
+		}
+		
 		tvNameMemory.setText(Html.fromHtml(
 				"<b>"+getString(R.string.lblMemory) + "</b>" +
 
 		" (" + FormatUtils.getFormatedMemory(entry.getAppMemoryUsed()) + 
-		" of " + FormatUtils.getFormatedMemory(entry.getAppMemoryTotal()) + ") <i>" + 
+		"&nbsp;" + getString(R.string.lblOf) + "&nbsp;" + FormatUtils.getFormatedMemory(entry.getAppMemoryTotal()) + ") <i>" + 
 		entry.getAppMemoryPercent()+"%</i>"));
 
 
@@ -362,7 +367,7 @@ implements OnClickListener, View.OnTouchListener
 			String lblMountText = "<b>" + psiMp.getName() + "</b>";
 
 			lblMountText += " (" + FormatUtils.getFormatedMemory(psiMp.getUsed()) + 
-					"&nbsp;of&nbsp;" + FormatUtils.getFormatedMemory(psiMp.getTotal()) + ")&nbsp;<i>"+ psiMp.getPercentUsed()+"%</i>";
+					"&nbsp;" + getString(R.string.lblOf) + "&nbsp;" + FormatUtils.getFormatedMemory(psiMp.getTotal()) + ") <i>"+ psiMp.getPercentUsed()+"%</i>";
 
 			tvName.setText(Html.fromHtml(lblMountText));
 

@@ -20,6 +20,7 @@ public class PSIHostData {
 	private int appMemoryPercent = 0;
 	private int appMemoryUsed= 0;
 	private int appMemoryTotal = 0;
+	private int appMemoryFullPercent = 0;
 	
 	private HashMap<String,String> temperature = new HashMap<String,String>();
 	private HashMap<String,String> fans = new HashMap<String,String>();
@@ -70,6 +71,16 @@ public class PSIHostData {
 		return appMemoryPercent;
 	}
 
+	public void setAppMemoryFullPercent(String value) {
+		if(value != null) {
+			this.appMemoryFullPercent = Integer.parseInt(value);
+		}
+	}
+
+	public int getAppMemoryFullPercent() {
+		return appMemoryFullPercent;
+	}	
+	
 	public String getLoadAvg() {
 		return loadAvg;
 	}
