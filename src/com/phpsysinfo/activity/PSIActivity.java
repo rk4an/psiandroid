@@ -107,9 +107,9 @@ implements OnClickListener, View.OnTouchListener
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
+
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -310,14 +310,14 @@ implements OnClickListener, View.OnTouchListener
 		LayoutInflater inflater = getLayoutInflater();
 
 		ProgressBar pbMemory = (ProgressBar) inflater.inflate(R.layout.pg, null);
-		
+
 		TextView tvNameMemory = new TextView(this);
 		pbMemory.setProgress(entry.getAppMemoryPercent());
-		
+
 		if(entry.getAppMemoryFullPercent() != 0) {
 			pbMemory.setSecondaryProgress(entry.getAppMemoryFullPercent());
 		}
-		
+
 		tvNameMemory.setText(Html.fromHtml(
 				"<b>"+getString(R.string.lblMemory) + "</b>" +
 
@@ -465,10 +465,9 @@ implements OnClickListener, View.OnTouchListener
 
 			//load new selected host
 			displayLoadingMessage();
-			int index = data.getExtras().getInt("host");
-			getData(index);
-
-			PSIConfig.getInstance().saveLastIndex(index);
+			selectedIndex = data.getExtras().getInt("host");
+			getData(selectedIndex);
+			PSIConfig.getInstance().saveLastIndex(selectedIndex);
 		}
 		else {
 
