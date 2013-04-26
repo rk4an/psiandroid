@@ -23,7 +23,7 @@
     
     <string name="lblUrlHint">http://</string>
     <string name="lblHosts">Serveurs</string>
-    <string name="lblHosts">Serveur</string>
+    <string name="lblHost">Serveur</string>
     <string name="lblUser">Nom</string>
     <string name="lblPassword">Mot de passe</string>
     <string name="lblSave">Enregistrer</string>
