@@ -2,6 +2,7 @@ package com.phpsysinfo.activity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.content.SharedPreferences;
@@ -102,4 +103,24 @@ public class PSIConfig {
 		editor.putInt(PSIConfig.LAST_INDEX, index);
 		editor.commit();
 	}
+	
+	
+	public void add(String txtUrl, String txtUser, String txtPasword) {
+		JSONArray hostsJsonArray = loadHostsList();
+		if (!txtUrl.equals("")) {
+
+			try {
+				JSONObject host = new JSONObject();
+				host.put("url", txtUrl);
+				host.put("username", txtUser);
+				host.put("password", txtPasword);
+
+				hostsJsonArray.put(host);
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			saveList(hostsJsonArray);
+		}
+	}	
 }

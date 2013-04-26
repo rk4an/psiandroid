@@ -23,8 +23,10 @@
     
     <string name="lblUrlHint">http://</string>
     <string name="lblHosts">Hosts</string>
-    <string name="lblUser">username</string>
-    <string name="lblPassword">password</string>
+    <string name="lblHost">Host</string>
+    <string name="lblUser">Username</string>
+    <string name="lblPassword">Password</string>
+    <string name="lblSave">Save</string>
     
     <string name="lblOf">of</string>
     <string name="lblMio">MiB</string>

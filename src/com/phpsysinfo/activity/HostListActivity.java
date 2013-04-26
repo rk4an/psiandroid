@@ -9,31 +9,36 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockDialogFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.phpsysinfo.R;
 
-public class HostListActivity extends SherlockActivity implements OnItemClickListener,
-OnItemLongClickListener, OnClickListener {
+public class HostListActivity extends SherlockFragmentActivity implements OnItemClickListener,
+OnItemLongClickListener {
 
-	List<String> listStringUrls = null;
-	ListView listViewUrls = null;
-	ArrayAdapter<String> arrayAdapterUrlList = null;
-	int pos = 0;
-
-	private JSONArray hostsJsonArray = null;
+	private List<String> listStringUrls = null;
+	private JSONArray allHost = null;
+	private static JSONObject editHost = null;
+	private static boolean editMode = false;
+	private static ListView listViewUrls = null;
+	private static ArrayAdapter<String> arrayAdapterUrlList = null;
+	private static int position = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,14 +53,11 @@ OnItemLongClickListener, OnClickListener {
 
 		listStringUrls = new ArrayList<String>();
 
-		Button btnAdd = (Button) findViewById(R.id.btnAdd);
-		btnAdd.setOnClickListener(this);
+		allHost = PSIConfig.getInstance().loadHostsList();
 
-		hostsJsonArray = PSIConfig.getInstance().loadHostsList();
-	
-		for (int i = 0; i < hostsJsonArray.length(); i++) {
+		for (int i = 0; i < allHost.length(); i++) {
 			try {
-				String url = ((JSONObject)hostsJsonArray.get(i)).getString("url");
+				String url = ((JSONObject)allHost.get(i)).getString("url");
 				if (!url.equals("")) {
 					listStringUrls.add(url);
 				}
@@ -68,13 +70,11 @@ OnItemLongClickListener, OnClickListener {
 				listStringUrls);
 		listViewUrls.setAdapter(arrayAdapterUrlList);
 
-		
 		int lastIndex = PSIConfig.getInstance().loadLastIndex();
-		
+
 		try {
-			hostsJsonArray.get(lastIndex);
+			allHost.get(lastIndex);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		listViewUrls.setItemChecked(lastIndex, true);
@@ -95,9 +95,7 @@ OnItemLongClickListener, OnClickListener {
 		finish();
 	}
 
-	/**
-	 * 
-	 */
+
 	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
@@ -105,44 +103,37 @@ OnItemLongClickListener, OnClickListener {
 			case DialogInterface.BUTTON_POSITIVE:
 				// delete item and save the list
 
-				boolean find = false;
 				JSONArray temp = new JSONArray();
-				for (int i = 0; i < hostsJsonArray.length() && !find; i++) {
+				for (int i = 0; i < allHost.length(); i++) {
 					try {
-						if (i != pos) {
-							temp.put(hostsJsonArray.get(i));
+						if (i != position) {
+							temp.put(allHost.get(i));
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
 				}
-				
-				hostsJsonArray = temp;
+
+				allHost = temp;
 
 				arrayAdapterUrlList.remove((String) listViewUrls
-						.getItemAtPosition(pos));
+						.getItemAtPosition(position));
 
-				PSIConfig.getInstance().saveList(hostsJsonArray);
+				PSIConfig.getInstance().saveList(allHost);
 				break;
 			case DialogInterface.BUTTON_NEUTRAL:
-				
-				//get json at position pos
-				
-				JSONObject editHost = null;
+
 				try {
-					editHost = (JSONObject) hostsJsonArray.get(pos);
-					
-					((EditText) findViewById(R.id.txtUrl)).setText(
-							editHost.get("url").toString());
-					((EditText) findViewById(R.id.txtUser)).setText(
-							editHost.get("username").toString());
-					((EditText) findViewById(R.id.txtPassword)).setText(
-							editHost.get("password").toString());
-					
+					editHost = (JSONObject) allHost.get(position);
+					editMode = true;
+
+					AddHostDialog editDialog = new AddHostDialog();
+					editDialog.show(getSupportFragmentManager(), getString(R.string.lblHost));
+
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
+
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:
 				break;
@@ -151,9 +142,30 @@ OnItemLongClickListener, OnClickListener {
 	};
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> a, View v, int position,
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.host, menu);
+		return true;
+	} 
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.iAdd:
+			editMode = false;
+			AddHostDialog addDialog = new AddHostDialog();
+			addDialog.show(getSupportFragmentManager(), getString(R.string.lblHost));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> a, View v, int pos,
 			long id) {
-		pos = position;
+		position = pos;
 
 		// create and display the remove dialog
 		AlertDialog.Builder adb = new AlertDialog.Builder(HostListActivity.this);
@@ -166,35 +178,56 @@ OnItemLongClickListener, OnClickListener {
 		return true;
 	}
 
-	@Override
-	public void onClick(View arg0) {
-		EditText txtUrl = (EditText) findViewById(R.id.txtUrl);
-		EditText txtUser = (EditText) findViewById(R.id.txtUser);
-		EditText txtPasword = (EditText) findViewById(R.id.txtPassword);
 
-		// add URL to the list
-		if (!txtUrl.getText().toString().equals("")) {
-			arrayAdapterUrlList.add(txtUrl.getText().toString());
 
-			try {
-				JSONObject host = new JSONObject();
-				host.put("url", txtUrl.getText().toString());
-				host.put("username", txtUser.getText().toString());
-				host.put("password", txtPasword.getText().toString());
+	public static class AddHostDialog extends SherlockDialogFragment {
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-				hostsJsonArray.put(host);
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-			} catch (JSONException e) {
-				e.printStackTrace();
+			LayoutInflater inflater = getActivity().getLayoutInflater();
+			View dialogView = inflater.inflate(R.layout.host_form, null);
+			final EditText url = ((EditText)dialogView.findViewById(R.id.txtUrl));
+			final EditText username = ((EditText)dialogView.findViewById(R.id.txtUsername));
+			final EditText password = ((EditText)dialogView.findViewById(R.id.txtPassword));
+
+			if(HostListActivity.editMode) {
+				try {
+					url.setText(HostListActivity.editHost.getString("url"));
+					username.setText(HostListActivity.editHost.getString("username"));
+					password.setText(HostListActivity.editHost.getString("password"));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 			}
 
-			//clear
-			txtUrl.setText("http://");
-			txtUser.setText("");
-			txtPasword.setText("");
-			
-			PSIConfig.getInstance().saveList(hostsJsonArray);
+			builder.setView(dialogView);
+			builder.setTitle(getString(R.string.lblHost));
+
+			builder.setPositiveButton(getString(R.string.lblSave), new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int whichButton) {
+
+					PSIConfig.getInstance().add(
+							url.getText().toString(),
+							username.getText().toString(),
+							password.getText().toString());
+
+					arrayAdapterUrlList.add(url.getText().toString());
+				}
+			});
+
+			builder.setNegativeButton(getString(R.string.lblCancel), new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					return;
+				}
+			});
+
+			return builder.create();
 		}
 	}
-
 }
