@@ -26,9 +26,7 @@ public class PSIConfig {
 		return instance;
 	}
 
-
 	private PSIConfig() {
-
 	}
 
 
@@ -36,7 +34,7 @@ public class PSIConfig {
 	 * 
 	 * @return
 	 */
-	public JSONArray loadHostsList() {
+	public JSONArray loadHosts() {
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(PSIActivity.getAppContext());
 
@@ -63,7 +61,7 @@ public class PSIConfig {
 	 * 
 	 * @param hostsList
 	 */
-	public void saveList(JSONArray hostsList) {
+	public void saveHosts(JSONArray hostsList) {
 
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(PSIActivity.getAppContext());
@@ -105,8 +103,8 @@ public class PSIConfig {
 	}
 
 
-	public boolean add(String url, String user, String password) {
-		JSONArray allHosts = loadHostsList();
+	public boolean addHost(String url, String user, String password) {
+		JSONArray allHosts = loadHosts();
 
 		try {
 			JSONObject host = new JSONObject();
@@ -115,12 +113,30 @@ public class PSIConfig {
 			host.put("password", password);
 
 			allHosts.put(host);
-			saveList(allHosts);
+			saveHosts(allHosts);
 			return true;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
 		return false;
-	}	
+	}
+	
+	public boolean editHost(int position, String url, String user, String password) {
+		JSONArray allHosts = loadHosts();
+
+		try {
+			JSONObject host = (JSONObject) allHosts.get(position);
+			host.put("url", url);
+			host.put("username", user);
+			host.put("password", password);
+			
+			saveHosts(allHosts);
+			return true;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
 }

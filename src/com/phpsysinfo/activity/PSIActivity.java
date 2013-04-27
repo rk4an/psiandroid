@@ -246,7 +246,7 @@ implements OnClickListener, View.OnTouchListener
 
 		String url = "";
 		try {
-			JSONObject host = (JSONObject) PSIConfig.getInstance().loadHostsList().get(selectedIndex);
+			JSONObject host = (JSONObject) PSIConfig.getInstance().loadHosts().get(selectedIndex);
 			url = (String) host.get("url");
 
 		} catch (JSONException e) {
@@ -506,7 +506,7 @@ implements OnClickListener, View.OnTouchListener
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
-		JSONArray hostsJsonArray = PSIConfig.getInstance().loadHostsList();
+		JSONArray hostsJsonArray = PSIConfig.getInstance().loadHosts();
 
 
 		if(!isReady) {
@@ -566,7 +566,7 @@ implements OnClickListener, View.OnTouchListener
 
 	public void getData(int index) {
 
-		JSONArray hostsList = PSIConfig.getInstance().loadHostsList();
+		JSONArray hostsList = PSIConfig.getInstance().loadHosts();
 		JSONObject currentHost = null;
 		try {
 			if(index < hostsList.length()) {

@@ -33,12 +33,12 @@ import com.phpsysinfo.R;
 public class HostListActivity extends SherlockFragmentActivity implements OnItemClickListener,
 OnItemLongClickListener {
 
-	private List<String> tmp = null;
-	private JSONArray allHosts = null;
+	private static JSONArray allHosts = null;
 	private static JSONObject editHost = null;
 	private static boolean editMode = false;
 	private static ListView lvHosts = null;
-	private static ArrayAdapter<String> arrayAdapterUrlList = null;
+	private static List<String> lHosts = null;
+	private static ArrayAdapter<String> aaHosts = null;
 	private static int position = 0;
 
 	@Override
@@ -50,23 +50,21 @@ OnItemLongClickListener {
 		lvHosts.setOnItemClickListener(this);
 		lvHosts.setOnItemLongClickListener(this);
 
-		tmp = new ArrayList<String>();
+		allHosts = PSIConfig.getInstance().loadHosts();
 
-		allHosts = PSIConfig.getInstance().loadHostsList();
-
+		lHosts = new ArrayList<String>();
 		for (int i = 0; i < allHosts.length(); i++) {
 			try {
 				String url = ((JSONObject)allHosts.get(i)).getString("url");
 				if (!url.equals("")) {
-					tmp.add(url);
+					lHosts.add(url);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
-
-		arrayAdapterUrlList = new ArrayAdapter<String>(this, R.layout.hosts_list, tmp);
-		lvHosts.setAdapter(arrayAdapterUrlList);
+		aaHosts = new ArrayAdapter<String>(PSIActivity.getAppContext(), R.layout.hosts_list, lHosts);
+		lvHosts.setAdapter(aaHosts);
 
 		int lastIndex = PSIConfig.getInstance().loadLastIndex();
 
@@ -118,8 +116,8 @@ OnItemLongClickListener {
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
-				// delete item and save the list
 
+				// rebuild the json array without the selected index
 				JSONArray temp = new JSONArray();
 				for (int i = 0; i < allHosts.length(); i++) {
 					try {
@@ -133,10 +131,10 @@ OnItemLongClickListener {
 
 				allHosts = temp;
 
-				arrayAdapterUrlList.remove((String) lvHosts
-						.getItemAtPosition(position));
+				lHosts.remove(position);
+				aaHosts.notifyDataSetChanged();
 
-				PSIConfig.getInstance().saveList(allHosts);
+				PSIConfig.getInstance().saveHosts(allHosts);
 				break;
 			case DialogInterface.BUTTON_NEUTRAL:
 
@@ -212,11 +210,26 @@ OnItemLongClickListener {
 					}
 
 					if (hostUrl.length() > 8 && URLUtil.isValidUrl(hostUrl)) {
-						if(PSIConfig.getInstance().add(
-								url.getText().toString(),
-								username.getText().toString(),
-								password.getText().toString())) {
-							arrayAdapterUrlList.add(hostUrl);
+						if(editMode) {
+							if(PSIConfig.getInstance().editHost(
+									position,
+									hostUrl,
+									username.getText().toString(),
+									password.getText().toString())) {
+
+								lHosts.set(position, hostUrl);
+								aaHosts.notifyDataSetChanged();
+							}
+						}
+						else {
+							if(PSIConfig.getInstance().addHost(
+									hostUrl,
+									username.getText().toString(),
+									password.getText().toString())) {
+								lHosts.add(hostUrl);
+								aaHosts.notifyDataSetChanged();
+							}
+
 						}
 					}
 				}
