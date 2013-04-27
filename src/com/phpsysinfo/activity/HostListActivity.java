@@ -117,24 +117,12 @@ OnItemLongClickListener {
 			switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
 
-				// rebuild the json array without the selected index
-				JSONArray temp = new JSONArray();
-				for (int i = 0; i < allHosts.length(); i++) {
-					try {
-						if (i != position) {
-							temp.put(allHosts.get(i));
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-
-				allHosts = temp;
-
+				PSIConfig.getInstance().removeHost(position);
+				allHosts = PSIConfig.getInstance().loadHosts();
+				
 				lHosts.remove(position);
 				aaHosts.notifyDataSetChanged();
-
-				PSIConfig.getInstance().saveHosts(allHosts);
+				
 				break;
 			case DialogInterface.BUTTON_NEUTRAL:
 
@@ -229,8 +217,8 @@ OnItemLongClickListener {
 								lHosts.add(hostUrl);
 								aaHosts.notifyDataSetChanged();
 							}
-
 						}
+						allHosts = PSIConfig.getInstance().loadHosts();
 					}
 				}
 			});

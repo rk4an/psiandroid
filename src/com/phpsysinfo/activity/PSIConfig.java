@@ -139,4 +139,23 @@ public class PSIConfig {
 
 		return false;
 	}
+	
+	public void removeHost(int position) {
+		JSONArray allHosts = loadHosts();
+		
+		// rebuild the json array without the selected index
+		JSONArray temp = new JSONArray();
+		for (int i = 0; i < allHosts.length(); i++) {
+			try {
+				if (i != position) {
+					temp.put(allHosts.get(i));
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		saveHosts(temp);
+	}
+	
 }
