@@ -93,34 +93,34 @@ public class PSIConfig {
 
 		return index;
 	}
-	
+
 	public void saveLastIndex(int index) {
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(PSIActivity.getAppContext());
-		
+
 		//save new selected host
 		Editor editor = pref.edit();
 		editor.putInt(PSIConfig.LAST_INDEX, index);
 		editor.commit();
 	}
-	
-	
-	public void add(String txtUrl, String txtUser, String txtPasword) {
-		JSONArray hostsJsonArray = loadHostsList();
-		if (!txtUrl.equals("")) {
 
-			try {
-				JSONObject host = new JSONObject();
-				host.put("url", txtUrl);
-				host.put("username", txtUser);
-				host.put("password", txtPasword);
 
-				hostsJsonArray.put(host);
+	public boolean add(String url, String user, String password) {
+		JSONArray allHosts = loadHostsList();
 
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			saveList(hostsJsonArray);
+		try {
+			JSONObject host = new JSONObject();
+			host.put("url", url);
+			host.put("username", user);
+			host.put("password", password);
+
+			allHosts.put(host);
+			saveList(allHosts);
+			return true;
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
+
+		return false;
 	}	
 }

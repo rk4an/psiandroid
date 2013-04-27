@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -32,11 +33,11 @@ import com.phpsysinfo.R;
 public class HostListActivity extends SherlockFragmentActivity implements OnItemClickListener,
 OnItemLongClickListener {
 
-	private List<String> listStringUrls = null;
-	private JSONArray allHost = null;
+	private List<String> tmp = null;
+	private JSONArray allHosts = null;
 	private static JSONObject editHost = null;
 	private static boolean editMode = false;
-	private static ListView listViewUrls = null;
+	private static ListView lvHosts = null;
 	private static ArrayAdapter<String> arrayAdapterUrlList = null;
 	private static int position = 0;
 
@@ -45,39 +46,36 @@ OnItemLongClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.hosts_view);
 
-		listViewUrls = (ListView) findViewById(R.id.lvHostsList);
-		listViewUrls.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		listViewUrls.setSelection(0);
-		listViewUrls.setOnItemClickListener(this);
-		listViewUrls.setOnItemLongClickListener(this);
+		lvHosts = (ListView) findViewById(R.id.lvHostsList);
+		lvHosts.setOnItemClickListener(this);
+		lvHosts.setOnItemLongClickListener(this);
 
-		listStringUrls = new ArrayList<String>();
+		tmp = new ArrayList<String>();
 
-		allHost = PSIConfig.getInstance().loadHostsList();
+		allHosts = PSIConfig.getInstance().loadHostsList();
 
-		for (int i = 0; i < allHost.length(); i++) {
+		for (int i = 0; i < allHosts.length(); i++) {
 			try {
-				String url = ((JSONObject)allHost.get(i)).getString("url");
+				String url = ((JSONObject)allHosts.get(i)).getString("url");
 				if (!url.equals("")) {
-					listStringUrls.add(url);
+					tmp.add(url);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
 
-		arrayAdapterUrlList = new ArrayAdapter<String>(this, R.layout.hosts_list,
-				listStringUrls);
-		listViewUrls.setAdapter(arrayAdapterUrlList);
+		arrayAdapterUrlList = new ArrayAdapter<String>(this, R.layout.hosts_list, tmp);
+		lvHosts.setAdapter(arrayAdapterUrlList);
 
 		int lastIndex = PSIConfig.getInstance().loadLastIndex();
 
 		try {
-			allHost.get(lastIndex);
+			allHosts.get(lastIndex);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		listViewUrls.setItemChecked(lastIndex, true);
+		lvHosts.setItemChecked(lastIndex, true);
 	}
 
 	@Override
@@ -94,52 +92,6 @@ OnItemLongClickListener {
 		setResult(Activity.RESULT_OK, i);
 		finish();
 	}
-
-
-	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			switch (which) {
-			case DialogInterface.BUTTON_POSITIVE:
-				// delete item and save the list
-
-				JSONArray temp = new JSONArray();
-				for (int i = 0; i < allHost.length(); i++) {
-					try {
-						if (i != position) {
-							temp.put(allHost.get(i));
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-
-				allHost = temp;
-
-				arrayAdapterUrlList.remove((String) listViewUrls
-						.getItemAtPosition(position));
-
-				PSIConfig.getInstance().saveList(allHost);
-				break;
-			case DialogInterface.BUTTON_NEUTRAL:
-
-				try {
-					editHost = (JSONObject) allHost.get(position);
-					editMode = true;
-
-					AddHostDialog editDialog = new AddHostDialog();
-					editDialog.show(getSupportFragmentManager(), getString(R.string.lblHost));
-
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-
-				break;
-			case DialogInterface.BUTTON_NEGATIVE:
-				break;
-			}
-		}
-	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,6 +113,50 @@ OnItemLongClickListener {
 		}
 	}
 
+	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+			case DialogInterface.BUTTON_POSITIVE:
+				// delete item and save the list
+
+				JSONArray temp = new JSONArray();
+				for (int i = 0; i < allHosts.length(); i++) {
+					try {
+						if (i != position) {
+							temp.put(allHosts.get(i));
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+
+				allHosts = temp;
+
+				arrayAdapterUrlList.remove((String) lvHosts
+						.getItemAtPosition(position));
+
+				PSIConfig.getInstance().saveList(allHosts);
+				break;
+			case DialogInterface.BUTTON_NEUTRAL:
+
+				try {
+					editHost = (JSONObject) allHosts.get(position);
+					editMode = true;
+
+					AddHostDialog editDialog = new AddHostDialog();
+					editDialog.show(getSupportFragmentManager(), getString(R.string.lblHost));
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				break;
+			case DialogInterface.BUTTON_NEGATIVE:
+				break;
+			}
+		}
+	};
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> a, View v, int pos,
@@ -169,7 +165,7 @@ OnItemLongClickListener {
 
 		// create and display the remove dialog
 		AlertDialog.Builder adb = new AlertDialog.Builder(HostListActivity.this);
-		adb.setMessage(getString(R.string.lblActionFor, listViewUrls.getItemAtPosition(position)));
+		adb.setMessage(getString(R.string.lblActionFor, lvHosts.getItemAtPosition(position)));
 		adb.setPositiveButton(getString(R.string.lblRemove), dialogClickListener);
 		adb.setNegativeButton(getString(R.string.lblCancel), dialogClickListener);
 		adb.setNeutralButton(getString(R.string.lblEdit), dialogClickListener);
@@ -177,8 +173,6 @@ OnItemLongClickListener {
 
 		return true;
 	}
-
-
 
 	public static class AddHostDialog extends SherlockDialogFragment {
 		@Override
@@ -210,12 +204,21 @@ OnItemLongClickListener {
 				@Override
 				public void onClick(DialogInterface dialog, int whichButton) {
 
-					PSIConfig.getInstance().add(
-							url.getText().toString(),
-							username.getText().toString(),
-							password.getText().toString());
+					String hostUrl = url.getText().toString().trim();
 
-					arrayAdapterUrlList.add(url.getText().toString());
+					//default prefix with http
+					if (!hostUrl.startsWith("http://") && !hostUrl.startsWith("https://")) {
+						hostUrl = "http://" + hostUrl;
+					}
+
+					if (hostUrl.length() > 8 && URLUtil.isValidUrl(hostUrl)) {
+						if(PSIConfig.getInstance().add(
+								url.getText().toString(),
+								username.getText().toString(),
+								password.getText().toString())) {
+							arrayAdapterUrlList.add(hostUrl);
+						}
+					}
 				}
 			});
 

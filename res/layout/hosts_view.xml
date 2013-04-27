@@ -48,7 +48,8 @@
         <ListView
             android:id="@+id/lvHostsList"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:choiceMode="singleChoice" >
         </ListView>
 
     </LinearLayout>
