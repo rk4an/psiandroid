@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PSIAndroid</string>
+    
     <string name="lblLoading">Загрузка...</string>
     <string name="lblUptime">Аптайм:</string>
-    <string name="lblMemory">Память</string>
-    <string name="lblLoad">Нагрузка:</string>
-    <string name="lblVersion">Версия PSI:</string>
+    <string name="lblRefresh">Обновить</string>
+    <string name="lblSettings">Настройки</string>
+    <string name="lblAbout">О программе</string>
+    
     <string name="lblKernel">Ядро:</string>
     <string name="lblDistro">Дистрибутив:</string>
     <string name="lblIp">IP:</string>
-    <string name="lblRefresh">Обновить</string>
-    <string name="lblSettings">Настройки</string>
+    <string name="lblLoad">Нагрузка:</string>
+    <string name="lblVersion">Версия PSI:</string>
+    <string name="lblMemory">Память</string>
+
+    <string name="lblMemoryUsage">Использование памяти</string>
+    <string name="lblMountPoints">Файловые системы</string>
+    <string name="lblNetwork">Сети</string>
+    <string name="lblTemperatures">Температура</string>
+    <string name="lblFans">Кулеры</string>
+    
+    <string name="lblUrlHint">http://</string>
+    <string name="lblHosts">Серверы</string>
+    <string name="lblHost">Host</string>
+    <string name="lblUser">логин</string>
+    <string name="lblPassword">пароль</string>
+    <string name="lblSave">Save</string>
+
+    <string name="lblOf">of</string>
     <string name="lblMio">Мб</string>
     <string name="lblGio">Гб</string>
     <string name="lblTio">Тб</string>
+    
     <string name="lblAdd">Добавить</string>
-    <string name="lblAbout">О программе</string>
-    <string name="lblUrlHint">http://</string>
-    <string name="lblHosts">Серверы</string>
-    <string name="lblUser">логин</string>
-    <string name="lblPassword">пароль</string>
-    <string name="lblMemoryUsage">Использование памяти</string>
-    <string name="lblMountPoints">Файловые системы</string>
-    <!-- <string name="lblCpu">Процессор:</string> -->
-    <string name="lblTemperatures">Температура</string>
-    <string name="lblNetwork">Сети</string>
+    <string name="lblActionFor">Action for %1$s ?</string>
+    <string name="lblCancel">Cancel</string>
+    <string name="lblEdit">Edit</string>
+    <string name="lblRemove">Remove</string>
+
     <string name="lblProcessStatus">Статус процессов</string>
-    <string name="lblFans">Кулеры</string>
+
     <string name="lblUps">ИБП</string>
     <string name="lblUpsName">Имя</string>
     <string name="lblUpsModel">Модель</string>
@@ -35,14 +49,14 @@
     <string name="lblUpsTime">Оставшееся время</string>
     <string name="lblUpsBattery">Напряженгие батареи</string>
     <string name="lblUpsLine">Напряжение сети</string>
+    
     <string name="lblSmart">SMART</string>
+    
     <string name="lblRaid">RAID</string>
     <string name="lblRaidDevice">Устройство</string>
     <string name="lblRaidActiveRegistered">Активно/Зарегистрировано</string>
+    
     <string name="lblUpdate">Обновить</string>
     <string name="lblPackages">Пакеты</string>
     <string name="lblSecurity">Безопасность</string>
-    <string name="lblCancel">Cancel</string>
-    <string name="lblEdit">Edit</string>
-    <string name="lblRemove">Remove</string>
 </resources>

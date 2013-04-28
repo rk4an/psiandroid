@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PSIAndroid</string>
+    
     <string name="lblLoading">Laddar...</string>
     <string name="lblUptime">Drifttid:</string>
-    <string name="lblMemory">Minne</string>
-    <string name="lblLoad">Belastning:</string>
-    <string name="lblVersion">Version av PSI:</string>
+    <string name="lblRefresh">Uppdatera</string>
+    <string name="lblSettings">Inställningar</string>
+    <string name="lblAbout">Om</string>
+
     <string name="lblKernel">Kärnversion:</string>
     <string name="lblDistro">Distribution:</string>
     <string name="lblIp">IP-adress:</string>
-    <string name="lblRefresh">Uppdatera</string>
-    <string name="lblSettings">Inställningar</string>
+    <string name="lblLoad">Belastning:</string>
+    <string name="lblVersion">Version av PSI:</string>
+    <string name="lblMemory">Minne</string>
+
+    <string name="lblMemoryUsage">Minnesanvändning</string>
+    <string name="lblMountPoints">Monterade filsystem</string>
+    <string name="lblNetwork">Nätverksanvändning</string>
+    <string name="lblTemperatures">Temperaturer</string>
+    <string name="lblFans">Fläktar</string>
+    
+    <string name="lblUrlHint">http://</string>
+    <string name="lblHosts">Värdar</string>
+    <string name="lblHost">Host</string>
+    <string name="lblUser">användarnamn</string>
+    <string name="lblPassword">lösenord</string>
+    <string name="lblSave">Save</string>
+    
+    <string name="lblOf">of</string>
     <string name="lblMio">MB</string>
     <string name="lblGio">GB</string>
     <string name="lblTio">TB</string>
+    
     <string name="lblAdd">Lägg till</string>
-    <string name="lblAbout">Om</string>
-    <string name="lblUrlHint">http://</string>
-    <string name="lblHosts">Värdar</string>
-    <string name="lblUser">användarnamn</string>
-    <string name="lblPassword">lösenord</string>
-    <string name="lblMemoryUsage">Minnesanvändning</string>
-    <string name="lblMountPoints">Monterade filsystem</string>
-    <!-- <string name="lblCpu">Processor:</string> -->
-    <string name="lblTemperatures">Temperaturer</string>
-    <string name="lblNetwork">Nätverksanvändning</string>
+    <string name="lblActionFor">Action for %1$s ?</string>
+    <string name="lblCancel">Avbryt</string>
+    <string name="lblEdit">Ändra</string>
+    <string name="lblRemove">Ta bort</string>
+
     <string name="lblProcessStatus">Status för processer</string>
-    <string name="lblFans">Fläktar</string>
+
     <string name="lblUps">UPS</string>
     <string name="lblUpsName">Namn</string>
     <string name="lblUpsModel">Modell</string>
@@ -35,14 +49,14 @@
     <string name="lblUpsTime">Tid kvar</string>
     <string name="lblUpsBattery">Batterispänning</string>
     <string name="lblUpsLine">Nätspänning</string>
+    
     <string name="lblSmart">SMART</string>
+    
     <string name="lblRaid">RAID</string>
     <string name="lblRaidDevice">Enhet</string>
     <string name="lblRaidActiveRegistered">Aktiv/Registrerad</string>
+    
     <string name="lblUpdate">Uppdatera</string>
     <string name="lblPackages">Paket</string>
     <string name="lblSecurity">Säkerhetspaket</string>
-    <string name="lblCancel">Avbryt</string>
-    <string name="lblEdit">Ändra</string>
-    <string name="lblRemove">Ta bort</string>
 </resources>
