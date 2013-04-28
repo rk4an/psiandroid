@@ -8,7 +8,7 @@
     <string name="lblVersion">Version av PSI:</string>
     <string name="lblKernel">Kärnversion:</string>
     <string name="lblDistro">Distribution:</string>
-    <string name="lblIp">IP:</string>
+    <string name="lblIp">IP-adress:</string>
     <string name="lblRefresh">Uppdatera</string>
     <string name="lblSettings">Inställningar</string>
     <string name="lblMio">MB</string>
@@ -42,7 +42,7 @@
     <string name="lblUpdate">Uppdatera</string>
     <string name="lblPackages">Paket</string>
     <string name="lblSecurity">Säkerhetspaket</string>
-    <string name="lblCancel">Cancel</string>
-    <string name="lblEdit">Edit</string>
-    <string name="lblRemove">Remove</string>
+    <string name="lblCancel">Avbryt</string>
+    <string name="lblEdit">Ändra</string>
+    <string name="lblRemove">Ta bort</string>
 </resources>
