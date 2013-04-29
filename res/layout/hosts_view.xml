@@ -22,22 +22,12 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/llHostsListTitle"
+    <com.phpsysinfo.ui.HeaderTextView
+        android:id="@+id/tvHostsListTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#444242"
-        android:padding="5dp"
-        android:gravity="center" >
-
-        <TextView
-            android:id="@+id/tvHostsListTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lblHosts" />
-
-    </LinearLayout>
+        android:gravity="center"
+        android:text="@string/lblHosts" />
 
     <LinearLayout
         android:id="@+id/llHostsList"
