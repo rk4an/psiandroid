@@ -12,7 +12,7 @@
     <string name="lblDistro">Distribution:</string>
     <string name="lblIp">IP-adress:</string>
     <string name="lblLoad">Belastning:</string>
-    <string name="lblUsers">Users:</string>
+    <string name="lblUsers">Användare:</string>
     <string name="lblVersion">Version av PSI:</string>
     <string name="lblMemory">Minne</string>
 
@@ -24,18 +24,18 @@
     
     <string name="lblUrlHint">http://</string>
     <string name="lblHosts">Värdar</string>
-    <string name="lblHost">Host</string>
+    <string name="lblHost">Värd</string>
     <string name="lblUser">användarnamn</string>
     <string name="lblPassword">lösenord</string>
-    <string name="lblSave">Save</string>
+    <string name="lblSave">Spara</string>
     
-    <string name="lblOf">of</string>
+    <string name="lblOf">av</string>
     <string name="lblMio">MB</string>
     <string name="lblGio">GB</string>
     <string name="lblTio">TB</string>
     
     <string name="lblAdd">Lägg till</string>
-    <string name="lblActionFor">Action for %1$s ?</string>
+    <string name="lblActionFor">Åtgärd för %1$s</string>
     <string name="lblCancel">Avbryt</string>
     <string name="lblEdit">Ändra</string>
     <string name="lblRemove">Ta bort</string>
