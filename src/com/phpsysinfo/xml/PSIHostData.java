@@ -32,7 +32,7 @@ public class PSIHostData {
 
 	private HashMap<String,String> processStatus = new HashMap<String,String>();
 
-	private HashMap<String,String> smart = new HashMap<String,String>();
+	private List<PSISmart> smart = new ArrayList<PSISmart>();
 
 	private List<PSIRaid> raid = new ArrayList<PSIRaid>();
 
@@ -236,11 +236,11 @@ public class PSIHostData {
 		return processStatus;
 	}	
 
-	public void addSmart(String attr, String value) {
-		smart.put(attr, value);
+	public void addSmart(PSISmart item) {
+		smart.add(item);
 	}
 
-	public HashMap<String, String> getSmart() {
+	public List<PSISmart> getSmart() {
 		return smart;
 	}
 

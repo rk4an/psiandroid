@@ -12,4 +12,6 @@
    <color name="pg_sec_end">#771997e1</color>
    <color name="pg_start">#ff0e75af</color>
    <color name="pg_end">#ff1997e1</color>
+   
+   <color name="sub_item">#ff1997e1</color>
 </resources>

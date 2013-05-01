@@ -1,6 +1,7 @@
 package com.phpsysinfo.activity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeSet;
 
 import org.json.JSONArray;
@@ -45,6 +46,7 @@ import com.phpsysinfo.xml.PSIHostData;
 import com.phpsysinfo.xml.PSIMountPoint;
 import com.phpsysinfo.xml.PSINetworkInterface;
 import com.phpsysinfo.xml.PSIRaid;
+import com.phpsysinfo.xml.PSISmart;
 import com.phpsysinfo.xml.PSIUps;
 
 enum ViewType {
@@ -953,16 +955,28 @@ implements OnClickListener, View.OnTouchListener
 			llSmart.setId(R.id.llSmart);
 			llSmart.setOrientation(LinearLayout.VERTICAL);
 
-			//HashMap<String, String> smart = entry.getSmart();
-			TreeSet<String> keys = new TreeSet<String>(entry.getSmart().keySet());
+			List<PSISmart> items = entry.getSmart();
 
-			for (String mapKey : keys) {
+			String currentDisk = "";
+			
+			for (PSISmart item : items) {
+				
+				if(!currentDisk.equals(item.getDisk())) {
+					currentDisk = item.getDisk();
+					TextView tvItemLabel = new TextView(this);
+					tvItemLabel.setTextColor(getResources().getColor(R.color.sub_item));
+					tvItemLabel.setText(Html.fromHtml("<b>" + item.getDisk() + "</b>"));
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
+					tSmart.addView(trItem);
+				}
+				
 				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
+				tvItemLabel.setText(Html.fromHtml("<b>" + item.getAttribut() + ": </b>"));
 
 				TextView tvItemValue = new TextView(this);
 
-				String value = entry.getSmart().get(mapKey);
+				String value = item.getValue();
 				tvItemValue.setText(value);
 
 				TableRow trItem = new TableRow(this);

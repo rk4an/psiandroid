@@ -19,7 +19,7 @@ public class PSIXmlParse extends DefaultHandler {
 	private boolean inPsStatus = false;
 	
 	private boolean inDisk = false;
-	private int numDisk = 0;
+	private String currentDisk = "";
 
 	private boolean inPackageUpdate = false;
 	private boolean inSecurityUpdate = false;
@@ -148,15 +148,15 @@ public class PSIXmlParse extends DefaultHandler {
 		//smart
 		else if (localName.equalsIgnoreCase("disk")){
 			inDisk = true;
-			numDisk++;
-			//attributes.getValue("name");
+			currentDisk = attributes.getValue("name");
 		}
 		
 		else if (inDisk){
 			if (localName.equalsIgnoreCase("attribute")) {
 				String attr = attributes.getValue("attribute_name");
 				String value = attributes.getValue("raw_value");
-				this.entry.addSmart(numDisk +" " + attr, value);
+				
+				this.entry.addSmart(new PSISmart(currentDisk, attr, value));
 			}
 		}
 
