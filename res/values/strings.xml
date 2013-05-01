@@ -12,6 +12,7 @@
     <string name="lblIp">IP:</string>
     <string name="lblUptime">Uptime:</string>
     <string name="lblLoad">Load:</string>
+    <string name="lblUsers">Users:</string>
     <string name="lblVersion">PSI version:</string>
     <string name="lblMemory">Memory</string>
     

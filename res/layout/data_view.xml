@@ -166,6 +166,26 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trUsers"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/lblUsers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblUsers"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtUsers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+            
+            <TableRow
                 android:id="@+id/trVersion"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"

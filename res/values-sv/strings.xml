@@ -12,6 +12,7 @@
     <string name="lblDistro">Distribution:</string>
     <string name="lblIp">IP-adress:</string>
     <string name="lblLoad">Belastning:</string>
+    <string name="lblUsers">Users:</string>
     <string name="lblVersion">Version av PSI:</string>
     <string name="lblMemory">Minne</string>
 

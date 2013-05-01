@@ -12,6 +12,7 @@
     <string name="lblIp">IP:</string>
     <string name="lblUptime">Darbspējas laiks:</string>
     <string name="lblLoad">Noslodze:</string>
+    <string name="lblUsers">Users:</string>
     <string name="lblVersion">PSI versija:</string>
     <string name="lblMemory">Atmiņa</string>
     

@@ -95,6 +95,7 @@ extends AsyncTask<String, Void, Void>
 		}
 		catch (Exception e) {
 			Log.d("PSIAndroid", "XML_PARSER_ERROR");
+			e.printStackTrace();
 			errorCode = PSIErrorCode.XML_PARSER_ERROR;
 			httpClient.close();
 			return null;

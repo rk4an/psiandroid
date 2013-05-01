@@ -50,6 +50,7 @@ public class PSIXmlParse extends DefaultHandler {
 			this.entry.setKernel(attributes.getValue("Kernel"));
 			this.entry.setDistro(attributes.getValue("Distro"));
 			this.entry.setIp(attributes.getValue("IPAddr"));
+			this.entry.setUsers(attributes.getValue("Users"));
 			this.entry.setDistroIcon(attributes.getValue("Distroicon"));
 		}
 		else if (localName.equalsIgnoreCase("Memory")){

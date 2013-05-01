@@ -268,6 +268,9 @@ implements OnClickListener, View.OnTouchListener
 		//psi version
 		TextView txtVersion = (TextView) findViewById(R.id.txtVersion);
 		txtVersion.setText(entry.getPsiVersion());
+		if(entry.getPsiVersion() != null && entry.getPsiVersion().matches("3.0-rc(.*)")) {
+			txtVersion.setTextColor(getResources().getColor(R.color.state_hard));
+		}
 
 		//kernel version
 		TextView txtKernel = (TextView) findViewById(R.id.txtKernel);
@@ -276,7 +279,10 @@ implements OnClickListener, View.OnTouchListener
 		//Cpu
 		//TextView txtCpu = (TextView) findViewById(R.id.txtCpu);
 		//txtCpu.setText(entry.getCpu());
-
+		
+		TextView txtUsers = (TextView) findViewById(R.id.txtUsers);
+		txtUsers.setText(entry.getUsers());
+		
 		//distro name
 		TextView txtDistro = (TextView) findViewById(R.id.txtDistro);
 		txtDistro.setText(entry.getDistro());

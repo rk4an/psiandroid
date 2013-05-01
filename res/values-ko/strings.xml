@@ -16,6 +16,7 @@ Korean translation by Dong-bum, Kim (admin@83rpm.com)
     <string name="lblIp">IP:</string>
     <string name="lblUptime">작동시간:</string>
     <string name="lblLoad">로드:</string>
+    <string name="lblUsers">Users:</string>
     <string name="lblMemory">메모리</string>
    
     <string name="lblMemoryUsage">메모리 사용량</string>
