@@ -95,6 +95,7 @@ implements OnClickListener, View.OnTouchListener
 		aboutDialog.setTitle("PSIAndroid");
 		TextView text = (TextView) aboutDialog.findViewById(R.id.text);
 		text.setText("http://phpsysinfo.sf.net");
+		text.append("\nPlease rate this app");
 		ImageView image = (ImageView) aboutDialog.findViewById(R.id.image);
 		image.setImageResource(R.drawable.ic_launcher);
 		image.setOnClickListener(this);
