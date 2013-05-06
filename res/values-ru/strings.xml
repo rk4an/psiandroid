@@ -12,9 +12,9 @@
     <string name="lblDistro">Дистрибутив:</string>
     <string name="lblIp">IP:</string>
     <string name="lblLoad">Нагрузка:</string>
-    <string name="lblUsers">Users:</string>
+    <string name="lblUsers">Пользователей:</string>
     <string name="lblVersion">Версия PSI:</string>
-    <string name="lblMemory">Память</string>
+    <string name="lblMemory">ОЗУ</string>
 
     <string name="lblMemoryUsage">Использование памяти</string>
     <string name="lblMountPoints">Файловые системы</string>
@@ -29,7 +29,7 @@
     <string name="lblPassword">пароль</string>
     <string name="lblSave">Save</string>
 
-    <string name="lblOf">of</string>
+    <string name="lblOf">из</string>
     <string name="lblMio">Мб</string>
     <string name="lblGio">Гб</string>
     <string name="lblTio">Тб</string>
@@ -42,13 +42,13 @@
 
     <string name="lblProcessStatus">Статус процессов</string>
 
-    <string name="lblUps">ИБП</string>
+    <string name="lblUps">Источники Бесперебойного Питания</string>
     <string name="lblUpsName">Имя</string>
     <string name="lblUpsModel">Модель</string>
     <string name="lblUpsBatteryCharge">Заряд батареи</string>
     <string name="lblUpsLoad">Нагрузка</string>
     <string name="lblUpsTime">Оставшееся время</string>
-    <string name="lblUpsBattery">Напряженгие батареи</string>
+    <string name="lblUpsBattery">Напряжение батареи</string>
     <string name="lblUpsLine">Напряжение сети</string>
     
     <string name="lblSmart">SMART</string>
@@ -57,7 +57,7 @@
     <string name="lblRaidDevice">Устройство</string>
     <string name="lblRaidActiveRegistered">Активно/Зарегистрировано</string>
     
-    <string name="lblUpdate">Обновить</string>
+    <string name="lblUpdate">Обновления системы</string>
     <string name="lblPackages">Пакеты</string>
     <string name="lblSecurity">Безопасность</string>
 </resources>
