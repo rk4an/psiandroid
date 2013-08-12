@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PSIAndroid</string>
+    
+    <string name="lblLoading">Wird geladen ...</string>
+    <string name="lblRefresh">Aktualisieren</string>
+    <string name="lblSettings">Einstellungen</string>
+    <string name="lblAbout">Über</string>
+    
+    <string name="lblKernel">Kernel:</string>
+    <string name="lblDistro">Distna:</string>
+    <string name="lblIp">IP:</string>
+    <string name="lblUptime">Betriebszeit:</string>
+    <string name="lblLoad">Auslastung:</string>
+    <string name="lblUsers">Benutzer:</string>
+    <string name="lblVersion">PSI Version:</string>
+    <string name="lblMemory">Arbeitsspeicher</string>
+    
+    <string name="lblMemoryUsage">Arbeitsspeicher Auslastung</string>
+    <string name="lblMountPoints">Angemeldete Dateisysteme</string>
+    <string name="lblNetwork">Netzwerke</string>
+    <string name="lblTemperatures">Temperaturen</string>
+    <string name="lblFans">Lüfter</string>
+    
+    <string name="lblUrlHint">http://</string>
+    <string name="lblHosts">Hosts</string>
+    <string name="lblHost">Host</string>
+    <string name="lblUser">Benutzername</string>
+    <string name="lblPassword">Passwort</string>
+    <string name="lblSave">Speichern</string>
+    
+    <string name="lblOf">von</string>
+    <string name="lblMio">MiB</string>
+    <string name="lblGio">GiB</string>
+    <string name="lblTio">TiB</string>
+    
+    <string name="lblAdd">Hinzufügen</string>
+    <string name="lblActionFor">Aktion für %1$s ?</string>
+    <string name="lblCancel">Abbrechen</string>
+    <string name="lblEdit">Bearbeiten</string>
+    <string name="lblRemove">Löschen</string>
+    
+    <string name="lblProcessStatus">Prozess-Status</string>
+    
+    <string name="lblUps">UPS</string>
+    <string name="lblUpsName">Name</string>
+    <string name="lblUpsModel">Model</string>
+    <string name="lblUpsBatteryCharge">Batterieladung</string>
+    <string name="lblUpsLoad">Laden</string>
+    <string name="lblUpsTime">Restzeit</string>
+    <string name="lblUpsBattery">Batterie-Spannung</string>
+    <string name="lblUpsLine">Netzspannung</string>
+    
+    <string name="lblSmart">SMART</string>
+    
+    <string name="lblRaid">RAID</string>
+    <string name="lblRaidDevice">Gerät</string>
+    <string name="lblRaidActiveRegistered">Aktiviert/Registriert</string>
+    
+    <string name="lblUpdate">Aktualisierung</string>
+    <string name="lblPackages">Pakete</string>
+    <string name="lblSecurity">Sicherheits</string>
+</resources>
