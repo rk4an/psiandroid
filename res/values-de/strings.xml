@@ -44,7 +44,7 @@
     
     <string name="lblUps">UPS</string>
     <string name="lblUpsName">Name</string>
-    <string name="lblUpsModel">Model</string>
+    <string name="lblUpsModel">Modell</string>
     <string name="lblUpsBatteryCharge">Batterieladung</string>
     <string name="lblUpsLoad">Laden</string>
     <string name="lblUpsTime">Restzeit</string>
