@@ -133,94 +133,82 @@ implements OnClickListener, View.OnTouchListener
 		}
 		else if(event.getId() == R.id.tvMemoryUsage) {
 			TableLayout tMemory = (TableLayout) findViewById(R.id.tMemory);
-			if(tMemory.getVisibility() == TableLayout.VISIBLE) {
-				tMemory.setVisibility(TableLayout.GONE);
-			}
-			else {
-				tMemory.setVisibility(TableLayout.VISIBLE);
-			}
+			toggleContent(tMemory);
 		}
 		else if(event.getId() == R.id.tvMountPoints) {
 			TableLayout tMountPoints = (TableLayout) findViewById(R.id.tMountPoints);
-			if(tMountPoints.getVisibility() == TableLayout.VISIBLE) {
-				tMountPoints.setVisibility(TableLayout.GONE);
-			}
-			else {
-				tMountPoints.setVisibility(TableLayout.VISIBLE);
-			}
+			toggleContent(tMountPoints);
 		}
 		else if(event.getId() == R.id.tvTemperature) {
 			LinearLayout llTemperature = (LinearLayout) findViewById(R.id.llTemperature);
-			if(llTemperature.getVisibility() == LinearLayout.VISIBLE) {
-				llTemperature.setVisibility(LinearLayout.GONE);
-			}
-			else {
-				llTemperature.setVisibility(LinearLayout.VISIBLE);
-			}
+			toggleContent(llTemperature);
 		}
 		else if(event.getId() == R.id.tvNetwork) {
 			LinearLayout llNetwork = (LinearLayout) findViewById(R.id.llNetwork);
-			if(llNetwork.getVisibility() == LinearLayout.VISIBLE) {
-				llNetwork.setVisibility(LinearLayout.GONE);
-			}
-			else {
-				llNetwork.setVisibility(LinearLayout.VISIBLE);
-			}
+			toggleContent(llNetwork);
 		}
 		else if(event.getId() == R.id.tvProcessStatus) {
 			LinearLayout llProcessStatus = (LinearLayout) findViewById(R.id.llProcessStatus);
-			if(llProcessStatus.getVisibility() == LinearLayout.VISIBLE) {
-				llProcessStatus.setVisibility(LinearLayout.GONE);
-			}
-			else {
-				llProcessStatus.setVisibility(LinearLayout.VISIBLE);
-			}
+			toggleContent(llProcessStatus);
 		}
 		else if(event.getId() == R.id.tvFans) {
 			LinearLayout llFans = (LinearLayout) findViewById(R.id.llFans);
-			if(llFans.getVisibility() == LinearLayout.VISIBLE) {
-				llFans.setVisibility(LinearLayout.GONE);
-			}
-			else {
-				llFans.setVisibility(LinearLayout.VISIBLE);
-			}
+			toggleContent(llFans);
 		}
 		else if(event.getId() == R.id.tvUps) {
 			LinearLayout llUps = (LinearLayout) findViewById(R.id.llUps);
-			if(llUps.getVisibility() == LinearLayout.VISIBLE) {
-				llUps.setVisibility(LinearLayout.GONE);
-			}
-			else {
-				llUps.setVisibility(LinearLayout.VISIBLE);
-			}
+			toggleContent(llUps);
 		}
 		else if(event.getId() == R.id.tvSmart) {
 			LinearLayout llSmart = (LinearLayout) findViewById(R.id.llSmart);
-			if(llSmart.getVisibility() == LinearLayout.VISIBLE) {
-				llSmart.setVisibility(LinearLayout.GONE);
-			}
-			else {
-				llSmart.setVisibility(LinearLayout.VISIBLE);
-			}
+			toggleContent(llSmart);
 		}
 		else if(event.getId() == R.id.tvRaid) {
 			LinearLayout llRaid = (LinearLayout) findViewById(R.id.llRaid);
-			if(llRaid.getVisibility() == LinearLayout.VISIBLE) {
-				llRaid.setVisibility(LinearLayout.GONE);
-			}
-			else {
-				llRaid.setVisibility(LinearLayout.VISIBLE);
-			}
+			toggleContent(llRaid);
 		}
 		else if(event.getId() == R.id.tvUpdate) {
 			LinearLayout llUpdate = (LinearLayout) findViewById(R.id.llUpdate);
-			if(llUpdate.getVisibility() == LinearLayout.VISIBLE) {
-				llUpdate.setVisibility(LinearLayout.GONE);
-			}
-			else {
-				llUpdate.setVisibility(LinearLayout.VISIBLE);
-			}
+			toggleContent(llUpdate);
 		}
+	}
+
+	public void toggleContent(final View v){
+
+		v.setVisibility( v.isShown()? View.GONE: View.VISIBLE );
+
+		/*Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down);
+		Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up);
+
+		slideUp.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				v.setVisibility(View.GONE);
+			}
+			@Override
+			public void onAnimationRepeat(Animation animation) {}
+			@Override
+			public void onAnimationStart(Animation animation) {}
+		});
+
+		slideDown.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationEnd(Animation animation) {}
+			@Override
+			public void onAnimationRepeat(Animation animation) {}
+			@Override
+			public void onAnimationStart(Animation animation) {
+				v.setVisibility(View.VISIBLE);
+			}
+		});
+
+
+		if(v.isShown()) {
+			v.startAnimation(slideUp);
+		}
+		else {
+			v.startAnimation(slideDown);
+		}*/
 	}
 
 	@Override
@@ -282,10 +270,10 @@ implements OnClickListener, View.OnTouchListener
 		//Cpu
 		//TextView txtCpu = (TextView) findViewById(R.id.txtCpu);
 		//txtCpu.setText(entry.getCpu());
-		
+
 		TextView txtUsers = (TextView) findViewById(R.id.txtUsers);
 		txtUsers.setText(entry.getUsers());
-		
+
 		//distro name
 		TextView txtDistro = (TextView) findViewById(R.id.txtDistro);
 		txtDistro.setText(entry.getDistro());
@@ -959,9 +947,9 @@ implements OnClickListener, View.OnTouchListener
 			List<PSISmart> items = entry.getSmart();
 
 			String currentDisk = "";
-			
+
 			for (PSISmart item : items) {
-				
+
 				if(!currentDisk.equals(item.getDisk())) {
 					currentDisk = item.getDisk();
 					TextView tvItemLabel = new TextView(this);
@@ -971,7 +959,7 @@ implements OnClickListener, View.OnTouchListener
 					trItem.addView(tvItemLabel);
 					tSmart.addView(trItem);
 				}
-				
+
 				TextView tvItemLabel = new TextView(this);
 				tvItemLabel.setText(Html.fromHtml("<b>" + item.getAttribut() + ": </b>"));
 
