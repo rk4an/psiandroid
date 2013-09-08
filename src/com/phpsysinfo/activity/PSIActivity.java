@@ -132,51 +132,41 @@ implements OnClickListener, View.OnTouchListener
 			aboutDialog.hide();
 		}
 		else if(event.getId() == R.id.tvMemoryUsage) {
-			TableLayout tMemory = (TableLayout) findViewById(R.id.tMemory);
-			toggleContent(tMemory);
+			toggleContent((View) findViewById(R.id.tMemory));
 		}
 		else if(event.getId() == R.id.tvMountPoints) {
-			TableLayout tMountPoints = (TableLayout) findViewById(R.id.tMountPoints);
-			toggleContent(tMountPoints);
+			toggleContent((View) findViewById(R.id.tMountPoints));
 		}
 		else if(event.getId() == R.id.tvTemperature) {
-			LinearLayout llTemperature = (LinearLayout) findViewById(R.id.llTemperature);
-			toggleContent(llTemperature);
+			toggleContent((View) findViewById(R.id.llTemperature));
 		}
 		else if(event.getId() == R.id.tvNetwork) {
-			LinearLayout llNetwork = (LinearLayout) findViewById(R.id.llNetwork);
-			toggleContent(llNetwork);
+			toggleContent((View) findViewById(R.id.llNetwork));
 		}
 		else if(event.getId() == R.id.tvProcessStatus) {
-			LinearLayout llProcessStatus = (LinearLayout) findViewById(R.id.llProcessStatus);
-			toggleContent(llProcessStatus);
+			toggleContent((View) findViewById(R.id.llProcessStatus));
 		}
 		else if(event.getId() == R.id.tvFans) {
-			LinearLayout llFans = (LinearLayout) findViewById(R.id.llFans);
-			toggleContent(llFans);
+			toggleContent((View) findViewById(R.id.llFans));
 		}
 		else if(event.getId() == R.id.tvUps) {
-			LinearLayout llUps = (LinearLayout) findViewById(R.id.llUps);
-			toggleContent(llUps);
+			toggleContent((View) findViewById(R.id.llUps));
 		}
 		else if(event.getId() == R.id.tvSmart) {
-			LinearLayout llSmart = (LinearLayout) findViewById(R.id.llSmart);
-			toggleContent(llSmart);
+			toggleContent((View) findViewById(R.id.llSmart));
 		}
 		else if(event.getId() == R.id.tvRaid) {
-			LinearLayout llRaid = (LinearLayout) findViewById(R.id.llRaid);
-			toggleContent(llRaid);
+			toggleContent((View) findViewById(R.id.llRaid));
 		}
 		else if(event.getId() == R.id.tvUpdate) {
-			LinearLayout llUpdate = (LinearLayout) findViewById(R.id.llUpdate);
-			toggleContent(llUpdate);
+			toggleContent((View) findViewById(R.id.llUpdate));
 		}
 	}
 
 	public void toggleContent(final View v){
 
 		v.setVisibility( v.isShown()? View.GONE: View.VISIBLE );
-
+		
 		/*Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down);
 		Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up);
 
