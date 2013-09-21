@@ -178,8 +178,8 @@ public class PSIXmlParse extends DefaultHandler {
 			ups.setBatteryVoltage(attributes.getValue("BatteryVoltage"));
 			ups.setBatteryChargePercent(attributes.getValue("BatteryChargePercent"));
 			ups.setTimeLeftMinutes(attributes.getValue("TimeLeftMinutes"));
-
-			this.entry.setUps(ups);
+			
+			this.entry.addUps(ups);
 		}
 		
 		else if(localName.equalsIgnoreCase("Raid")){

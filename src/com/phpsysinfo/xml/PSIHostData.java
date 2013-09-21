@@ -36,7 +36,7 @@ public class PSIHostData {
 
 	private List<PSIRaid> raid = new ArrayList<PSIRaid>();
 
-	private PSIUps ups = null;
+	private List<PSIUps> ups = new ArrayList<PSIUps>();
 
 	private int normalUpdate = -1;
 	private int securityUpdate = -1;
@@ -244,14 +244,13 @@ public class PSIHostData {
 		return smart;
 	}
 
-	public PSIUps getUps() {
+	public List<PSIUps> getUps() {
 		return ups;
 	}
 
-	public void setUps(PSIUps ups) {
-		this.ups = ups;
+	public void addUps(PSIUps item) {
+		ups.add(item);
 	}
-
 
 	public List<PSIRaid> getRaid() {
 		return raid;

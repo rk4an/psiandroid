@@ -166,7 +166,7 @@ implements OnClickListener, View.OnTouchListener
 	public void toggleContent(final View v){
 
 		v.setVisibility( v.isShown()? View.GONE: View.VISIBLE );
-		
+
 		/*Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down);
 		Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up);
 
@@ -780,7 +780,7 @@ implements OnClickListener, View.OnTouchListener
 
 		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
 
-		if(entry.getUps() != null) {
+		if(entry.getUps().size() > 0) {
 
 			//header
 			HeaderTextView tvUps = new HeaderTextView(this);
@@ -799,111 +799,112 @@ implements OnClickListener, View.OnTouchListener
 			llUps.setId(R.id.llUps);
 			llUps.setOrientation(LinearLayout.VERTICAL);
 
-			PSIUps ups = entry.getUps();
 
-			if(ups.getName() != null) {
+			List<PSIUps> items = entry.getUps();
 
-				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsName)+"</b>" ));
+			for (PSIUps item : items) {
 
-				TextView tvItemValue = new TextView(this);
-				tvItemValue.setText(ups.getName());
+				if(item.getName() != null) {
 
-				TableRow trItem = new TableRow(this);
-				trItem.addView(tvItemLabel);
-				trItem.addView(tvItemValue);
+					TextView tvItemLabel = new TextView(this);
+					tvItemLabel.setTextColor(getResources().getColor(R.color.sub_item));
+					tvItemLabel.setText(Html.fromHtml("<b>"+item.getName()+"</b>" ));
 
-				tUps.addView(trItem);
-			}
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
 
-			if(ups.getModel() != null) {
+					tUps.addView(trItem);
+				}
 
-				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsModel)+" </b>"));
+				if(item.getModel() != null) {
 
-				TextView tvItemValue = new TextView(this);
-				tvItemValue.setText(ups.getModel());
+					TextView tvItemLabel = new TextView(this);
+					tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsModel)+" </b>"));
 
-				TableRow trItem = new TableRow(this);
-				trItem.addView(tvItemLabel);
-				trItem.addView(tvItemValue);
+					TextView tvItemValue = new TextView(this);
+					tvItemValue.setText(item.getModel());
 
-				tUps.addView(trItem);
-			}
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
+					trItem.addView(tvItemValue);
 
-			if(ups.getBatteryChargePercent() != null) {
+					tUps.addView(trItem);
+				}
 
-				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsBatteryCharge)+" </b>"));
+				if(item.getBatteryChargePercent() != null) {
 
-				TextView tvItemValue = new TextView(this);
-				tvItemValue.setText(ups.getBatteryChargePercent() + "%");
+					TextView tvItemLabel = new TextView(this);
+					tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsBatteryCharge)+" </b>"));
 
-				TableRow trItem = new TableRow(this);
-				trItem.addView(tvItemLabel);
-				trItem.addView(tvItemValue);
+					TextView tvItemValue = new TextView(this);
+					tvItemValue.setText(item.getBatteryChargePercent() + "%");
 
-				tUps.addView(trItem);
-			}
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
+					trItem.addView(tvItemValue);
 
-			if(ups.getLoadPercent() != null) {
+					tUps.addView(trItem);
+				}
 
-				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsLoad)+" </b>"));
+				if(item.getLoadPercent() != null) {
 
-				TextView tvItemValue = new TextView(this);
-				tvItemValue.setText(ups.getLoadPercent() + "%");
+					TextView tvItemLabel = new TextView(this);
+					tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsLoad)+" </b>"));
 
-				TableRow trItem = new TableRow(this);
-				trItem.addView(tvItemLabel);
-				trItem.addView(tvItemValue);
+					TextView tvItemValue = new TextView(this);
+					tvItemValue.setText(item.getLoadPercent() + "%");
 
-				tUps.addView(trItem);
-			}
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
+					trItem.addView(tvItemValue);
 
-			if(ups.getTimeLeftMinutes() != null) {
+					tUps.addView(trItem);
+				}
 
-				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsTime)+" </b>"));
+				if(item.getTimeLeftMinutes() != null) {
 
-				TextView tvItemValue = new TextView(this);
-				tvItemValue.setText(ups.getTimeLeftMinutes() + "min");
+					TextView tvItemLabel = new TextView(this);
+					tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsTime)+" </b>"));
 
-				TableRow trItem = new TableRow(this);
-				trItem.addView(tvItemLabel);
-				trItem.addView(tvItemValue);
+					TextView tvItemValue = new TextView(this);
+					tvItemValue.setText(item.getTimeLeftMinutes() + "min");
 
-				tUps.addView(trItem);
-			}
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
+					trItem.addView(tvItemValue);
 
-			if(ups.getBatteryVoltage() != null) {
+					tUps.addView(trItem);
+				}
 
-				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsBattery)+" </b>"));
+				if(item.getBatteryVoltage() != null) {
 
-				TextView tvItemValue = new TextView(this);
-				tvItemValue.setText(ups.getBatteryVoltage() + "V");
+					TextView tvItemLabel = new TextView(this);
+					tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsBattery)+" </b>"));
 
-				TableRow trItem = new TableRow(this);
-				trItem.addView(tvItemLabel);
-				trItem.addView(tvItemValue);
+					TextView tvItemValue = new TextView(this);
+					tvItemValue.setText(item.getBatteryVoltage() + "V");
 
-				tUps.addView(trItem);
-			}
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
+					trItem.addView(tvItemValue);
 
-			if(ups.getLineVoltage() != null) {
+					tUps.addView(trItem);
+				}
 
-				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsLine)+" </b>"));
+				if(item.getLineVoltage() != null) {
 
-				TextView tvItemValue = new TextView(this);
-				tvItemValue.setText(ups.getLineVoltage() + "V");
+					TextView tvItemLabel = new TextView(this);
+					tvItemLabel.setText(Html.fromHtml("<b>"+getString(R.string.lblUpsLine)+" </b>"));
 
-				TableRow trItem = new TableRow(this);
-				trItem.addView(tvItemLabel);
-				trItem.addView(tvItemValue);
+					TextView tvItemValue = new TextView(this);
+					tvItemValue.setText(item.getLineVoltage() + "V");
 
-				tUps.addView(trItem);
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
+					trItem.addView(tvItemValue);
+
+					tUps.addView(trItem);
+				}
 			}
 
 			llUps.addView(tUps);
