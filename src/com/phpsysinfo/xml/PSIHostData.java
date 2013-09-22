@@ -38,6 +38,8 @@ public class PSIHostData {
 
 	private List<PSIUps> ups = new ArrayList<PSIUps>();
 
+	private List<PSIPrinter> printer = new ArrayList<PSIPrinter>();
+	
 	private int normalUpdate = -1;
 	private int securityUpdate = -1;
 
@@ -244,6 +246,14 @@ public class PSIHostData {
 		return smart;
 	}
 
+	public void addPrinter(PSIPrinter item) {
+		printer.add(item);
+	}
+
+	public List<PSIPrinter> getPrinter() {
+		return printer;
+	}
+	
 	public List<PSIUps> getUps() {
 		return ups;
 	}

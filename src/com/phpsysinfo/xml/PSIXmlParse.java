@@ -23,6 +23,10 @@ public class PSIXmlParse extends DefaultHandler {
 
 	private boolean inPackageUpdate = false;
 	private boolean inSecurityUpdate = false;
+	
+	private boolean inPrinter = false;
+	private String currentPrinter = "";
+	
 	private StringBuffer buffer = new StringBuffer();
 	
 	@Override
@@ -151,6 +155,22 @@ public class PSIXmlParse extends DefaultHandler {
 			currentDisk = attributes.getValue("name");
 		}
 		
+		else if (localName.equalsIgnoreCase("Printer")){
+			inPrinter = true;
+			currentPrinter = attributes.getValue("Name");
+		}
+		
+		else if (inPrinter){
+			if (localName.equalsIgnoreCase("MarkerSupplies")) {
+				String description = attributes.getValue("Description");
+				String supplyUnit = attributes.getValue("SupplyUnit");
+				String maxCapacity = attributes.getValue("MaxCapacity");
+				String level = attributes.getValue("Level");
+				
+				this.entry.addPrinter(new PSIPrinter(currentPrinter, description, supplyUnit, maxCapacity, level));
+			}
+		}
+		
 		else if (inDisk){
 			if (localName.equalsIgnoreCase("attribute")) {
 				String attr = attributes.getValue("attribute_name");
@@ -234,6 +254,9 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 		else if(localName.equalsIgnoreCase("disk")){
 			inDisk = false;
+		}
+		else if(localName.equalsIgnoreCase("Printer")){
+			inPrinter = false;
 		}
 		else if(localName.equalsIgnoreCase("packages")){
 			inPackageUpdate = false;

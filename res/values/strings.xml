@@ -60,4 +60,14 @@
     <string name="lblUpdate">Update</string>
     <string name="lblPackages">Packages</string>
     <string name="lblSecurity">Security</string>
+    
+    <string name="lblPrinter">Printers</string>
+    <string name="lblDescription">Description</string>
+    <string name="lblSupplyUnit">Supply Unit:</string>
+    <string name="lblMaxCapacity">Max Capacity:</string>
+    <string name="lblLevel">Level:</string>
+    <string name="lblPercent">Percent</string>  
+    <string name="lblTenthsMl">Tenths of ml</string>  
+    <string name="lblImpressions">Impressions</string>  
+    
 </resources>

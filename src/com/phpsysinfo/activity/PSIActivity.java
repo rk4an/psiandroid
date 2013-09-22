@@ -45,6 +45,7 @@ import com.phpsysinfo.xml.PSIErrorCode;
 import com.phpsysinfo.xml.PSIHostData;
 import com.phpsysinfo.xml.PSIMountPoint;
 import com.phpsysinfo.xml.PSINetworkInterface;
+import com.phpsysinfo.xml.PSIPrinter;
 import com.phpsysinfo.xml.PSIRaid;
 import com.phpsysinfo.xml.PSISmart;
 import com.phpsysinfo.xml.PSIUps;
@@ -160,6 +161,9 @@ implements OnClickListener, View.OnTouchListener
 		}
 		else if(event.getId() == R.id.tvUpdate) {
 			toggleContent((View) findViewById(R.id.llUpdate));
+		}
+		else if(event.getId() == R.id.tvPrinter) {
+			toggleContent((View) findViewById(R.id.llPrinter));
 		}
 	}
 
@@ -407,6 +411,9 @@ implements OnClickListener, View.OnTouchListener
 
 		//update section
 		showUpdate(entry);
+
+		//printer section
+		showPrinter(entry);
 	}
 
 	/**
@@ -1081,6 +1088,71 @@ implements OnClickListener, View.OnTouchListener
 
 			llUpdate.addView(tUpdate);
 			llPlugins.addView(llUpdate);
+		}
+	}
+
+	public void showPrinter(PSIHostData entry) {
+
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+
+		if(entry.getPrinter().size() > 0) {
+
+			//header
+			HeaderTextView tvPrinter = new HeaderTextView(this);
+			tvPrinter.setId(R.id.tvPrinter);
+			tvPrinter.setText(R.string.lblPrinter);
+			llPlugins.addView(tvPrinter);
+
+			tvPrinter.setOnClickListener(this);
+
+			//content
+			TableLayout tPrinter = new TableLayout(this);
+			tPrinter.setColumnShrinkable(1, true);
+			tPrinter.setId(R.id.tPrinter);
+
+			LinearLayout llSmart = new LinearLayout(this);
+			llSmart.setId(R.id.llPrinter);
+			llSmart.setOrientation(LinearLayout.VERTICAL);
+
+			List<PSIPrinter> items = entry.getPrinter();
+
+			String currentDisk = "";
+
+			for (PSIPrinter item : items) {
+
+				if(!currentDisk.equals(item.getPrinter())) {
+					currentDisk = item.getPrinter();
+					TextView tvItemLabel = new TextView(this);
+					tvItemLabel.setTextColor(getResources().getColor(R.color.sub_item));
+					tvItemLabel.setText(Html.fromHtml("<b>" + item.getPrinter() + "</b>"));
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
+					tPrinter.addView(trItem);
+				}
+
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>"+item.getDescription()+"</b>"));
+
+				TextView tvItemValue = new TextView(this);
+
+				String unit = item.getSupplyUnit();
+				if(unit.equals("19")) unit = getString(R.string.lblPercent);
+				else if(unit.equals("15")) unit = getString(R.string.lblTenthsMl);
+				else if(unit.equals("7")) unit = getString(R.string.lblImpressions);
+
+				String value = getString(R.string.lblSupplyUnit) + " " + unit + " \n" 
+						+ getString(R.string.lblLevel) + " " + item.getLevel() + " " + getString(R.string.lblOf) + " " + item.getMaxCapacity();
+				tvItemValue.setText(value);
+
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tPrinter.addView(trItem);
+			}
+
+			llSmart.addView(tPrinter);
+			llPlugins.addView(llSmart);
 		}
 	}
 

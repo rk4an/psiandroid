@@ -24,4 +24,7 @@
         <item type="id" name="tvUpdate"/>
         <item type="id" name="llUpdate"/>
         <item type="id" name="tUpdate"/>
+        <item type="id" name="tvPrinter"/>
+        <item type="id" name="llPrinter"/>
+        <item type="id" name="tPrinter"/>
     </resources>
