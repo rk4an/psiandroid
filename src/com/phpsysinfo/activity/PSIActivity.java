@@ -1110,9 +1110,9 @@ implements OnClickListener, View.OnTouchListener
 			tPrinter.setColumnShrinkable(1, true);
 			tPrinter.setId(R.id.tPrinter);
 
-			LinearLayout llSmart = new LinearLayout(this);
-			llSmart.setId(R.id.llPrinter);
-			llSmart.setOrientation(LinearLayout.VERTICAL);
+			LinearLayout llPrinter = new LinearLayout(this);
+			llPrinter.setId(R.id.llPrinter);
+			llPrinter.setOrientation(LinearLayout.VERTICAL);
 
 			List<PSIPrinter> items = entry.getPrinter();
 
@@ -1151,8 +1151,8 @@ implements OnClickListener, View.OnTouchListener
 				tPrinter.addView(trItem);
 			}
 
-			llSmart.addView(tPrinter);
-			llPlugins.addView(llSmart);
+			llPrinter.addView(tPrinter);
+			llPlugins.addView(llPrinter);
 		}
 	}
 
