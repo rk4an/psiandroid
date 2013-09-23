@@ -63,7 +63,7 @@
     
     <string name="lblPrinter">Printers</string>
     <string name="lblDescription">Description</string>
-    <string name="lblSupplyUnit">Supply Unit:</string>
+    <string name="lblSupplyUnit">Unit:</string>
     <string name="lblMaxCapacity">Max Capacity:</string>
     <string name="lblLevel">Level:</string>
     <string name="lblPercent">Percent</string>  

@@ -1094,6 +1094,7 @@ implements OnClickListener, View.OnTouchListener
 	public void showPrinter(PSIHostData entry) {
 
 		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+		LayoutInflater inflater = getLayoutInflater();
 
 		if(entry.getPrinter().size() > 0) {
 
@@ -1107,7 +1108,7 @@ implements OnClickListener, View.OnTouchListener
 
 			//content
 			TableLayout tPrinter = new TableLayout(this);
-			tPrinter.setColumnShrinkable(1, true);
+			tPrinter.setColumnShrinkable(0, true);
 			tPrinter.setId(R.id.tPrinter);
 
 			LinearLayout llPrinter = new LinearLayout(this);
@@ -1140,15 +1141,34 @@ implements OnClickListener, View.OnTouchListener
 				else if(unit.equals("15")) unit = getString(R.string.lblTenthsMl);
 				else if(unit.equals("7")) unit = getString(R.string.lblImpressions);
 
-				String value = getString(R.string.lblSupplyUnit) + " " + unit + " \n" 
-						+ getString(R.string.lblLevel) + " " + item.getLevel() + " " + getString(R.string.lblOf) + " " + item.getMaxCapacity();
+				String value = item.getLevel() + " " + getString(R.string.lblOf) + " " + item.getMaxCapacity() + " ("+unit+")";
 				tvItemValue.setText(value);
 
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
 				trItem.addView(tvItemValue);
-
 				tPrinter.addView(trItem);
+
+				//progressBar
+				try {
+					int level = Integer.parseInt(item.getLevel());
+					int capacity = Integer.parseInt(item.getMaxCapacity());
+
+					if(level >= 0 && capacity >0) {
+						int percent = 100*level/capacity;
+						if(percent >= 0 && percent <= 100) {
+							ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
+							pgPercent.setProgress(percent);
+							TableRow trItem2 = new TableRow(this);
+							trItem2.addView(new TextView(this));
+							trItem2.addView(pgPercent);
+							tPrinter.addView(trItem2);	
+						}
+					}
+				}
+				catch(Exception e) {
+
+				}
 			}
 
 			llPrinter.addView(tPrinter);
