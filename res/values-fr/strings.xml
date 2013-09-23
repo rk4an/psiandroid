@@ -62,10 +62,6 @@
     <string name="lblSecurity">Sécurités</string>
     
     <string name="lblPrinter">Imprimantes</string>
-    <string name="lblDescription">Description</string>
-    <string name="lblSupplyUnit">Unité:</string>
-    <string name="lblMaxCapacity">Capacité:</string>
-    <string name="lblLevel">Niveau:</string>
     <string name="lblPercent">Pourcentage</string>  
     <string name="lblTenthsMl">Dixièmes de ml</string>  
     <string name="lblImpressions">Impressions</string>  
