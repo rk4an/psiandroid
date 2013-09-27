@@ -1224,7 +1224,7 @@ implements OnClickListener, View.OnTouchListener
 			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblRemaining) + " </b>"));
 
 			TextView tvItemValue = new TextView(this);
-			tvItemValue.setText(entry.getBat().getRemainingCapacity()+"");
+			tvItemValue.setText(entry.getBat().getRemainingCapacity()+"%");
 
 			TableRow trItem = new TableRow(this);
 			trItem.addView(tvItemLabel);
