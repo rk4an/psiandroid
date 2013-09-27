@@ -165,6 +165,9 @@ implements OnClickListener, View.OnTouchListener
 		else if(event.getId() == R.id.tvPrinter) {
 			toggleContent((View) findViewById(R.id.llPrinter));
 		}
+		else if(event.getId() == R.id.tvBat) {
+			toggleContent((View) findViewById(R.id.llBat));
+		}
 	}
 
 	public void toggleContent(final View v){
@@ -414,6 +417,9 @@ implements OnClickListener, View.OnTouchListener
 
 		//printer section
 		showPrinter(entry);
+
+		//bat section
+		showBat(entry);
 	}
 
 	/**
@@ -1136,34 +1142,47 @@ implements OnClickListener, View.OnTouchListener
 
 				TextView tvItemValue = new TextView(this);
 
+				//unit
 				String unit = item.getSupplyUnit();
 				if(unit.equals("19")) unit = getString(R.string.lblPercent);
 				else if(unit.equals("15")) unit = getString(R.string.lblTenthsMl);
 				else if(unit.equals("7")) unit = getString(R.string.lblImpressions);
 
-				String value = item.getLevel() + " " + getString(R.string.lblOf) + " " + item.getMaxCapacity() + " ("+unit+")";
-				tvItemValue.setText(value);
-
-				TableRow trItem = new TableRow(this);
-				trItem.addView(tvItemLabel);
-				trItem.addView(tvItemValue);
-				tPrinter.addView(trItem);
-
-				//progressBar
+				//value
 				try {
 					int level = Integer.parseInt(item.getLevel());
-					int capacity = Integer.parseInt(item.getMaxCapacity());
+					int max = Integer.parseInt(item.getMaxCapacity());
+					int percent = -1;
 
-					if(level >= 0 && capacity >0) {
-						int percent = 100*level/capacity;
-						if(percent >= 0 && percent <= 100) {
-							ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
-							pgPercent.setProgress(percent);
-							TableRow trItem2 = new TableRow(this);
-							trItem2.addView(new TextView(this));
-							trItem2.addView(pgPercent);
-							tPrinter.addView(trItem2);	
-						}
+					if(level >= 0 && max >0 && level <= max) {
+						percent = 100*level/max;
+					}
+					else if (max == -2 && level >= 0 && level <= 100) {
+						percent = level;
+						max = 100;
+					}
+					else if (level == -3) {
+						percent = -1;
+					}
+					else {
+						percent = -1;
+					}
+
+					String value = level + "/" + max + " ("+unit+")";
+					tvItemValue.setText(value);
+					TableRow trItem = new TableRow(this);
+					trItem.addView(tvItemLabel);
+					trItem.addView(tvItemValue);
+					tPrinter.addView(trItem);
+
+					//progressbar
+					if(percent >=0 && percent <= 100) {
+						ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
+						pgPercent.setProgress(percent);
+						TableRow trItem2 = new TableRow(this);
+						trItem2.addView(new TextView(this));
+						trItem2.addView(pgPercent);
+						tPrinter.addView(trItem2);	
 					}
 				}
 				catch(Exception e) {
@@ -1173,6 +1192,81 @@ implements OnClickListener, View.OnTouchListener
 
 			llPrinter.addView(tPrinter);
 			llPlugins.addView(llPrinter);
+		}
+	}
+
+	public void showBat(PSIHostData entry) {
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+
+		if(entry.getBat() != null) {
+
+			//header
+			HeaderTextView tvBat = new HeaderTextView(this);
+			tvBat.setId(R.id.tvBat);
+			tvBat.setText(getString(R.string.lblBat));
+			llPlugins.addView(tvBat);
+
+			tvBat.setOnClickListener(this);
+
+			//content
+			TableLayout tBat = new TableLayout(this);
+			tBat.setColumnShrinkable(1, true);
+			tBat.setId(R.id.tBat);
+
+			LinearLayout llBat = new LinearLayout(this);
+			llBat.setId(R.id.llBat);
+			llBat.setOrientation(LinearLayout.VERTICAL);
+
+			//populate
+
+			//remaining
+			TextView tvItemLabel = new TextView(this);
+			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblRemaining) + " </b>"));
+
+			TextView tvItemValue = new TextView(this);
+			tvItemValue.setText(entry.getBat().getRemainingCapacity()+"");
+
+			TableRow trItem = new TableRow(this);
+			trItem.addView(tvItemLabel);
+			trItem.addView(tvItemValue);
+
+			tBat.addView(trItem);
+
+			//progressbar
+			try {
+				int percent = Integer.parseInt(entry.getBat().getRemainingCapacity());
+
+				if(percent >=0 && percent<= 100) {
+					LayoutInflater inflater = getLayoutInflater();
+					ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
+					pgPercent.setProgress(percent);
+
+					TableRow trItemPg = new TableRow(this);
+					trItemPg.addView(new TextView(this));
+					trItemPg.addView(pgPercent);
+
+					tBat.addView(trItemPg);
+				}
+			}
+			catch(Exception e) {
+
+			}
+
+			//state
+			tvItemLabel = new TextView(this);
+			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblState) + " </b>"));
+
+			tvItemValue = new TextView(this);
+			tvItemValue.setText(entry.getBat().getChargingState()+"");
+
+			trItem = new TableRow(this);
+			trItem.addView(tvItemLabel);
+			trItem.addView(tvItemValue);
+
+			tBat.addView(trItem);			
+
+			llBat.addView(tBat);
+			llPlugins.addView(llBat);
 		}
 	}
 

@@ -27,4 +27,7 @@
         <item type="id" name="tvPrinter"/>
         <item type="id" name="llPrinter"/>
         <item type="id" name="tPrinter"/>
+        <item type="id" name="tvBat"/>
+        <item type="id" name="llBat"/>
+        <item type="id" name="tBat"/>
     </resources>

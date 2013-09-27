@@ -40,6 +40,8 @@ public class PSIHostData {
 
 	private List<PSIPrinter> printer = new ArrayList<PSIPrinter>();
 	
+	private PSIBat bat = null;
+	
 	private int normalUpdate = -1;
 	private int securityUpdate = -1;
 
@@ -295,6 +297,14 @@ public class PSIHostData {
 
 	public void setSecurityUpdate(int securityUpdate) {
 		this.securityUpdate = securityUpdate;
+	}
+
+	public PSIBat getBat() {
+		return bat;
+	}
+
+	public void setBat(PSIBat bat) {
+		this.bat = bat;
 	}
 
 }

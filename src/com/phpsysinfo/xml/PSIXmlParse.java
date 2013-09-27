@@ -218,6 +218,13 @@ public class PSIXmlParse extends DefaultHandler {
 			inSecurityUpdate = true;
 			buffer = new StringBuffer();
 		}
+		else if(localName.equalsIgnoreCase("Bat")){
+			String rc = attributes.getValue("RemainingCapacity");
+			String cs = attributes.getValue("ChargingState");
+
+			PSIBat bat = new PSIBat(rc, cs);
+			this.entry.setBat(bat);
+		}
 	}
 
 	@Override
