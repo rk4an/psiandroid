@@ -65,7 +65,7 @@
     <string name="lblPercent">Pourcent</string>  
     <string name="lblTenthsMl">Dixièmes de ml</string>  
     <string name="lblImpressions">Impressions</string> 
-    <string name="lblTenthsGrams">Dixièmes of gramme</string>
+    <string name="lblTenthsGrams">Dixièmes de gramme</string>
     
     <string name="lblBat">Batterie</string>  
     <string name="lblRemaining">Restant:</string> 
