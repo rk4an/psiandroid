@@ -616,6 +616,9 @@ implements OnClickListener, View.OnTouchListener
 			//content
 			TableLayout tNetwork = new TableLayout(this);
 			tNetwork.setColumnShrinkable(0, true);
+			tNetwork.setColumnStretchable(0, true);
+			tNetwork.setColumnStretchable(1, true);
+			tNetwork.setColumnStretchable(2, true);
 			tNetwork.setId(R.id.tNetwork);
 
 			LinearLayout llNetwork = new LinearLayout(this);
@@ -666,6 +669,8 @@ implements OnClickListener, View.OnTouchListener
 			//content
 			TableLayout tTemperature = new TableLayout(this);
 			tTemperature.setColumnShrinkable(0, true);
+			tTemperature.setColumnStretchable(0, true);
+			tTemperature.setColumnStretchable(1, true);
 			tTemperature.setId(R.id.tTemperature);
 
 			LinearLayout llTemperature = new LinearLayout(this);
@@ -681,7 +686,8 @@ implements OnClickListener, View.OnTouchListener
 
 				TextView tvItemValue = new TextView(this);
 				tvItemValue.setText(entry.getTemperature().get(mapKey));
-
+				tvItemValue.setWidth(0);
+				tvItemLabel.setWidth(0);
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
 				trItem.addView(tvItemValue);
@@ -768,6 +774,8 @@ implements OnClickListener, View.OnTouchListener
 			//content
 			TableLayout tFans = new TableLayout(this);
 			tFans.setColumnShrinkable(0, true);
+			tFans.setColumnStretchable(0, true);
+			tFans.setColumnStretchable(1, true);
 			tFans.setId(R.id.tFans);
 
 			LinearLayout llFans = new LinearLayout(this);
@@ -782,12 +790,14 @@ implements OnClickListener, View.OnTouchListener
 				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
 
 				TextView tvItemValue = new TextView(this);
-
 				String value = fans.get(mapKey);
 				tvItemValue.setText(value);
-
+				
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
+				
+				tvItemLabel.setWidth(0);
+				tvItemValue.setWidth(0);
 				trItem.addView(tvItemValue);
 
 				tFans.addView(trItem);
@@ -1124,6 +1134,8 @@ implements OnClickListener, View.OnTouchListener
 
 			//content
 			TableLayout tPrinter = new TableLayout(this);
+			tPrinter.setColumnStretchable(0, true);
+			tPrinter.setColumnStretchable(1, true);
 			tPrinter.setColumnShrinkable(0, true);
 			tPrinter.setId(R.id.tPrinter);
 
@@ -1142,6 +1154,8 @@ implements OnClickListener, View.OnTouchListener
 					TextView tvItemLabel = new TextView(this);
 					tvItemLabel.setTextColor(getResources().getColor(R.color.sub_item));
 					tvItemLabel.setText(Html.fromHtml("<b>" + item.getPrinter() + "</b>"));
+					tvItemLabel.setWidth(0);
+
 					TableRow trItem = new TableRow(this);
 					trItem.addView(tvItemLabel);
 					tPrinter.addView(trItem);
@@ -1152,11 +1166,15 @@ implements OnClickListener, View.OnTouchListener
 
 				TextView tvItemValue = new TextView(this);
 
+				tvItemLabel.setWidth(0);
+				tvItemValue.setWidth(0);
+				
 				//unit
 				String unit = item.getSupplyUnit();
 				if(unit.equals("19")) unit = getString(R.string.lblPercent);
 				else if(unit.equals("15")) unit = getString(R.string.lblTenthsMl);
 				else if(unit.equals("7")) unit = getString(R.string.lblImpressions);
+				else if(unit.equals("13")) unit = getString(R.string.lblTenthsGrams);
 
 				//value
 				try {
@@ -1220,7 +1238,8 @@ implements OnClickListener, View.OnTouchListener
 
 			//content
 			TableLayout tBat = new TableLayout(this);
-			tBat.setColumnShrinkable(1, true);
+			tBat.setColumnStretchable(0, true);
+			tBat.setColumnStretchable(1, true);
 			tBat.setId(R.id.tBat);
 
 			LinearLayout llBat = new LinearLayout(this);
@@ -1235,7 +1254,8 @@ implements OnClickListener, View.OnTouchListener
 
 			TextView tvItemValue = new TextView(this);
 			tvItemValue.setText(entry.getBat().getRemainingCapacity()+"%");
-
+			tvItemLabel.setWidth(0);
+			tvItemValue.setWidth(0);
 			TableRow trItem = new TableRow(this);
 			trItem.addView(tvItemLabel);
 			trItem.addView(tvItemValue);
@@ -1246,7 +1266,7 @@ implements OnClickListener, View.OnTouchListener
 			try {
 				int percent = Integer.parseInt(entry.getBat().getRemainingCapacity());
 
-				if(percent >=0 && percent<= 100) {
+				if(percent >=0 && percent <= 100) {
 					LayoutInflater inflater = getLayoutInflater();
 					ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
 					pgPercent.setProgress(percent);

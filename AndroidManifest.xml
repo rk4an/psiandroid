@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.phpsysinfo"
-    android:versionCode="570"
-    android:versionName="0.57" >
+    android:versionCode="580"
+    android:versionName="0.58" >
 
     <uses-sdk
         android:minSdkVersion="8"

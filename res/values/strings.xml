@@ -65,9 +65,10 @@
     <string name="lblPercent">Percent</string>  
     <string name="lblTenthsMl">Tenths of ml</string>  
     <string name="lblImpressions">Impressions</string>  
+    <string name="lblTenthsGrams">Tenths of grams</string>
     
     <string name="lblBat">Battery</string>  
-    <string name="lblRemaining">Remaining</string> 
-    <string name="lblState">State</string> 
+    <string name="lblRemaining">Remaining:</string> 
+    <string name="lblState">State:</string> 
     
 </resources>
