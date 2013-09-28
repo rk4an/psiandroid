@@ -213,6 +213,13 @@ implements OnClickListener, View.OnTouchListener
 		super.onConfigurationChanged(newConfig);
 	}
 
+	public void setPadding(View v) {
+		v.setPadding(5, 5, 5, 5);
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		llp.setMargins(0, 5, 0, 5);
+		v.setLayoutParams(llp);
+	}
+	
 	/**
 	 * fill label with data
 	 * @param entry
@@ -225,6 +232,9 @@ implements OnClickListener, View.OnTouchListener
 			loadDynamicLayout(R.layout.data_view);
 			((TextView) findViewById(R.id.tvMemoryUsage)).setOnClickListener(this);
 			((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
+			setPadding((TextView) findViewById(R.id.tvMemoryUsage));
+			setPadding((TextView) findViewById(R.id.tvMountPoints));
+			
 			viewType = ViewType.DATA;
 			scrollView.setOnTouchListener(this);
 		}
