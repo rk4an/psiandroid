@@ -25,7 +25,7 @@ public class PSIXmlParse extends DefaultHandler {
 	private boolean inSecurityUpdate = false;
 	
 	private boolean inPrinter = false;
-	private String currentPrinter = "";
+	private PSIPrinter currentPrinter = null;
 	
 	private StringBuffer buffer = new StringBuffer();
 	
@@ -157,7 +157,9 @@ public class PSIXmlParse extends DefaultHandler {
 		
 		else if (localName.equalsIgnoreCase("Printer")){
 			inPrinter = true;
-			currentPrinter = attributes.getValue("Name");
+			String pname = attributes.getValue("Name");
+			currentPrinter = new PSIPrinter(pname);
+			this.entry.addPrinter(currentPrinter);
 		}
 		
 		else if (inPrinter){
@@ -167,7 +169,12 @@ public class PSIXmlParse extends DefaultHandler {
 				String maxCapacity = attributes.getValue("MaxCapacity");
 				String level = attributes.getValue("Level");
 				
-				this.entry.addPrinter(new PSIPrinter(currentPrinter, description, supplyUnit, maxCapacity, level));
+				PSIPrinterItem ppi = new PSIPrinterItem(description, supplyUnit, maxCapacity, level);
+				currentPrinter.addItem(ppi);
+			}
+			if (localName.equalsIgnoreCase("PrinterMessage")) {
+				String message = attributes.getValue("Message");
+				currentPrinter.addMessages(message);
 			}
 		}
 		

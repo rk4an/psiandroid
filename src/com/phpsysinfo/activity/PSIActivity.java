@@ -46,6 +46,7 @@ import com.phpsysinfo.xml.PSIHostData;
 import com.phpsysinfo.xml.PSIMountPoint;
 import com.phpsysinfo.xml.PSINetworkInterface;
 import com.phpsysinfo.xml.PSIPrinter;
+import com.phpsysinfo.xml.PSIPrinterItem;
 import com.phpsysinfo.xml.PSIRaid;
 import com.phpsysinfo.xml.PSISmart;
 import com.phpsysinfo.xml.PSIUps;
@@ -219,7 +220,7 @@ implements OnClickListener, View.OnTouchListener
 		llp.setMargins(0, 5, 0, 5);
 		v.setLayoutParams(llp);
 	}
-	
+
 	/**
 	 * fill label with data
 	 * @param entry
@@ -234,7 +235,7 @@ implements OnClickListener, View.OnTouchListener
 			((TextView) findViewById(R.id.tvMountPoints)).setOnClickListener(this);
 			setPadding((TextView) findViewById(R.id.tvMemoryUsage));
 			setPadding((TextView) findViewById(R.id.tvMountPoints));
-			
+
 			viewType = ViewType.DATA;
 			scrollView.setOnTouchListener(this);
 		}
@@ -792,10 +793,10 @@ implements OnClickListener, View.OnTouchListener
 				TextView tvItemValue = new TextView(this);
 				String value = fans.get(mapKey);
 				tvItemValue.setText(value);
-				
+
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
-				
+
 				tvItemLabel.setWidth(0);
 				tvItemValue.setWidth(0);
 				trItem.addView(tvItemValue);
@@ -1143,78 +1144,97 @@ implements OnClickListener, View.OnTouchListener
 			llPrinter.setId(R.id.llPrinter);
 			llPrinter.setOrientation(LinearLayout.VERTICAL);
 
-			List<PSIPrinter> items = entry.getPrinter();
+			List<PSIPrinter> printers = entry.getPrinter();
 
-			String currentDisk = "";
 
-			for (PSIPrinter item : items) {
-
-				if(!currentDisk.equals(item.getPrinter())) {
-					currentDisk = item.getPrinter();
-					TextView tvItemLabel = new TextView(this);
-					tvItemLabel.setTextColor(getResources().getColor(R.color.sub_item));
-					tvItemLabel.setText(Html.fromHtml("<b>" + item.getPrinter() + "</b>"));
-					tvItemLabel.setWidth(0);
-
-					TableRow trItem = new TableRow(this);
-					trItem.addView(tvItemLabel);
-					tPrinter.addView(trItem);
-				}
+			for (PSIPrinter printer : printers) {
 
 				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>"+item.getDescription()+"</b>"));
-
-				TextView tvItemValue = new TextView(this);
-
+				tvItemLabel.setTextColor(getResources().getColor(R.color.sub_item));
+				tvItemLabel.setText(Html.fromHtml("<b>" + printer.getName() + "</b>"));
 				tvItemLabel.setWidth(0);
-				tvItemValue.setWidth(0);
-				
-				//unit
-				String unit = item.getSupplyUnit();
-				if(unit.equals("19")) unit = getString(R.string.lblPercent);
-				else if(unit.equals("15")) unit = getString(R.string.lblTenthsMl);
-				else if(unit.equals("7")) unit = getString(R.string.lblImpressions);
-				else if(unit.equals("13")) unit = getString(R.string.lblTenthsGrams);
 
-				//value
-				try {
-					int level = Integer.parseInt(item.getLevel());
-					int max = Integer.parseInt(item.getMaxCapacity());
-					int percent = -1;
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				tPrinter.addView(trItem);
 
-					if(level >= 0 && max >0 && level <= max) {
-						percent = 100*level/max;
-					}
-					else if (max == -2 && level >= 0 && level <= 100) {
-						percent = level;
-						max = 100;
-					}
-					else if (level == -3) {
-						percent = -1;
-					}
-					else {
-						percent = -1;
-					}
+				List<PSIPrinterItem> items = printer.getItem();
 
-					String value = level + "/" + max + " ("+unit+")";
-					tvItemValue.setText(value);
-					TableRow trItem = new TableRow(this);
-					trItem.addView(tvItemLabel);
-					trItem.addView(tvItemValue);
-					tPrinter.addView(trItem);
+				//MarkerSupplies
+				for (PSIPrinterItem item : items) {
+					tvItemLabel = new TextView(this);
+					tvItemLabel.setText(Html.fromHtml("<b>"+item.getDescription()+"</b>"));
 
-					//progressbar
-					if(percent >=0 && percent <= 100) {
-						ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
-						pgPercent.setProgress(percent);
-						TableRow trItem2 = new TableRow(this);
-						trItem2.addView(new TextView(this));
-						trItem2.addView(pgPercent);
-						tPrinter.addView(trItem2);	
+					TextView tvItemValue = new TextView(this);
+
+					tvItemLabel.setWidth(0);
+					tvItemValue.setWidth(0);
+
+					//unit
+					String unit = item.getSupplyUnit();
+					if(unit.equals("19")) unit = getString(R.string.lblPercent);
+					else if(unit.equals("15")) unit = getString(R.string.lblTenthsMl);
+					else if(unit.equals("7")) unit = getString(R.string.lblImpressions);
+					else if(unit.equals("13")) unit = getString(R.string.lblTenthsGrams);
+
+					//value
+					try {
+						int level = Integer.parseInt(item.getLevel());
+						int max = Integer.parseInt(item.getMaxCapacity());
+						int percent = -1;
+
+						if(level >= 0 && max >0 && level <= max) {
+							percent = 100*level/max;
+						}
+						else if (max == -2 && level >= 0 && level <= 100) {
+							percent = level;
+							max = 100;
+						}
+						else if (level == -3) {
+							percent = -1;
+						}
+						else {
+							percent = -1;
+						}
+
+						String value = level + "/" + max + " ("+unit+")";
+						tvItemValue.setText(value);
+						trItem = new TableRow(this);
+						trItem.addView(tvItemLabel);
+						trItem.addView(tvItemValue);
+						tPrinter.addView(trItem);
+
+						//progressbar
+						if(percent >=0 && percent <= 100) {
+							ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
+							pgPercent.setProgress(percent);
+							TableRow trItem2 = new TableRow(this);
+							trItem2.addView(new TextView(this));
+							trItem2.addView(pgPercent);
+							tPrinter.addView(trItem2);	
+						}
+					}
+					catch(Exception e) {
+
 					}
 				}
-				catch(Exception e) {
-
+				
+				//Messages
+				List<String> messages = printer.getMessages();
+				for (String message : messages) {
+					TextView tvItemLabelMessage = new TextView(this);
+					tvItemLabelMessage.setText("-" + message);
+					tvItemLabelMessage.setTextColor(getResources().getColor(R.color.state_soft));
+					
+					TableRow.LayoutParams params = new TableRow.LayoutParams();
+					params.span = 2;
+					tvItemLabelMessage.setLayoutParams(params);
+					
+					trItem = new TableRow(this);
+					trItem.addView(tvItemLabelMessage);
+					tvItemLabel.setWidth(0);
+		
+					tPrinter.addView(trItem);
 				}
 			}
 

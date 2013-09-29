@@ -1,58 +1,39 @@
 package com.phpsysinfo.xml;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PSIPrinter {
 
-	private String printer = "";
-	private String description = "";
-	private String supplyUnit = "";
-	private String maxCapacity = "";
-	private String level = "";
+	private String name = "";
+	private List<PSIPrinterItem> item = new ArrayList<PSIPrinterItem>();
+	private List<String> messages = new ArrayList<String>();
 	
-	public PSIPrinter(String printer, String description, String supplyUnit, String maxCapacity, String level) {
-		this.printer = printer;
-		this.description = description;
-		this.supplyUnit = supplyUnit;
-		this.maxCapacity = maxCapacity;
-		this.level = level;
+	public PSIPrinter(String name) {
+		this.name = name;
 	}
 
-	public String getPrinter() {
-		return printer;
+	public String getName() {
+		return name;
+	}
+
+	public List<PSIPrinterItem> getItem() {
+		return item;
+	}
+
+	public void addItem(PSIPrinterItem item) {
+		this.item.add(item);
+	}
+
+	public List<String> getMessages() {
+		return messages;
+	}
+
+	public void addMessages(String messages) {
+		this.messages.add(messages);
 	}
 
 	public void setPrinter(String printer) {
-		this.printer = printer;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getSupplyUnit() {
-		return supplyUnit;
-	}
-
-	public void setSupplyUnit(String supplyUnit) {
-		this.supplyUnit = supplyUnit;
-	}
-
-	public String getMaxCapacity() {
-		return maxCapacity;
-	}
-
-	public void setMaxCapacity(String maxCapacity) {
-		this.maxCapacity = maxCapacity;
-	}
-
-	public String getLevel() {
-		return level;
-	}
-
-	public void setLevel(String level) {
-		this.level = level;
+		this.name = printer;
 	}
 }
