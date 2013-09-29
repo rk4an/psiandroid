@@ -170,11 +170,16 @@ public class PSIXmlParse extends DefaultHandler {
 				String level = attributes.getValue("Level");
 				
 				PSIPrinterItem ppi = new PSIPrinterItem(description, supplyUnit, maxCapacity, level);
-				currentPrinter.addItem(ppi);
+				
+				if(currentPrinter != null) {
+					currentPrinter.addItem(ppi);
+				}
 			}
 			if (localName.equalsIgnoreCase("PrinterMessage")) {
 				String message = attributes.getValue("Message");
-				currentPrinter.addMessages(message);
+				if(currentPrinter != null) {
+					currentPrinter.addMessages(message);
+				}
 			}
 		}
 		
