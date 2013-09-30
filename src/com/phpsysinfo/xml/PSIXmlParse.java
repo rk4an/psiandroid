@@ -116,7 +116,7 @@ public class PSIXmlParse extends DefaultHandler {
 			if(localName.equalsIgnoreCase("Item")) {
 				String desc = attributes.getValue("Label");
 				String temp = attributes.getValue("Value");
-				String max = attributes.getValue("Limit");
+				String max = attributes.getValue("Max");
 				this.entry.addTemperature(desc, temp, max);
 			}
 		}
