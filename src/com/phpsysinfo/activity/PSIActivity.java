@@ -96,8 +96,14 @@ implements OnClickListener, View.OnTouchListener
 		aboutDialog.setContentView(R.layout.about_dialog);
 		aboutDialog.setTitle("PSIAndroid");
 		TextView text = (TextView) aboutDialog.findViewById(R.id.text);
-		text.setText("http://phpsysinfo.sf.net");
-		text.append("\nPlease rate this app");
+		
+		try {
+		    PackageInfo manager = getPackageManager().getPackageInfo(getPackageName(), 0);
+		    text.setText("PSIAndroid " + manager.versionName + "\n");
+		} catch (Exception e) { }
+		
+		text.append(Html.fromHtml("<a href=\"https://play.google.com/store/apps/details?id=com.phpsysinfo\">Please rate this app on Google Play!</a>"));
+		
 		ImageView image = (ImageView) aboutDialog.findViewById(R.id.image);
 		image.setImageResource(R.drawable.ic_launcher);
 		image.setOnClickListener(this);
