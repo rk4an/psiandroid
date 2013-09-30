@@ -114,7 +114,10 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 		else if (inPluginImpiTemperature){
 			if(localName.equalsIgnoreCase("Item")) {
-				this.entry.addTemperature(attributes.getValue("Label"), attributes.getValue("Value"));
+				String desc = attributes.getValue("Label");
+				String temp = attributes.getValue("Value");
+				String max = attributes.getValue("Limit");
+				this.entry.addTemperature(desc, temp, max);
 			}
 		}
 
@@ -130,7 +133,10 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 		else if (inMbInfoTemperature){
 			if(localName.equalsIgnoreCase("Item")) {
-				this.entry.addTemperature(attributes.getValue("Label"), attributes.getValue("Value"));
+				String desc = attributes.getValue("Label");
+				String temp = attributes.getValue("Value");
+				String max = attributes.getValue("Max");
+				this.entry.addTemperature(desc, temp, max);
 			}
 		}
 		else if (inMbInfoFans){

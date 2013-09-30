@@ -25,7 +25,7 @@ public class PSIHostData {
 	private int appMemoryTotal = 0;
 	private int appMemoryFullPercent = 0;
 
-	private HashMap<String,String> temperature = new HashMap<String,String>();
+	private List<PSITemperature> temperature = new ArrayList<PSITemperature>();
 	private HashMap<String,String> fans = new HashMap<String,String>();
 
 	private List<PSINetworkInterface> networkInterface = new ArrayList<PSINetworkInterface>();
@@ -197,11 +197,24 @@ public class PSIHostData {
 		}
 	}
 
-	public void addTemperature(String label, String value) {
-		temperature.put(label, value);
+	public void addTemperature(String description, String temp, String max) {
+
+		try {
+			int itemp = Integer.parseInt(temp);
+			
+			if(max == null) {
+				max = "-1";
+			}
+			int imax = Integer.parseInt(max);
+			
+			temperature.add(new PSITemperature(description, itemp, imax));
+		}
+		catch(Exception e) {
+			Log.d("PSIAndroid",e.toString());
+		}
 	}
 
-	public HashMap<String, String> getTemperature() {
+	public List<PSITemperature> getTemperature() {
 		return temperature;
 	}
 

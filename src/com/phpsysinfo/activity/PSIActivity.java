@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ import com.phpsysinfo.xml.PSIPrinter;
 import com.phpsysinfo.xml.PSIPrinterItem;
 import com.phpsysinfo.xml.PSIRaid;
 import com.phpsysinfo.xml.PSISmart;
+import com.phpsysinfo.xml.PSITemperature;
 import com.phpsysinfo.xml.PSIUps;
 
 enum ViewType {
@@ -96,14 +98,16 @@ implements OnClickListener, View.OnTouchListener
 		aboutDialog.setContentView(R.layout.about_dialog);
 		aboutDialog.setTitle("PSIAndroid");
 		TextView text = (TextView) aboutDialog.findViewById(R.id.text);
-		
+
 		try {
-		    PackageInfo manager = getPackageManager().getPackageInfo(getPackageName(), 0);
-		    text.setText("PSIAndroid " + manager.versionName + "\n");
+			PackageInfo manager = getPackageManager().getPackageInfo(getPackageName(), 0);
+			text.setText("PSIAndroid " + manager.versionName + "\n");
 		} catch (Exception e) { }
-		
-		text.append(Html.fromHtml("<a href=\"https://play.google.com/store/apps/details?id=com.phpsysinfo\">Please rate this app on Google Play!</a>"));
-		
+
+		text.append(Html.fromHtml(
+				"<a href=\"https://play.google.com/store/apps/details?id=com.phpsysinfo\">" +
+				"Please rate this app on Google Play!</a>"));
+		text.setMovementMethod(LinkMovementMethod.getInstance());
 		ImageView image = (ImageView) aboutDialog.findViewById(R.id.image);
 		image.setImageResource(R.drawable.ic_launcher);
 		image.setOnClickListener(this);
@@ -118,7 +122,6 @@ implements OnClickListener, View.OnTouchListener
 	@Override
 	protected void onStart() {
 		super.onStart();
-
 	}
 
 	@Override
@@ -684,15 +687,27 @@ implements OnClickListener, View.OnTouchListener
 			llTemperature.setId(R.id.llTemperature);
 			llTemperature.setOrientation(LinearLayout.VERTICAL);
 
-			TreeSet<String> keys = new TreeSet<String>(entry.getTemperature().keySet());
+			List<PSITemperature> temperatures = entry.getTemperature();
 
 			//populate
-			for (String mapKey : keys) {
+			for (PSITemperature temperature : temperatures) {
 				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>" + mapKey + ": </b>"));
+				tvItemLabel.setText(Html.fromHtml("<b>" + temperature.getDescription() + ": </b>"));
 
 				TextView tvItemValue = new TextView(this);
-				tvItemValue.setText(entry.getTemperature().get(mapKey));
+				if(temperature.getMax() != -1) {
+					tvItemValue.setText(temperature.getTemp() + "° (max: " + temperature.getMax()+"°)");
+					
+					if(temperature.getMax() != 0) {
+						int percent = temperature.getTemp() * 100 / temperature.getMax();
+						if(percent > PSIConfig.TEMP_SOFT_THR) {
+							tvItemValue.setTextColor(getResources().getColor(R.color.state_soft));
+						}
+					}
+				}
+				else {
+					tvItemValue.setText(temperature.getTemp() + "°");
+				}
 				tvItemValue.setWidth(0);
 				tvItemLabel.setWidth(0);
 				TableRow trItem = new TableRow(this);
@@ -1224,22 +1239,22 @@ implements OnClickListener, View.OnTouchListener
 
 					}
 				}
-				
+
 				//Messages
 				List<String> messages = printer.getMessages();
 				for (String message : messages) {
 					TextView tvItemLabelMessage = new TextView(this);
 					tvItemLabelMessage.setText("-" + message);
 					tvItemLabelMessage.setTextColor(getResources().getColor(R.color.state_soft));
-					
+
 					TableRow.LayoutParams params = new TableRow.LayoutParams();
 					params.span = 2;
 					tvItemLabelMessage.setLayoutParams(params);
-					
+
 					trItem = new TableRow(this);
 					trItem.addView(tvItemLabelMessage);
 					tvItemLabel.setWidth(0);
-		
+
 					tPrinter.addView(trItem);
 				}
 			}
