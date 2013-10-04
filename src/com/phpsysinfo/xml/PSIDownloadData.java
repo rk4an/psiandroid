@@ -46,7 +46,8 @@ extends AsyncTask<String, Void, Void>
 	private PSIHostData psiObject;
 	private String address = "";
 	private static AndroidHttpClient httpClient = null;
-
+	private boolean canceled = false;
+	
 	public PSIDownloadData(PSIActivity psiaa) {
 		super();
 		this.activity = psiaa;
@@ -71,6 +72,18 @@ extends AsyncTask<String, Void, Void>
 			return null;
 		}
 
+		if(canceled) {
+			Log.d("PSIAndroid","Was canceled!");
+			errorCode = PSIErrorCode.CANCELED;
+			try{
+				httpClient.close();
+			}
+			catch(Exception e) {
+				
+			}
+			return null;
+		}
+		
 		try {
 			parser = SAXParserFactory.newInstance().newSAXParser();
 		}
@@ -112,6 +125,9 @@ extends AsyncTask<String, Void, Void>
 		if (this.errorCode.equals(PSIErrorCode.NO_ERROR)) {
 			this.activity.displayInfo(psiObject);
 		}
+		else if (this.errorCode.equals(PSIErrorCode.CANCELED)) {
+			//nothing
+		}
 		else {
 			this.activity.displayError(address, errorCode);
 		}
@@ -122,6 +138,10 @@ extends AsyncTask<String, Void, Void>
 		super.onPreExecute();
 	}
 
+	public void stop() {
+		canceled = true;
+	}
+	
 	private static InputStream getUrl(String url, String user, String password)
 			throws MalformedURLException, IOException
 			{
@@ -130,8 +150,8 @@ extends AsyncTask<String, Void, Void>
 			//user agent
 			httpClient = AndroidHttpClient.newInstance("PSIAndroid");
 			
-			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 10000);
-			HttpConnectionParams.setSoTimeout(httpClient.getParams(), 10000);
+			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 15000);
+			HttpConnectionParams.setSoTimeout(httpClient.getParams(), 15000);
 
 			URL urlObj = new URL(url);
 			HttpHost host = new HttpHost(urlObj.getHost(), urlObj.getPort(), urlObj.getProtocol());

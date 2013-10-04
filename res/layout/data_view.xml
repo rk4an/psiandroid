@@ -83,27 +83,25 @@
                     android:layout_height="wrap_content" />
             </TableRow>
 
-            <!--
-                <TableRow
-                    android:id="@+id/trCpu"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_weight="1" >
+            <TableRow
+                android:id="@+id/trCpu"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
 
-                     <TextView
-                        android:id="@+id/lblCpu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lblCpu"
-                        android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/lblCpu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblCpu"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/txtCpu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </TableRow>
-            -->
+                <TextView
+                    android:id="@+id/txtCpu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
 
             <TableRow
                 android:id="@+id/trIp"
@@ -184,7 +182,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
-            
+
             <TableRow
                 android:id="@+id/trVersion"
                 android:layout_width="fill_parent"

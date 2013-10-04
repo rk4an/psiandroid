@@ -17,6 +17,7 @@ public class PSIHostData {
 	private String Ip = "";
 	private String psiVersion = "";
 	private String cpu = "";
+	private int cpuCore = 0;
 	private String users = "";
 
 	private List<PSIMountPoint> mountPoint = new ArrayList<PSIMountPoint>();
@@ -147,6 +148,14 @@ public class PSIHostData {
 
 	public void setCpu(String processor) {
 		this.cpu = processor;
+	}
+	
+	public void addCpuCore() {
+		this.cpuCore++;
+	}
+	
+	public int getCpuCore() {
+		return this.cpuCore;
 	}
 
 	public String getUsers() {

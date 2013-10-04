@@ -2,7 +2,6 @@ package com.phpsysinfo.activity;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +16,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -75,6 +73,8 @@ implements OnClickListener, View.OnTouchListener
 
 	private ViewType viewType = ViewType.NONE;
 
+	private PSIDownloadData task = null;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -285,8 +285,8 @@ implements OnClickListener, View.OnTouchListener
 		txtKernel.setText(entry.getKernel());
 
 		//Cpu
-		//TextView txtCpu = (TextView) findViewById(R.id.txtCpu);
-		//txtCpu.setText(entry.getCpu());
+		TextView txtCpu = (TextView) findViewById(R.id.txtCpu);
+		txtCpu.setText(entry.getCpu() + " ("+entry.getCpuCore()+")");
 
 		TextView txtUsers = (TextView) findViewById(R.id.txtUsers);
 		txtUsers.setText(entry.getUsers());
@@ -484,7 +484,7 @@ implements OnClickListener, View.OnTouchListener
 		if (resultCode == RESULT_OK) {
 
 			//load new selected host
-			displayLoadingMessage();
+			displayLoadingMessage(data.getExtras().getInt("host"));
 			selectedIndex = data.getExtras().getInt("host");
 			getData(selectedIndex);
 			PSIConfig.getInstance().saveLastIndex(selectedIndex);
@@ -529,10 +529,10 @@ implements OnClickListener, View.OnTouchListener
 		JSONArray hostsJsonArray = PSIConfig.getInstance().loadHosts();
 
 
-		if(!isReady) {
+		/*if(!isReady) {
 			Log.d("PSIAndroid","Cancel swipe");
 			return false;
-		}
+		}*/
 
 		v.onTouchEvent(event);
 
@@ -563,7 +563,7 @@ implements OnClickListener, View.OnTouchListener
 					}
 
 					//load the previous/next host
-					displayLoadingMessage();
+					displayLoadingMessage(selectedIndex);
 					getData(selectedIndex);
 
 					PSIConfig.getInstance().saveLastIndex(selectedIndex);
@@ -578,11 +578,25 @@ implements OnClickListener, View.OnTouchListener
 	}
 
 
-	private void displayLoadingMessage() {
+	private void displayLoadingMessage(int index) {
+		
+		String hostname = "";
+		JSONArray hostsList = PSIConfig.getInstance().loadHosts();
+		JSONObject currentHost = null;
+		try {
+			if(index < hostsList.length()) {
+				currentHost = (JSONObject) hostsList.get(index);
+				hostname = currentHost.getString("url");
+			}
+		}
+		catch(Exception e) {
+		}
+		
 		loadDynamicLayout(R.layout.loading);
+		((TextView) findViewById(R.id.errortxt)).setText(
+				getString(R.string.lblLoading) + "\n" + hostname);
 		viewType = ViewType.LOADING;
 	}
-
 
 	public void getData(int index) {
 
@@ -596,7 +610,12 @@ implements OnClickListener, View.OnTouchListener
 				String user = currentHost.getString("username");
 				String password = currentHost.getString("password");
 
-				PSIDownloadData task = new PSIDownloadData(this);
+				//cancel previous request
+				if(task != null) {
+					task.stop();
+				}
+				
+				task = new PSIDownloadData(this);
 				this.refresh();
 				if(!url.equals("")) {
 					task.execute(url + PSIConfig.SCRIPT_NAME, user, password);
