@@ -492,7 +492,6 @@ implements OnClickListener, View.OnTouchListener
 		}
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
@@ -526,11 +525,9 @@ implements OnClickListener, View.OnTouchListener
 
 		JSONArray hostsJsonArray = PSIConfig.getInstance().loadHosts();
 
-
-		/*if(!isReady) {
-			Log.d("PSIAndroid","Cancel swipe");
+		if(!isReady) {
 			return false;
-		}*/
+		}
 
 		v.onTouchEvent(event);
 
@@ -609,9 +606,9 @@ implements OnClickListener, View.OnTouchListener
 				String password = currentHost.getString("password");
 
 				//cancel previous request
-				if(task != null) {
+				/*if(task != null) {
 					task.stop();
-				}
+				}*/
 				
 				task = new PSIDownloadData(this);
 				this.refresh();
