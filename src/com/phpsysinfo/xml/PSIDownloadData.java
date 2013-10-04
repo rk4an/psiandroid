@@ -75,12 +75,7 @@ extends AsyncTask<String, Void, Void>
 		if(canceled) {
 			Log.d("PSIAndroid","Was canceled!");
 			errorCode = PSIErrorCode.CANCELED;
-			try{
-				httpClient.close();
-			}
-			catch(Exception e) {
-				
-			}
+			httpClient.close();
 			return null;
 		}
 		
@@ -90,6 +85,7 @@ extends AsyncTask<String, Void, Void>
 		catch (Exception e) {
 			Log.d("PSIAndroid", "XML_PARSER_CREATE");
 			errorCode = PSIErrorCode.XML_PARSER_CREATE;
+			httpClient.close();
 			return null;
 		}
 
@@ -200,8 +196,10 @@ extends AsyncTask<String, Void, Void>
 			else {
 				return null;
 			}
+			
 		}
 		catch(Exception e){
+			httpClient.close();
 			e.printStackTrace();
 		}
 		return null;

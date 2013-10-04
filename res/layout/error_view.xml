@@ -15,6 +15,16 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <TextView
+        android:id="@+id/errorhost"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingTop="20dp"
+        android:textStyle="bold|italic"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="false" />
+    
+        <TextView
         android:id="@+id/errorcode"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

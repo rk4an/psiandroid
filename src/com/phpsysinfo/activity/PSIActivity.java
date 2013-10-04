@@ -454,11 +454,9 @@ implements OnClickListener, View.OnTouchListener
 			loadDynamicLayout(R.layout.error_view);
 		}
 
-		TextView txtHostname = (TextView) findViewById(R.id.errortxt);
-		txtHostname.setText(Html.fromHtml(host));
-
-		TextView errorCode = (TextView) findViewById(R.id.errorcode);
-		errorCode.setText("Error: " + error.toString());
+		((TextView) findViewById(R.id.errortxt)).setText(getString(R.string.lblError));
+		((TextView) findViewById(R.id.errorhost)).setText(host);
+		((TextView) findViewById(R.id.errorcode)).setText(error.toString());
 	}
 
 
@@ -593,8 +591,8 @@ implements OnClickListener, View.OnTouchListener
 		}
 		
 		loadDynamicLayout(R.layout.loading);
-		((TextView) findViewById(R.id.errortxt)).setText(
-				getString(R.string.lblLoading) + "\n" + hostname);
+		((TextView) findViewById(R.id.tvLoading)).setText(getString(R.string.lblLoading));
+		((TextView) findViewById(R.id.tvLoadingHost)).setText(hostname);
 		viewType = ViewType.LOADING;
 	}
 

@@ -6,6 +6,7 @@
     <string name="lblRefresh">Refresh</string>
     <string name="lblSettings">Settings</string>
     <string name="lblAbout">About</string>
+    <string name="lblError">Error</string>
     
     <string name="lblKernel">Kernel:</string>
     <string name="lblDistro">Distro:</string>
