@@ -16,7 +16,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -128,7 +127,6 @@ implements OnClickListener, View.OnTouchListener
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
-				Log.d("eeroor",e.toString());
 			}
 		}
 		
