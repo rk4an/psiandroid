@@ -16,6 +16,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -114,6 +115,23 @@ implements OnClickListener, View.OnTouchListener
 
 		displayLogo();
 
+		
+		//set alias if empty
+		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
+		for (int i = 0; i < allHosts.length(); i++) {
+			try {
+				if(!((JSONObject)allHosts.get(i)).has("alias")) {
+					String url = ((JSONObject)allHosts.get(i)).getString("url");
+					String username = ((JSONObject)allHosts.get(i)).getString("username");
+					String password = ((JSONObject)allHosts.get(i)).getString("password");
+					PSIConfig.getInstance().editHost(i, url, url, username, password);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Log.d("eeroor",e.toString());
+			}
+		}
+		
 		//load data
 		int selectedIndex = PSIConfig.getInstance().loadLastIndex();
 		getData(selectedIndex);
@@ -253,16 +271,18 @@ implements OnClickListener, View.OnTouchListener
 		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
 
 		String url = "";
+		String alias = "";
 		try {
 			JSONObject host = (JSONObject) PSIConfig.getInstance().loadHosts().get(selectedIndex);
 			url = (String) host.get("url");
+			alias = (String) host.get("alias");
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
 		txtTitle.setText(
-				Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
+				Html.fromHtml("<a href=\""+url+"\">"+alias+"</a>"));
 		txtTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
 		//uptime
@@ -581,7 +601,7 @@ implements OnClickListener, View.OnTouchListener
 		try {
 			if(index < hostsList.length()) {
 				currentHost = (JSONObject) hostsList.get(index);
-				hostname = currentHost.getString("url");
+				hostname = currentHost.getString("alias");
 			}
 		}
 		catch(Exception e) {
@@ -601,6 +621,7 @@ implements OnClickListener, View.OnTouchListener
 			if(index < hostsList.length()) {
 
 				currentHost = (JSONObject) hostsList.get(index);
+				String alias = currentHost.getString("alias");
 				String url = currentHost.getString("url");
 				String user = currentHost.getString("username");
 				String password = currentHost.getString("password");
@@ -613,7 +634,7 @@ implements OnClickListener, View.OnTouchListener
 				task = new PSIDownloadData(this);
 				this.refresh();
 				if(!url.equals("")) {
-					task.execute(url + PSIConfig.SCRIPT_NAME, user, password);
+					task.execute(url + PSIConfig.SCRIPT_NAME, user, password, alias);
 				}
 			}
 

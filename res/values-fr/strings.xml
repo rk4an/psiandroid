@@ -30,7 +30,8 @@
     <string name="lblUser">Nom</string>
     <string name="lblPassword">Mot de passe</string>
     <string name="lblSave">Enregistrer</string>
-
+    <string name="lblAlias">Alias</string>
+    
     <string name="lblOf">sur</string>
     <string name="lblMio">MiB</string>
     <string name="lblGio">GiB</string>

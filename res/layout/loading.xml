@@ -18,7 +18,7 @@
         android:id="@+id/tvLoadingHost"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="center"
         android:paddingTop="20dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="false"

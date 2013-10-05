@@ -55,9 +55,9 @@ OnItemLongClickListener {
 		lHosts = new ArrayList<String>();
 		for (int i = 0; i < allHosts.length(); i++) {
 			try {
-				String url = ((JSONObject)allHosts.get(i)).getString("url");
-				if (!url.equals("")) {
-					lHosts.add(url);
+				String alias = ((JSONObject)allHosts.get(i)).getString("alias");
+				if (!alias.equals("")) {
+					lHosts.add(alias);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -168,12 +168,14 @@ OnItemLongClickListener {
 
 			LayoutInflater inflater = getActivity().getLayoutInflater();
 			View dialogView = inflater.inflate(R.layout.host_form, null);
+			final EditText alias = ((EditText)dialogView.findViewById(R.id.txtAlias));
 			final EditText url = ((EditText)dialogView.findViewById(R.id.txtUrl));
 			final EditText username = ((EditText)dialogView.findViewById(R.id.txtUsername));
 			final EditText password = ((EditText)dialogView.findViewById(R.id.txtPassword));
 
 			if(HostListActivity.editMode) {
 				try {
+					alias.setText(HostListActivity.editHost.getString("alias"));
 					url.setText(HostListActivity.editHost.getString("url"));
 					username.setText(HostListActivity.editHost.getString("username"));
 					password.setText(HostListActivity.editHost.getString("password"));
@@ -201,20 +203,22 @@ OnItemLongClickListener {
 						if(editMode) {
 							if(PSIConfig.getInstance().editHost(
 									position,
+									alias.getText().toString(),
 									hostUrl,
 									username.getText().toString(),
 									password.getText().toString())) {
 
-								lHosts.set(position, hostUrl);
+								lHosts.set(position, alias.getText().toString());
 								aaHosts.notifyDataSetChanged();
 							}
 						}
 						else {
 							if(PSIConfig.getInstance().addHost(
+									alias.getText().toString(),
 									hostUrl,
 									username.getText().toString(),
 									password.getText().toString())) {
-								lHosts.add(hostUrl);
+								lHosts.add(alias.getText().toString());
 								aaHosts.notifyDataSetChanged();
 							}
 						}

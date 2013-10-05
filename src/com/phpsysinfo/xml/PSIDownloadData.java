@@ -45,6 +45,7 @@ extends AsyncTask<String, Void, Void>
 	private PSIActivity activity;
 	private PSIHostData psiObject;
 	private String address = "";
+	private String alias = "";
 	private static AndroidHttpClient httpClient = null;
 	private boolean canceled = false;
 	
@@ -58,6 +59,7 @@ extends AsyncTask<String, Void, Void>
 		address = strs[0];
 		String user = strs[1];
 		String password = strs[2];
+		alias = strs[3];
 
 		SAXParser parser = null;
 		InputStream input = null;
@@ -125,7 +127,7 @@ extends AsyncTask<String, Void, Void>
 			//nothing
 		}
 		else {
-			this.activity.displayError(address, errorCode);
+			this.activity.displayError(alias, errorCode);
 		}
 	}
 

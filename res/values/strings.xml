@@ -30,6 +30,7 @@
     <string name="lblUser">Username</string>
     <string name="lblPassword">Password</string>
     <string name="lblSave">Save</string>
+    <string name="lblAlias">Alias</string>
     
     <string name="lblOf">of</string>
     <string name="lblMio">MiB</string>

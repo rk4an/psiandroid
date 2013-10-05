@@ -104,11 +104,12 @@ public class PSIConfig {
 	}
 
 
-	public boolean addHost(String url, String user, String password) {
+	public boolean addHost(String alias, String url, String user, String password) {
 		JSONArray allHosts = loadHosts();
 
 		try {
 			JSONObject host = new JSONObject();
+			host.put("alias", alias);
 			host.put("url", url);
 			host.put("username", user);
 			host.put("password", password);
@@ -123,11 +124,12 @@ public class PSIConfig {
 		return false;
 	}
 	
-	public boolean editHost(int position, String url, String user, String password) {
+	public boolean editHost(int position, String alias, String url, String user, String password) {
 		JSONArray allHosts = loadHosts();
 
 		try {
 			JSONObject host = (JSONObject) allHosts.get(position);
+			host.put("alias", alias);
 			host.put("url", url);
 			host.put("username", user);
 			host.put("password", password);
