@@ -193,7 +193,12 @@ OnItemLongClickListener {
 				public void onClick(DialogInterface dialog, int whichButton) {
 
 					String hostUrl = url.getText().toString().trim();
+					String aliasName = alias.getText().toString();
 
+					if(aliasName.equals("")) {
+						aliasName = hostUrl;
+					}
+					
 					//default prefix with http
 					if (!hostUrl.startsWith("http://") && !hostUrl.startsWith("https://")) {
 						hostUrl = "http://" + hostUrl;
@@ -203,7 +208,7 @@ OnItemLongClickListener {
 						if(editMode) {
 							if(PSIConfig.getInstance().editHost(
 									position,
-									alias.getText().toString(),
+									aliasName,
 									hostUrl,
 									username.getText().toString(),
 									password.getText().toString())) {
@@ -214,11 +219,11 @@ OnItemLongClickListener {
 						}
 						else {
 							if(PSIConfig.getInstance().addHost(
-									alias.getText().toString(),
+									aliasName,
 									hostUrl,
 									username.getText().toString(),
 									password.getText().toString())) {
-								lHosts.add(alias.getText().toString());
+								lHosts.add(aliasName);
 								aaHosts.notifyDataSetChanged();
 							}
 						}
