@@ -269,18 +269,16 @@ implements OnClickListener, View.OnTouchListener
 		TextView txtTitle = (TextView) findViewById(R.id.txtTitle);
 
 		String url = "";
-		String alias = "";
 		try {
 			JSONObject host = (JSONObject) PSIConfig.getInstance().loadHosts().get(selectedIndex);
 			url = (String) host.get("url");
-			alias = (String) host.get("alias");
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
 		txtTitle.setText(
-				Html.fromHtml("<a href=\""+url+"\">"+alias+"</a>"));
+				Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
 		txtTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
 		//uptime

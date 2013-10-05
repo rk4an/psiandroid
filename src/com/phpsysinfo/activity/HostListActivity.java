@@ -213,7 +213,7 @@ OnItemLongClickListener {
 									username.getText().toString(),
 									password.getText().toString())) {
 
-								lHosts.set(position, alias.getText().toString());
+								lHosts.set(position, aliasName);
 								aaHosts.notifyDataSetChanged();
 							}
 						}
