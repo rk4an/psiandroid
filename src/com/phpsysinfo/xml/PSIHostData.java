@@ -209,12 +209,12 @@ public class PSIHostData {
 	public void addTemperature(String description, String temp, String max) {
 
 		try {
-			int itemp = Integer.parseInt(temp);
+			float itemp = Float.parseFloat(temp);
 			
 			if(max == null) {
 				max = "-1";
 			}
-			int imax = Integer.parseInt(max);
+			float imax = Float.parseFloat(max);
 			
 			temperature.add(new PSITemperature(description, itemp, imax));
 		}

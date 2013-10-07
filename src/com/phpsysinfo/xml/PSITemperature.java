@@ -3,10 +3,10 @@ package com.phpsysinfo.xml;
 public class PSITemperature {
 
 	private String description = "";
-	private int temp = -1;
-	private int max = -1;
+	private float temp = -1;
+	private float max = -1;
 	
-	public PSITemperature(String description, int temp, int max) {
+	public PSITemperature(String description, float temp, float max) {
 		this.description = description;
 		this.temp = temp;
 		this.max = max;
@@ -20,19 +20,19 @@ public class PSITemperature {
 		this.description = description;
 	}
 
-	public int getTemp() {
+	public float getTemp() {
 		return temp;
 	}
 
-	public void setTemp(int temp) {
+	public void setTemp(float temp) {
 		this.temp = temp;
 	}
 
-	public int getMax() {
+	public float getMax() {
 		return max;
 	}
 
-	public void setMax(int max) {
+	public void setMax(float max) {
 		this.max = max;
 	}
 }

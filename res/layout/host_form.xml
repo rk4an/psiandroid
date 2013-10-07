@@ -15,7 +15,8 @@
         android:id="@+id/txtAlias"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10">
+        android:ems="10"
+        android:inputType="text">
 
         <requestFocus />
     </EditText>
@@ -34,7 +35,6 @@
         android:hint="@string/lblUrlHint"
         android:inputType="textUri" >
 
-        <requestFocus />
     </EditText>
 
     <TextView

@@ -730,7 +730,7 @@ implements OnClickListener, View.OnTouchListener
 					tvItemValue.setText(temperature.getTemp() + "° (max: " + temperature.getMax()+"°)");
 					
 					if(temperature.getMax() != 0) {
-						int percent = temperature.getTemp() * 100 / temperature.getMax();
+						float percent = temperature.getTemp() * 100 / temperature.getMax();
 						if(percent > PSIConfig.TEMP_SOFT_THR) {
 							tvItemValue.setTextColor(getResources().getColor(R.color.state_soft));
 						}
