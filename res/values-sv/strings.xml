@@ -3,16 +3,18 @@
     <string name="app_name">PSIAndroid</string>
     
     <string name="lblLoading">Laddar...</string>
-    <string name="lblUptime">Drifttid:</string>
     <string name="lblRefresh">Uppdatera</string>
     <string name="lblSettings">Inställningar</string>
     <string name="lblAbout">Om</string>
-
+    <string name="lblError">Fel</string>
+	
     <string name="lblKernel">Kärnversion:</string>
     <string name="lblDistro">Distribution:</string>
     <string name="lblIp">IP-adress:</string>
+	<string name="lblUptime">Drifttid:</string>
     <string name="lblLoad">Belastning:</string>
     <string name="lblUsers">Användare:</string>
+	<string name="lblCpu">Processor:</string>
     <string name="lblVersion">Version av PSI:</string>
     <string name="lblMemory">Minne</string>
 
@@ -28,6 +30,7 @@
     <string name="lblUser">användarnamn</string>
     <string name="lblPassword">lösenord</string>
     <string name="lblSave">Spara</string>
+    <string name="lblAlias">Namn</string>
     
     <string name="lblOf">av</string>
     <string name="lblMio">MB</string>
@@ -60,4 +63,15 @@
     <string name="lblUpdate">Uppdatera</string>
     <string name="lblPackages">Paket</string>
     <string name="lblSecurity">Säkerhetspaket</string>
+    
+    <string name="lblPrinter">Skrivare</string>
+    <string name="lblPercent">Procent</string>  
+    <string name="lblTenthsMl">Tiondels ml</string>  
+    <string name="lblImpressions">Tryckningar</string>  
+    <string name="lblTenthsGrams">Tiondels gram</string>
+    
+    <string name="lblBat">Batteri</string>  
+    <string name="lblRemaining">Återstående:</string> 
+    <string name="lblState">Status:</string> 
+    
 </resources>
