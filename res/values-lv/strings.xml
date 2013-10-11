@@ -43,7 +43,6 @@
     <string name="lblProcessStatus">Procesa Status</string>
 
     <string name="lblUps">UPS</string>
-    <string name="lblUpsName">Nosaukums</string>
     <string name="lblUpsModel">Modelis</string>
     <string name="lblUpsBatteryCharge">Batereja uzlāde</string>
     <string name="lblUpsLoad">Noslodze</string>

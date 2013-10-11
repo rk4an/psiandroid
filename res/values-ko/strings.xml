@@ -46,7 +46,6 @@ Korean translation by Dong-bum, Kim (admin@83rpm.com)
     <string name="lblProcessStatus">프로세스 상태</string>
 
     <string name="lblUps">UPS</string>
-    <string name="lblUpsName">이름</string>
     <string name="lblUpsModel">모델명</string>
     <string name="lblUpsBatteryCharge">배터리 충전</string>
     <string name="lblUpsLoad">로드</string>

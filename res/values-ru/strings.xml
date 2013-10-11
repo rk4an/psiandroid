@@ -43,7 +43,6 @@
     <string name="lblProcessStatus">Статус процессов</string>
 
     <string name="lblUps">Источники Бесперебойного Питания</string>
-    <string name="lblUpsName">Имя</string>
     <string name="lblUpsModel">Модель</string>
     <string name="lblUpsBatteryCharge">Заряд батареи</string>
     <string name="lblUpsLoad">Нагрузка</string>

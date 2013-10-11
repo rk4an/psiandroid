@@ -46,7 +46,6 @@
     <string name="lblProcessStatus">Etat Processus</string>
 
     <string name="lblUps">UPS</string>
-    <string name="lblUpsName">Nom</string>
     <string name="lblUpsModel">Modèle</string>
     <string name="lblUpsBatteryCharge">Charge battery</string>
     <string name="lblUpsLoad">Charge</string>

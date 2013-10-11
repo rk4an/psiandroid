@@ -46,7 +46,6 @@
     <string name="lblProcessStatus">Status för processer</string>
 
     <string name="lblUps">UPS</string>
-    <string name="lblUpsName">Namn</string>
     <string name="lblUpsModel">Modell</string>
     <string name="lblUpsBatteryCharge">Uppladdning</string>
     <string name="lblUpsLoad">Laddar</string>
