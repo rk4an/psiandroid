@@ -36,7 +36,6 @@ Korean translation by Dong-bum, Kim (admin@83rpm.com)
     <string name="lblMio">MB</string>
     <string name="lblGio">GB</string>
     <string name="lblTio">TB</string>
-    <string name="lblAdd">추가</string>
 
     <string name="lblAdd">Add</string>
     <string name="lblActionFor">Action for %1$s ?</string>

@@ -727,7 +727,7 @@ implements OnClickListener, View.OnTouchListener
 
 				TextView tvItemValue = new TextView(this);
 				if(temperature.getMax() != -1) {
-					tvItemValue.setText(temperature.getTemp() + "° (max: " + temperature.getMax()+"°)");
+					tvItemValue.setText(temperature.getTemp() + "°C (max: " + temperature.getMax()+"°C)");
 					
 					if(temperature.getMax() != 0) {
 						float percent = temperature.getTemp() * 100 / temperature.getMax();
@@ -737,7 +737,7 @@ implements OnClickListener, View.OnTouchListener
 					}
 				}
 				else {
-					tvItemValue.setText(temperature.getTemp() + "°");
+					tvItemValue.setText(temperature.getTemp() + "°C");
 				}
 				tvItemValue.setWidth(0);
 				tvItemLabel.setWidth(0);
