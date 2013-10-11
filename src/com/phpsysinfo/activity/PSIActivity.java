@@ -366,7 +366,7 @@ implements OnClickListener, View.OnTouchListener
 			tvNameMemory.setTextColor(getResources().getColor(R.color.state_hard));
 		}
 
-		LayoutParams p = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams p = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 		//init memory table
 		TableLayout tMemory = (TableLayout) findViewById(R.id.tMemory);	
