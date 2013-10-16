@@ -14,15 +14,17 @@ import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -32,10 +34,6 @@ import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.phpsysinfo.R;
 import com.phpsysinfo.ui.HeaderTextView;
 import com.phpsysinfo.utils.FormatUtils;
@@ -56,7 +54,7 @@ enum ViewType {
 }
 
 public class PSIActivity 
-extends SherlockActivity
+extends ActionBarActivity
 implements OnClickListener, View.OnTouchListener
 {
 	private static Context context;
@@ -67,14 +65,13 @@ implements OnClickListener, View.OnTouchListener
 	private int selectedIndex = 0 ;
 	private boolean isReady = false;
 
-	private MenuItem refreshItem;
-	private ImageView iv;
-	private Animation rotation;
+	private Menu menu;
 
 	private ViewType viewType = ViewType.NONE;
 
 	private PSIDownloadData task = null;
-	
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,13 +81,6 @@ implements OnClickListener, View.OnTouchListener
 		setContentView(R.layout.main_view);
 
 		scrollView = (ScrollView) findViewById(R.id.svMain);
-
-		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		iv = (ImageView) inflater.inflate(R.layout.action_refresh, null);
-
-		rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_refresh);
-		rotation.setAnimationListener(rotateListener);
-
 		scrollView.setOnTouchListener(this);
 
 		//create about dialog
@@ -114,7 +104,7 @@ implements OnClickListener, View.OnTouchListener
 
 		displayLogo();
 
-		
+
 		//set alias if empty
 		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
 		for (int i = 0; i < allHosts.length(); i++) {
@@ -129,7 +119,7 @@ implements OnClickListener, View.OnTouchListener
 				e.printStackTrace();
 			}
 		}
-		
+
 		//load data
 		int selectedIndex = PSIConfig.getInstance().loadLastIndex();
 		getData(selectedIndex);
@@ -475,23 +465,29 @@ implements OnClickListener, View.OnTouchListener
 		((TextView) findViewById(R.id.errorcode)).setText(error.toString());
 	}
 
+	public void setRefreshActionButtonState(final boolean refreshing) {
+		if (menu != null) {
+			final MenuItem refreshItem = menu.findItem(R.id.iRefresh);
+			if (refreshItem != null) {
+				if (refreshing) {
+					//refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+					MenuItemCompat.setActionView(refreshItem,R.layout.actionbar_indeterminate_progress);
+				} else {
+					//refreshItem.setActionView(null);
+					MenuItemCompat.setActionView(refreshItem,null);
+				}
+			}
+		}
+	}
 
 	public void refresh() {
-		iv.startAnimation(rotation);
+		setRefreshActionButtonState(true);
 		isReady = false;
-		if(refreshItem != null) {
-			refreshItem.setActionView(iv);
-		}
 	}
 
 
 	public void completeRefresh() {
-		if(refreshItem != null) {
-			if(refreshItem.getActionView() != null) {
-				refreshItem.getActionView().clearAnimation();
-				refreshItem.setActionView(null);
-			}
-		}
+		setRefreshActionButtonState(false);
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -510,10 +506,10 @@ implements OnClickListener, View.OnTouchListener
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
+		this.menu = menu;
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
-		refreshItem = menu.findItem(R.id.iRefresh);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	} 
 
 	@Override
@@ -590,7 +586,7 @@ implements OnClickListener, View.OnTouchListener
 
 
 	private void displayLoadingMessage(int index) {
-		
+
 		String hostname = "";
 		JSONArray hostsList = PSIConfig.getInstance().loadHosts();
 		JSONObject currentHost = null;
@@ -602,7 +598,7 @@ implements OnClickListener, View.OnTouchListener
 		}
 		catch(Exception e) {
 		}
-		
+
 		loadDynamicLayout(R.layout.loading);
 		((TextView) findViewById(R.id.tvLoading)).setText(getString(R.string.lblLoading));
 		((TextView) findViewById(R.id.tvLoadingHost)).setText(hostname);
@@ -626,7 +622,7 @@ implements OnClickListener, View.OnTouchListener
 				/*if(task != null) {
 					task.stop();
 				}*/
-				
+
 				task = new PSIDownloadData(this);
 				this.refresh();
 				if(!url.equals("")) {
@@ -728,7 +724,7 @@ implements OnClickListener, View.OnTouchListener
 				TextView tvItemValue = new TextView(this);
 				if(temperature.getMax() != -1) {
 					tvItemValue.setText(temperature.getTemp() + "°C (max: " + temperature.getMax()+"°C)");
-					
+
 					if(temperature.getMax() != 0) {
 						float percent = temperature.getTemp() * 100 / temperature.getMax();
 						if(percent > PSIConfig.TEMP_SOFT_THR) {
@@ -1380,26 +1376,6 @@ implements OnClickListener, View.OnTouchListener
 		LayoutInflater inflater = getLayoutInflater();
 		llmain.addView(inflater.inflate(layoutID, null));
 	}
-
-	private AnimationListener rotateListener = new AnimationListener() {
-
-		@Override
-		public void onAnimationStart(Animation animation) {}
-
-		@Override
-		public void onAnimationRepeat(Animation animation) {}
-
-		@Override
-		public void onAnimationEnd(Animation animation) {
-			if(isReady) {
-				iv.clearAnimation();
-				refreshItem.setActionView(null);
-			}
-			else { 
-				iv.startAnimation(rotation);
-			}
-		}
-	};
 
 	public static Context getAppContext() {
 		return PSIActivity.context;

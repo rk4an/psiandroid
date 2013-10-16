@@ -13,7 +13,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.AdapterView;
@@ -23,14 +28,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.phpsysinfo.R;
 
-public class HostListActivity extends SherlockFragmentActivity implements OnItemClickListener,
+public class HostListActivity extends ActionBarActivity implements OnItemClickListener,
 OnItemLongClickListener {
 
 	private static JSONArray allHosts = null;
@@ -93,7 +93,7 @@ OnItemLongClickListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.host, menu);
 		return true;
 	} 
@@ -160,7 +160,7 @@ OnItemLongClickListener {
 		return true;
 	}
 
-	public static class AddHostDialog extends SherlockDialogFragment {
+	public static class AddHostDialog extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 
