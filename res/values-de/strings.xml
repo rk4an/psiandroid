@@ -6,6 +6,7 @@
     <string name="lblRefresh">Aktualisieren</string>
     <string name="lblSettings">Einstellungen</string>
     <string name="lblAbout">Über</string>
+    <string name="lblError">Error</string>
     
     <string name="lblKernel">Kernel:</string>
     <string name="lblDistro">Distna:</string>
@@ -13,6 +14,7 @@
     <string name="lblUptime">Betriebszeit:</string>
     <string name="lblLoad">Auslastung:</string>
     <string name="lblUsers">Benutzer:</string>
+    <string name="lblCpu">CPU:</string>
     <string name="lblVersion">PSI Version:</string>
     <string name="lblMemory">Arbeitsspeicher</string>
     
@@ -28,6 +30,7 @@
     <string name="lblUser">Benutzername</string>
     <string name="lblPassword">Passwort</string>
     <string name="lblSave">Speichern</string>
+    <string name="lblAlias">Alias</string>
     
     <string name="lblOf">von</string>
     <string name="lblMio">MiB</string>
@@ -59,4 +62,14 @@
     <string name="lblUpdate">Aktualisierung</string>
     <string name="lblPackages">Pakete</string>
     <string name="lblSecurity">Sicherheits</string>
+    
+    <string name="lblPrinter">Drucker</string>
+    <string name="lblPercent">Prozent</string>  
+    <string name="lblTenthsMl">Zehntel ml</string>  
+    <string name="lblImpressions">Auflagen</string>  
+    <string name="lblTenthsGrams">Tenths of Gramm</string>
+    
+    <string name="lblBat">Batterie</string>  
+    <string name="lblRemaining">Verbleibend:</string> 
+    <string name="lblState">Zustand:</string> 
 </resources>
