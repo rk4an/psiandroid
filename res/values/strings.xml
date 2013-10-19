@@ -56,8 +56,6 @@
     <string name="lblSmart">SMART</string>
     
     <string name="lblRaid">RAID</string>
-    <string name="lblRaidDevice">Device</string>
-    <string name="lblRaidActiveRegistered">Active/Registered</string>
     
     <string name="lblUpdate">Update</string>
     <string name="lblPackages">Packages</string>

@@ -45,6 +45,7 @@ import com.phpsysinfo.xml.PSINetworkInterface;
 import com.phpsysinfo.xml.PSIPrinter;
 import com.phpsysinfo.xml.PSIPrinterItem;
 import com.phpsysinfo.xml.PSIRaid;
+import com.phpsysinfo.xml.PSIRaidDevice;
 import com.phpsysinfo.xml.PSISmart;
 import com.phpsysinfo.xml.PSITemperature;
 import com.phpsysinfo.xml.PSIUps;
@@ -1068,41 +1069,55 @@ implements OnClickListener, View.OnTouchListener
 
 			//content
 			TableLayout tRaid = new TableLayout(this);
-			tRaid.setColumnShrinkable(0, true);
+			
+			//tRaid.setColumnStretchable(0, true);
+			//tRaid.setColumnStretchable(1, true);
+			tRaid.setColumnShrinkable(1, true);
 			tRaid.setId(R.id.tRaid);
 
 			LinearLayout llRaid = new LinearLayout(this);
 			llRaid.setId(R.id.llRaid);
 			llRaid.setOrientation(LinearLayout.VERTICAL);
 
-			//header
-			/*TextView tvItemLabelHeader = new TextView(this);
-			tvItemLabelHeader.setText(Html.fromHtml(
-					"<b><i>"+getString(R.string.lblRaidDevice)+" </i></b>"));
-
-			TextView tvItemValueHeader = new TextView(this);
-			tvItemValueHeader.setText(Html.fromHtml(
-					"<i>"+getString(R.string.lblRaidActiveRegistered)+"</i>"));
-
-			TableRow trItemHeader = new TableRow(this);
-			trItemHeader.addView(tvItemLabelHeader);
-			trItemHeader.addView(tvItemValueHeader);
-
-			tRaid.addView(trItemHeader);*/
-
 
 			//populate
 			for (PSIRaid psiRaid : entry.getRaid()) {
 				TextView tvItemLabel = new TextView(this);
-				tvItemLabel.setText(Html.fromHtml("<b>" + psiRaid.getName() + ": </b>"));
-
-				TextView tvItemValue = new TextView(this);
-				tvItemValue.setText(psiRaid.getDisks_active()+"/"+psiRaid.getDisks_registered());
+				tvItemLabel.setText(Html.fromHtml(
+						"<b>" + psiRaid.getName() + " (" + psiRaid.getLevel() + ")</b>"));
+				tvItemLabel.setTextColor(getResources().getColor(R.color.sub_item));
 
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
+				tRaid.addView(trItem);
+				
+				
+				//disks
+				trItem = new TableRow(this);
+				tvItemLabel = new TextView(this);
+				TextView tvItemValue = new TextView(this);
+				
+				String list = "[" + psiRaid.getDisksRegistered() + "/" + psiRaid.getDisksActive() + "]";
+				
+				for (PSIRaidDevice dev : psiRaid.getDevices()) {
+					if(dev.getStatus().equals(""))
+						list = list + " " + dev.getName();
+					else {
+						int color = getResources().getColor(R.color.state_hard);
+						String сolorString = String.format("%X", color).substring(2);
+						list = list + " " + String.format(
+								"<font color=\"#%s\">"+dev.getName()+"</font>", сolorString);
+					}
+				}
+				tvItemValue.setText(Html.fromHtml(list));
+
+				trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
 				trItem.addView(tvItemValue);
 
+				//tvItemLabel.setWidth(0);
+				//tvItemValue.setWidth(0);
+				
 				tRaid.addView(trItem);
 			}
 

@@ -17,18 +17,20 @@ public class PSIXmlParse extends DefaultHandler {
 	private boolean inMbInfoFans = false;
 
 	private boolean inPsStatus = false;
-	
+
 	private boolean inDisk = false;
 	private String currentDisk = "";
 
 	private boolean inPackageUpdate = false;
 	private boolean inSecurityUpdate = false;
-	
+
 	private boolean inPrinter = false;
 	private PSIPrinter currentPrinter = null;
-	
+
+	private PSIRaid currentRaid = null;
+
 	private StringBuffer buffer = new StringBuffer();
-	
+
 	@Override
 	public void processingInstruction(String target, String data) throws SAXException {
 		super.processingInstruction(target, data);
@@ -155,29 +157,29 @@ public class PSIXmlParse extends DefaultHandler {
 				this.entry.addProcessStatus(attributes.getValue("Name"), attributes.getValue("Status"));
 			}
 		}
-		
+
 		//smart
-		else if (localName.equalsIgnoreCase("disk")){
+		else if (localName.equals("disk")){
 			inDisk = true;
 			currentDisk = attributes.getValue("name");
 		}
-		
+
 		else if (localName.equalsIgnoreCase("Printer")){
 			inPrinter = true;
 			String pname = attributes.getValue("Name");
 			currentPrinter = new PSIPrinter(pname);
 			this.entry.addPrinter(currentPrinter);
 		}
-		
+
 		else if (inPrinter){
 			if (localName.equalsIgnoreCase("MarkerSupplies")) {
 				String description = attributes.getValue("Description");
 				String supplyUnit = attributes.getValue("SupplyUnit");
 				String maxCapacity = attributes.getValue("MaxCapacity");
 				String level = attributes.getValue("Level");
-				
+
 				PSIPrinterItem ppi = new PSIPrinterItem(description, supplyUnit, maxCapacity, level);
-				
+
 				if(currentPrinter != null) {
 					currentPrinter.addItem(ppi);
 				}
@@ -189,12 +191,12 @@ public class PSIXmlParse extends DefaultHandler {
 				}
 			}
 		}
-		
+
 		else if (inDisk){
 			if (localName.equalsIgnoreCase("attribute")) {
 				String attr = attributes.getValue("attribute_name");
 				String value = attributes.getValue("raw_value");
-				
+
 				this.entry.addSmart(new PSISmart(currentDisk, attr, value));
 			}
 		}
@@ -217,22 +219,38 @@ public class PSIXmlParse extends DefaultHandler {
 			ups.setBatteryVoltage(attributes.getValue("BatteryVoltage"));
 			ups.setBatteryChargePercent(attributes.getValue("BatteryChargePercent"));
 			ups.setTimeLeftMinutes(attributes.getValue("TimeLeftMinutes"));
-			
+
 			this.entry.addUps(ups);
 		}
-		
+
 		else if(localName.equalsIgnoreCase("Raid")){
-			this.entry.addRaid(
-					attributes.getValue("Device_Name") + " ("  + attributes.getValue("Level") + ")",
-					attributes.getValue("Disks_Active"),
-					attributes.getValue("Disks_Registered"));
+
+			currentRaid = new PSIRaid();
+			currentRaid.setName(attributes.getValue("Device_Name"));
+			currentRaid.setLevel(attributes.getValue("Level"));
+
+			String active = attributes.getValue("Disks_Active");
+			if(active != null && !active.equals("")) {
+				currentRaid.setDisksActive(Integer.parseInt(active));
+			}
+			String registered = attributes.getValue("Disks_Registered");
+			if(registered != null && !registered.equals("")) {
+				currentRaid.setDisksRegistered(Integer.parseInt(registered));
+			}
+
+			this.entry.addRaid(currentRaid);
 		}
-		
+		else if(localName.equals("Disk")){
+			PSIRaidDevice psiRaidDevice = new PSIRaidDevice(
+					attributes.getValue("Name"),
+					attributes.getValue("Status"));
+			currentRaid.addDevices(psiRaidDevice);
+		}
 		else if(localName.equalsIgnoreCase("packages")){
 			inPackageUpdate = true;
 			buffer = new StringBuffer();
 		}
-		
+
 		else if(localName.equalsIgnoreCase("security")){
 			inSecurityUpdate = true;
 			buffer = new StringBuffer();
@@ -250,16 +268,16 @@ public class PSIXmlParse extends DefaultHandler {
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		super.characters(ch, start, length);
-		
+
 		if(inPackageUpdate) {
 			buffer.append(ch);
 		}
-		
+
 		if(inSecurityUpdate) {
 			buffer.append(ch);
 		}
 	}
-	
+
 	@Override
 	public void endElement(String uri, String localName, String name) throws SAXException {
 		if (localName.equalsIgnoreCase("Plugin_ipmi")){
@@ -278,7 +296,7 @@ public class PSIXmlParse extends DefaultHandler {
 		else if(localName.equalsIgnoreCase("Plugin_PSStatus")){
 			inPsStatus = false;
 		}
-		else if(localName.equalsIgnoreCase("disk")){
+		else if(localName.equals("disk")){
 			inDisk = false;
 		}
 		else if(localName.equalsIgnoreCase("Printer")){

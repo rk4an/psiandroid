@@ -1,14 +1,22 @@
 package com.phpsysinfo.xml;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PSIRaid {
 
 	public String name = "";
+	public String level = "";
 	public int disks_active = 0;
 	public int disks_registered = 0;
+	public List<PSIRaidDevice> devices = new ArrayList<PSIRaidDevice>();
 	
-	public PSIRaid(String name, int disks_active, int disks_registered) {
-		super();
+	public PSIRaid() {
+	}
+	
+	public PSIRaid(String name, String level, int disks_active, int disks_registered) {
 		this.name = name;
+		this.level = level;
 		this.disks_active = disks_active;
 		this.disks_registered = disks_registered;
 	}
@@ -21,20 +29,35 @@ public class PSIRaid {
 		this.name = name;
 	}
 	
-	public int getDisks_active() {
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public int getDisksActive() {
 		return disks_active;
 	}
 	
-	public void setDisks_active(int disks_active) {
+	public void setDisksActive(int disks_active) {
 		this.disks_active = disks_active;
 	}
 	
-	public int getDisks_registered() {
+	public int getDisksRegistered() {
 		return disks_registered;
 	}
 	
-	public void setDisks_registered(int disks_registered) {
+	public void setDisksRegistered(int disks_registered) {
 		this.disks_registered = disks_registered;
 	}
 	
+	public List<PSIRaidDevice> getDevices() {
+		return this.devices;
+	}
+	
+	public void addDevices(PSIRaidDevice device) {
+		this.devices.add(device);
+	}
 }

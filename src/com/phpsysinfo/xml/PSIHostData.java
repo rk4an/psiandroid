@@ -290,21 +290,10 @@ public class PSIHostData {
 		return raid;
 	}
 
-	public void addRaid(String name, String active, String registered) {
-		int _active = 0;
-		int _registered = 0;
-
-		if(active != null && !active.equals("")) {
-			_active = Integer.parseInt(active);
-		}
-
-		if(registered != null && !registered.equals("")) {
-			_registered =  Integer.parseInt(registered);
-		}
-
-		raid.add(new PSIRaid(name,_active,_registered));
+	public void addRaid(PSIRaid r) {
+		raid.add(r);
 	}
-
+	
 	public int getNormalUpdate() {
 		return normalUpdate;
 	}
