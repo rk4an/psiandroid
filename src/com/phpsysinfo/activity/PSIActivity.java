@@ -1069,7 +1069,7 @@ implements OnClickListener, View.OnTouchListener
 
 			//content
 			TableLayout tRaid = new TableLayout(this);
-			
+
 			//tRaid.setColumnStretchable(0, true);
 			//tRaid.setColumnStretchable(1, true);
 			tRaid.setColumnShrinkable(1, true);
@@ -1090,15 +1090,15 @@ implements OnClickListener, View.OnTouchListener
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
 				tRaid.addView(trItem);
-				
-				
+
+
 				//disks
 				trItem = new TableRow(this);
 				tvItemLabel = new TextView(this);
 				TextView tvItemValue = new TextView(this);
-				
+
 				String list = "[" + psiRaid.getDisksRegistered() + "/" + psiRaid.getDisksActive() + "]";
-				
+
 				for (PSIRaidDevice dev : psiRaid.getDevices()) {
 					if(dev.getStatus().equals(""))
 						list = list + " " + dev.getName();
@@ -1117,7 +1117,7 @@ implements OnClickListener, View.OnTouchListener
 
 				//tvItemLabel.setWidth(0);
 				//tvItemValue.setWidth(0);
-				
+
 				tRaid.addView(trItem);
 			}
 
@@ -1335,8 +1335,20 @@ implements OnClickListener, View.OnTouchListener
 			TextView tvItemLabel = new TextView(this);
 			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblRemaining) + " </b>"));
 
+			int remainingCapacity = 0;
+			int designCapacity = 0;
+			int percent = 0;
+			try {
+				remainingCapacity = Integer.parseInt(entry.getBat().getRemainingCapacity());
+				designCapacity = Integer.parseInt(entry.getBat().getDesignCapacity());
+				percent = (int) designCapacity/remainingCapacity*100;
+			}
+			catch (Exception e) {
+
+			}
+
 			TextView tvItemValue = new TextView(this);
-			tvItemValue.setText(entry.getBat().getRemainingCapacity()+"%");
+			tvItemValue.setText(percent+"%");
 			tvItemLabel.setWidth(0);
 			tvItemValue.setWidth(0);
 			TableRow trItem = new TableRow(this);
@@ -1346,24 +1358,18 @@ implements OnClickListener, View.OnTouchListener
 			tBat.addView(trItem);
 
 			//progressbar
-			try {
-				int percent = Integer.parseInt(entry.getBat().getRemainingCapacity());
+			if(percent >=0 && percent <= 100) {
+				LayoutInflater inflater = getLayoutInflater();
+				ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
+				pgPercent.setProgress(percent);
 
-				if(percent >=0 && percent <= 100) {
-					LayoutInflater inflater = getLayoutInflater();
-					ProgressBar pgPercent = (ProgressBar) inflater.inflate(R.layout.pg, null);
-					pgPercent.setProgress(percent);
+				TableRow trItemPg = new TableRow(this);
+				trItemPg.addView(new TextView(this));
+				trItemPg.addView(pgPercent);
 
-					TableRow trItemPg = new TableRow(this);
-					trItemPg.addView(new TextView(this));
-					trItemPg.addView(pgPercent);
-
-					tBat.addView(trItemPg);
-				}
+				tBat.addView(trItemPg);
 			}
-			catch(Exception e) {
 
-			}
 
 			//state
 			tvItemLabel = new TextView(this);
