@@ -1341,7 +1341,7 @@ implements OnClickListener, View.OnTouchListener
 			try {
 				remainingCapacity = Integer.parseInt(entry.getBat().getRemainingCapacity());
 				designCapacity = Integer.parseInt(entry.getBat().getDesignCapacity());
-				percent = (int) designCapacity/remainingCapacity*100;
+				percent = (int) (((float)remainingCapacity/designCapacity)*100);
 			}
 			catch (Exception e) {
 
