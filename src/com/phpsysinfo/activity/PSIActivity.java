@@ -122,7 +122,7 @@ implements OnClickListener, View.OnTouchListener
 		}
 
 		//load data
-		int selectedIndex = PSIConfig.getInstance().loadLastIndex();
+		selectedIndex = PSIConfig.getInstance().loadLastIndex();
 		getData(selectedIndex);
 	}
 
