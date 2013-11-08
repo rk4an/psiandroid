@@ -3,16 +3,18 @@
     <string name="app_name">PSIAndroid</string>
     
     <string name="lblLoading">Загрузка...</string>
-    <string name="lblUptime">Аптайм:</string>
     <string name="lblRefresh">Обновить</string>
     <string name="lblSettings">Настройки</string>
     <string name="lblAbout">О программе</string>
+    <string name="lblError">Ошибка</string>    
     
     <string name="lblKernel">Ядро:</string>
     <string name="lblDistro">Дистрибутив:</string>
     <string name="lblIp">IP:</string>
+    <string name="lblUptime">Аптайм:</string>
     <string name="lblLoad">Нагрузка:</string>
     <string name="lblUsers">Пользователей:</string>
+    <string name="lblCpu">ЦП:</string>
     <string name="lblVersion">Версия PSI:</string>
     <string name="lblMemory">ОЗУ</string>
 
@@ -22,12 +24,13 @@
     <string name="lblTemperatures">Температура</string>
     <string name="lblFans">Кулеры</string>
     
-    <string name="lblUrlHint">http://</string>
+    <string name="lblUrlHint">http://ваш-хост.рф/phpsysinfo</string>
     <string name="lblHosts">Серверы</string>
-    <string name="lblHost">Host</string>
-    <string name="lblUser">логин</string>
-    <string name="lblPassword">пароль</string>
-    <string name="lblSave">Save</string>
+    <string name="lblHost">PSI URL</string>
+    <string name="lblUser">Логин</string>
+    <string name="lblPassword">Пароль</string>
+    <string name="lblSave">Сохранить</string>
+    <string name="lblAlias">Имя ярлыка</string>
 
     <string name="lblOf">из</string>
     <string name="lblMio">Мб</string>
@@ -35,10 +38,10 @@
     <string name="lblTio">Тб</string>
     
     <string name="lblAdd">Добавить</string>
-    <string name="lblActionFor">Action for %1$s ?</string>
-    <string name="lblCancel">Cancel</string>
-    <string name="lblEdit">Edit</string>
-    <string name="lblRemove">Remove</string>
+    <string name="lblActionFor">Что сделать с %1$s ?</string>
+    <string name="lblCancel">Отмена</string>
+    <string name="lblEdit">Изменить</string>
+    <string name="lblRemove">Удалить</string>
 
     <string name="lblProcessStatus">Статус процессов</string>
 
@@ -59,4 +62,15 @@
     <string name="lblUpdate">Обновления системы</string>
     <string name="lblPackages">Пакеты</string>
     <string name="lblSecurity">Безопасность</string>
+
+    <string name="lblPrinter">Принтеры</string>
+    <string name="lblPercent">Процент</string>  
+    <string name="lblTenthsMl">Десятых мл</string>  
+    <string name="lblImpressions">Отпечатков</string>  
+    <string name="lblTenthsGrams">Десятых грамма</string>
+    
+    <string name="lblBat">Батарея</string>  
+    <string name="lblRemaining">Остаток:</string> 
+    <string name="lblState">Состояние:</string> 
+
 </resources>
