@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PSIAndroid</string>
+    
+    <string name="lblLoading">Wordt geladen ...</string>
+    <string name="lblRefresh">Vernieuwen</string>
+    <string name="lblSettings">Instellingen</string>
+    <string name="lblAbout">Over</string>
+    <string name="lblError">Fout</string>
+    
+    <string name="lblKernel">Kernel:</string>
+    <string name="lblDistro">Distna:</string>
+    <string name="lblIp">IP:</string>
+    <string name="lblUptime">Looptijd:</string>
+    <string name="lblLoad">Gebruik:</string>
+    <string name="lblUsers">Gebruiker:</string>
+    <string name="lblCpu">CPU:</string>
+    <string name="lblVersion">PSI Versie:</string>
+    <string name="lblMemory">Werkgeheugen</string>
+    
+    <string name="lblMemoryUsage">Geheugengebruik</string>
+    <string name="lblMountPoints">Geregistreerde File Systems</string>
+    <string name="lblNetwork">Netwerk</string>
+    <string name="lblTemperatures">Temperaturen</string>
+    <string name="lblFans">Fan</string>
+    
+    <string name="lblUrlHint">http://</string>
+    <string name="lblHosts">Hosts</string>
+    <string name="lblHost">Host</string>
+    <string name="lblUser">Gebruikersnaam</string>
+    <string name="lblPassword">Wachtwoord</string>
+    <string name="lblSave">Opslaan</string>
+    <string name="lblAlias">Alias</string>
+    
+    <string name="lblOf">van</string>
+    <string name="lblMio">MiB</string>
+    <string name="lblGio">GiB</string>
+    <string name="lblTio">TiB</string>
+    
+    <string name="lblAdd">Toevoegen</string>
+    <string name="lblActionFor">Actie voor %1$s ?</string>
+    <string name="lblCancel">Stoppen</string>
+    <string name="lblEdit">Bewerken</string>
+    <string name="lblRemove">Verwijderen</string>
+    
+    <string name="lblProcessStatus">Proces Status</string>
+    
+    <string name="lblUps">UPS</string>
+    <string name="lblUpsModel">Model</string>
+    <string name="lblUpsBatteryCharge">Batterijlading</string>
+    <string name="lblUpsLoad">Laden</string>
+    <string name="lblUpsTime">Resttijd</string>
+    <string name="lblUpsBattery">Accuspanning</string>
+    <string name="lblUpsLine">Netvoeding</string>
+    
+    <string name="lblSmart">SMART</string>
+    
+    <string name="lblRaid">RAID</string>
+    <string name="lblRaidDevice">Apparaat</string>
+    <string name="lblRaidActiveRegistered">Actief/Geregistreerd</string>
+    
+    <string name="lblUpdate">Bijwerken</string>
+    <string name="lblPackages">Pakete</string>
+    <string name="lblSecurity">Veiligheid</string>
+    
+    <string name="lblPrinter">Printer</string>
+    <string name="lblPercent">Procent</string>
+    <string name="lblTenthsMl">Tiende ml</string>
+    <string name="lblImpressions">Eisen</string>
+    <string name="lblTenthsGrams">Tienden van Gramm</string>
+    
+    <string name="lblBat">Batterij</string>
+    <string name="lblRemaining">Resterende:</string>
+    <string name="lblState">Toestand:</string>
+</resources>
