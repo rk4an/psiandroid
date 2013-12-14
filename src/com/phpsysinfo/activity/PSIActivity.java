@@ -1,5 +1,6 @@
 package com.phpsysinfo.activity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.OnNavigationListener;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -25,6 +28,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -56,11 +60,11 @@ enum ViewType {
 
 public class PSIActivity 
 extends ActionBarActivity
-implements OnClickListener, View.OnTouchListener
+implements OnClickListener, View.OnTouchListener, OnNavigationListener
 {
 	private static Context context;
 
-	private Dialog aboutDialog = null;
+	private Dialog aboutDialog;
 	private ScrollView scrollView;
 
 	private int selectedIndex = 0 ;
@@ -70,9 +74,12 @@ implements OnClickListener, View.OnTouchListener
 
 	private ViewType viewType = ViewType.NONE;
 
-	private PSIDownloadData task = null;
-
-
+	private PSIDownloadData task;
+	
+	ActionBar actionBar;
+	ArrayList<String> dropDown = new ArrayList<String>();
+	ArrayAdapter<String> aaDropDown;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -105,7 +112,6 @@ implements OnClickListener, View.OnTouchListener
 
 		displayLogo();
 
-
 		//set alias if empty
 		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
 		for (int i = 0; i < allHosts.length(); i++) {
@@ -120,10 +126,24 @@ implements OnClickListener, View.OnTouchListener
 				e.printStackTrace();
 			}
 		}
+		
+		actionBar = getSupportActionBar();
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
+		aaDropDown = new ArrayAdapter<String>(
+				actionBar.getThemedContext(),
+				android.R.layout.simple_list_item_1,
+				android.R.id.text1, dropDown);
+		
+		actionBar.setListNavigationCallbacks(aaDropDown, this);
+		
+		updateDropDown();
+		
 		//load data
 		selectedIndex = PSIConfig.getInstance().loadLastIndex();
-		getData(selectedIndex);
+		actionBar.setSelectedNavigationItem(selectedIndex);
+		
 	}
 
 	@Override
@@ -492,17 +512,32 @@ implements OnClickListener, View.OnTouchListener
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
 		if (resultCode == RESULT_OK) {
-
 			//load new selected host
 			displayLoadingMessage(data.getExtras().getInt("host"));
 			selectedIndex = data.getExtras().getInt("host");
-			getData(selectedIndex);
-			PSIConfig.getInstance().saveLastIndex(selectedIndex);
+			actionBar.setSelectedNavigationItem(selectedIndex);
 		}
-		else {
+		
+		updateDropDown();
+	}
 
+	private void updateDropDown() {
+		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
+		dropDown.clear();
+		for (int i = 0; i < allHosts.length(); i++) {
+			try {
+				String alias = ((JSONObject)allHosts.get(i)).getString("alias");
+				if (!alias.equals("")) {
+					dropDown.add(alias);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
+		
+		aaDropDown.notifyDataSetChanged();
 	}
 
 	@Override
@@ -572,7 +607,7 @@ implements OnClickListener, View.OnTouchListener
 
 					//load the previous/next host
 					displayLoadingMessage(selectedIndex);
-					getData(selectedIndex);
+					actionBar.setSelectedNavigationItem(selectedIndex);
 
 					PSIConfig.getInstance().saveLastIndex(selectedIndex);
 
@@ -584,7 +619,6 @@ implements OnClickListener, View.OnTouchListener
 
 		return true;
 	}
-
 
 	private void displayLoadingMessage(int index) {
 
@@ -1400,5 +1434,16 @@ implements OnClickListener, View.OnTouchListener
 
 	public static Context getAppContext() {
 		return PSIActivity.context;
+	}
+
+	@Override
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		
+		//load data
+		selectedIndex = itemPosition;
+		PSIConfig.getInstance().saveLastIndex(selectedIndex);
+		getData(selectedIndex);
+		
+		return false;
 	}
 }
