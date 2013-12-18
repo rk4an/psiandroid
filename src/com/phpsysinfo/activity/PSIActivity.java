@@ -1443,10 +1443,6 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		
-		if(!isReady) {
-			return false;
-		}
-		
 		//load data
 		selectedIndex = itemPosition;
 		PSIConfig.getInstance().saveLastIndex(selectedIndex);
