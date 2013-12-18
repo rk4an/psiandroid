@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBar.OnNavigationListener;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -68,7 +69,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	private ScrollView scrollView;
 
 	private int selectedIndex = 0 ;
-	private boolean isReady = false;
+	private boolean isReady = true;
 
 	private Menu menu;
 
@@ -79,6 +80,8 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	ActionBar actionBar;
 	ArrayList<String> dropDown = new ArrayList<String>();
 	ArrayAdapter<String> aaDropDown;
+	
+	Float firstX = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -288,6 +291,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			e.printStackTrace();
 		}
 
+		
 		txtTitle.setText(
 				Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
 		txtTitle.setMovementMethod(LinkMovementMethod.getInstance());
@@ -479,11 +483,13 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 		if (this.viewType != ViewType.ERROR) {
 			loadDynamicLayout(R.layout.error_view);
+			this.viewType = ViewType.ERROR;
 		}
 
 		((TextView) findViewById(R.id.errortxt)).setText(getString(R.string.lblError));
 		((TextView) findViewById(R.id.errorhost)).setText(host);
 		((TextView) findViewById(R.id.errorcode)).setText(error.toString());
+		
 	}
 
 	public void setRefreshActionButtonState(final boolean refreshing) {
@@ -566,7 +572,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		}
 	}
 
-	Float firstX = null;
+	
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -608,8 +614,6 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 					//load the previous/next host
 					displayLoadingMessage(selectedIndex);
 					actionBar.setSelectedNavigationItem(selectedIndex);
-
-					PSIConfig.getInstance().saveLastIndex(selectedIndex);
 
 					firstX = null;
 					return false;
@@ -1439,10 +1443,15 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		
+		if(!isReady) {
+			return false;
+		}
+		
 		//load data
 		selectedIndex = itemPosition;
 		PSIConfig.getInstance().saveLastIndex(selectedIndex);
 		getData(selectedIndex);
+		Log.d("PSIAndroid","selectedIndex="+selectedIndex);
 		
 		return false;
 	}
