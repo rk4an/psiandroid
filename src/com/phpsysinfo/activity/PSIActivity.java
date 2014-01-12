@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -173,46 +174,53 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			aboutDialog.hide();
 		}
 		else if(event.getId() == R.id.tvMemoryUsage) {
-			toggleContent((View) findViewById(R.id.tMemory));
+			toggleContent((View) findViewById(R.id.tMemory), R.id.tvMemoryUsage);
 		}
 		else if(event.getId() == R.id.tvMountPoints) {
-			toggleContent((View) findViewById(R.id.tMountPoints));
+			toggleContent((View) findViewById(R.id.tMountPoints), R.id.tvMountPoints);
 		}
 		else if(event.getId() == R.id.tvTemperature) {
-			toggleContent((View) findViewById(R.id.llTemperature));
+			toggleContent((View) findViewById(R.id.llTemperature), R.id.tvTemperature);
 		}
 		else if(event.getId() == R.id.tvNetwork) {
-			toggleContent((View) findViewById(R.id.llNetwork));
+			toggleContent((View) findViewById(R.id.llNetwork), R.id.tvNetwork);
 		}
 		else if(event.getId() == R.id.tvProcessStatus) {
-			toggleContent((View) findViewById(R.id.llProcessStatus));
+			toggleContent((View) findViewById(R.id.llProcessStatus), R.id.tvProcessStatus);
 		}
 		else if(event.getId() == R.id.tvFans) {
-			toggleContent((View) findViewById(R.id.llFans));
+			toggleContent((View) findViewById(R.id.llFans), R.id.tvFans);
 		}
 		else if(event.getId() == R.id.tvUps) {
-			toggleContent((View) findViewById(R.id.llUps));
+			toggleContent((View) findViewById(R.id.llUps), R.id.tvUps);
 		}
 		else if(event.getId() == R.id.tvSmart) {
-			toggleContent((View) findViewById(R.id.llSmart));
+			toggleContent((View) findViewById(R.id.llSmart), R.id.tvSmart);
 		}
 		else if(event.getId() == R.id.tvRaid) {
-			toggleContent((View) findViewById(R.id.llRaid));
+			toggleContent((View) findViewById(R.id.llRaid), R.id.tvRaid);
 		}
 		else if(event.getId() == R.id.tvUpdate) {
-			toggleContent((View) findViewById(R.id.llUpdate));
+			toggleContent((View) findViewById(R.id.llUpdate), R.id.tvUpdate);
 		}
 		else if(event.getId() == R.id.tvPrinter) {
-			toggleContent((View) findViewById(R.id.llPrinter));
+			toggleContent((View) findViewById(R.id.llPrinter), R.id.tvPrinter);
 		}
 		else if(event.getId() == R.id.tvBat) {
-			toggleContent((View) findViewById(R.id.llBat));
+			toggleContent((View) findViewById(R.id.llBat), R.id.tvBat);
 		}
 	}
 
-	public void toggleContent(final View v){
+	public void toggleContent(final View v, int res){
 
 		v.setVisibility( v.isShown()? View.GONE: View.VISIBLE );
+		
+		if(v.isShown()) {
+			displayArrow(res, "up");
+		}
+		else {
+			displayArrow(res, "down");
+		}
 
 		/*Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down);
 		Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up);
@@ -253,6 +261,14 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		super.onConfigurationChanged(newConfig);
 	}
 
+	public void displayArrow(int label, String state) {
+		TextView t = (TextView) findViewById(label);
+		Resources res = getResources();
+		int resourceId = res.getIdentifier(state, "drawable", getPackageName());
+		Drawable img = res.getDrawable(resourceId);
+		t.setCompoundDrawablesWithIntrinsicBounds(img, null , null, null);
+	}
+	
 	public void setPadding(View v) {
 		v.setPadding(5, 5, 5, 5);
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

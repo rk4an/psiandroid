@@ -1,8 +1,10 @@
 package com.phpsysinfo.ui;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TableRow.LayoutParams;
@@ -38,6 +40,11 @@ public class HeaderTextView extends TextView {
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		llp.setMargins(0, 5, 0, 5);
 		this.setLayoutParams(llp);
+		
+		Resources res = getResources();
+		int resourceId = res.getIdentifier("up", "drawable", getContext().getPackageName());
+		Drawable img = res.getDrawable(resourceId);
+		this.setCompoundDrawablesWithIntrinsicBounds(img, null , null, null);
 	}
 }
 
