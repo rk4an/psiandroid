@@ -711,6 +711,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			tNetwork.setColumnStretchable(0, true);
 			tNetwork.setColumnStretchable(1, true);
 			tNetwork.setColumnStretchable(2, true);
+			tNetwork.setColumnStretchable(3, true);
 			tNetwork.setId(R.id.tNetwork);
 
 			LinearLayout llNetwork = new LinearLayout(this);
@@ -731,10 +732,14 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				tvItemValueTx.setText(Html.fromHtml( 
 						"&uarr; " + FormatUtils.getFormatedMemory((int)pni.getTxBytes())));
 
+				TextView tvItemValueErrDrops = new TextView(this);
+				tvItemValueErrDrops.setText("(" + pni.getErr() + "/" + pni.getDrops() + ")");
+				
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
 				trItem.addView(tvItemValueRx);
 				trItem.addView(tvItemValueTx);
+				trItem.addView(tvItemValueErrDrops);
 
 				tNetwork.addView(trItem);
 			}

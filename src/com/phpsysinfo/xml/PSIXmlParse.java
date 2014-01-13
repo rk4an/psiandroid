@@ -105,7 +105,9 @@ public class PSIXmlParse extends DefaultHandler {
 			this.entry.addNetworkInterface(
 					attributes.getValue("Name"),
 					attributes.getValue("RxBytes"),
-					attributes.getValue("TxBytes"));
+					attributes.getValue("TxBytes"),
+					attributes.getValue("Err"),
+					attributes.getValue("Drops"));
 		}
 
 		//ipmi
