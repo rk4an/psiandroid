@@ -58,6 +58,15 @@ public class PSIXmlParse extends DefaultHandler {
 			this.entry.setIp(attributes.getValue("IPAddr"));
 			this.entry.setUsers(attributes.getValue("Users"));
 			this.entry.setDistroIcon(attributes.getValue("Distroicon"));
+			
+			try {
+				int cpuLoad = (int) Double.parseDouble(attributes.getValue("CPULoad"));
+				this.entry.setCpuUsage(cpuLoad);
+			}
+			catch(Exception e) {
+				
+			}
+			
 		}
 		else if (localName.equalsIgnoreCase("Memory")){
 			this.entry.setAppMemoryTotal(attributes.getValue("Total"));

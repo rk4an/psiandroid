@@ -15,6 +15,7 @@ import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -306,7 +307,6 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
 		
 		txtTitle.setText(
 				Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
@@ -320,6 +320,23 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		TextView txtLoad = (TextView) findViewById(R.id.txtLoad);
 		txtLoad.setText(entry.getLoadAvg());
 
+		//load avg percent
+		TableRow trLoadPercent = (TableRow) findViewById(R.id.trLoadPercent);
+		LayoutInflater inflater = getLayoutInflater();
+		ProgressBar pbLoad = (ProgressBar) inflater.inflate(R.layout.pg, null);
+		
+		trLoadPercent.removeAllViews();
+		if(entry.getCpuUsage() != -1) {
+			trLoadPercent.addView(new TextView(this));
+			trLoadPercent.addView(pbLoad);
+			pbLoad.setProgress(entry.getCpuUsage());
+			txtLoad.setText(entry.getCpuUsage() +"%" + " (" + entry.getLoadAvg() + ")");
+			trLoadPercent.setVisibility(LinearLayout.VISIBLE);
+		}
+		else {
+			trLoadPercent.setVisibility(LinearLayout.GONE);
+		}
+		
 		//psi version
 		TextView txtVersion = (TextView) findViewById(R.id.txtVersion);
 		txtVersion.setText(entry.getPsiVersion());
@@ -368,8 +385,6 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		tMountPoints.removeAllViews();
 
 		//memory
-		LayoutInflater inflater = getLayoutInflater();
-
 		ProgressBar pbMemory = (ProgressBar) inflater.inflate(R.layout.pg, null);
 
 		TextView tvNameMemory = new TextView(this);

@@ -18,6 +18,7 @@ public class PSIHostData {
 	private String psiVersion = "";
 	private String cpu = "";
 	private int cpuCore = 0;
+	private int cpuUsage = -1;
 	private String users = "";
 
 	private List<PSIMountPoint> mountPoint = new ArrayList<PSIMountPoint>();
@@ -326,6 +327,14 @@ public class PSIHostData {
 
 	public void setBat(PSIBat bat) {
 		this.bat = bat;
+	}
+
+	public int getCpuUsage() {
+		return cpuUsage;
+	}
+
+	public void setCpuUsage(int cpuUsage) {
+		this.cpuUsage = cpuUsage;
 	}
 
 }

@@ -171,6 +171,14 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trLoadPercent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
+            </TableRow>
+
+            <TableRow
                 android:id="@+id/trUsers"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
