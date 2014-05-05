@@ -125,6 +125,8 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 		displayLogo();
 
+		handler = new Handler();
+		
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		autorefresh = Integer.parseInt(pref.getString("autorefresh", 0+""));
 
@@ -515,7 +517,6 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		showBat(entry);
 
 		if(autorefresh != 0) {
-			handler = new Handler();
 			handler.postDelayed(r, autorefresh*1000);
 		}
 	}
