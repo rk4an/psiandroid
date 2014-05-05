@@ -88,7 +88,8 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	Float firstX = null;
 
 	SharedPreferences pref = null;
-	private static final int PREFERENCE = 0;
+	private static final int CODE_HOST = 10;
+	private static final int CODE_PREFERENCE = 20;
 	int autorefresh = 0;
 	Handler handler = null;
 
@@ -571,16 +572,20 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		if(requestCode == PSIActivity.PREFERENCE) {
-			autorefresh = Integer.parseInt(pref.getString("autorefresh", 0+""));
-			return;
+		if(requestCode == PSIActivity.CODE_PREFERENCE) {
+			if (resultCode == RESULT_OK) {
+				autorefresh = Integer.parseInt(pref.getString("autorefresh", 0+""));			
+				actionBar.setSelectedNavigationItem(selectedIndex);
+				return;
+			}
 		}
-
-		if (resultCode == RESULT_OK) {
-			//load new selected host
-			displayLoadingMessage(data.getExtras().getInt("host"));
-			selectedIndex = data.getExtras().getInt("host");
-			actionBar.setSelectedNavigationItem(selectedIndex);
+		else if (requestCode == PSIActivity.CODE_HOST) {
+			if (resultCode == RESULT_OK) {
+				//load new selected host
+				displayLoadingMessage(data.getExtras().getInt("host"));
+				selectedIndex = data.getExtras().getInt("host");
+				actionBar.setSelectedNavigationItem(selectedIndex);
+			}
 		}
 
 		updateDropDown();
@@ -624,11 +629,11 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			return true;
 		case R.id.iSettings:
 			Intent i = new Intent(this, HostListActivity.class);
-			startActivityForResult(i,0);
+			startActivityForResult(i, PSIActivity.CODE_HOST);
 			return true;
 		case R.id.iPreference:
 			Intent ip = new Intent(this, PSIPreferencesActivity.class);
-			startActivityForResult(ip, PSIActivity.PREFERENCE);
+			startActivityForResult(ip, PSIActivity.CODE_PREFERENCE);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
