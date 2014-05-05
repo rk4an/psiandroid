@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/tv_settings" >
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/autorefresh_step_entries"
+            android:entryValues="@array/autorefresh_step_values"
+            android:key="autorefresh"
+            android:summary="@string/autorefresh_sum"
+            android:title="@string/autorefresh_title" />
+        
+    </PreferenceCategory>
+
+</PreferenceScreen>

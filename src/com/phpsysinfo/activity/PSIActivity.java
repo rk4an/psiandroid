@@ -11,11 +11,14 @@ import org.json.JSONObject;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.OnNavigationListener;
@@ -77,13 +80,18 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	private ViewType viewType = ViewType.NONE;
 
 	private PSIDownloadData task;
-	
+
 	ActionBar actionBar;
 	ArrayList<String> dropDown = new ArrayList<String>();
 	ArrayAdapter<String> aaDropDown;
-	
+
 	Float firstX = null;
-	
+
+	SharedPreferences pref = null;
+	private static final int PREFERENCE = 0;
+	int autorefresh = 0;
+	Handler handler = null;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -116,6 +124,9 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 		displayLogo();
 
+		pref = PreferenceManager.getDefaultSharedPreferences(this);
+		autorefresh = Integer.parseInt(pref.getString("autorefresh", 0+""));
+
 		//set alias if empty
 		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
 		for (int i = 0; i < allHosts.length(); i++) {
@@ -130,7 +141,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				e.printStackTrace();
 			}
 		}
-		
+
 		actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -139,15 +150,15 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				actionBar.getThemedContext(),
 				android.R.layout.simple_list_item_1,
 				android.R.id.text1, dropDown);
-		
+
 		actionBar.setListNavigationCallbacks(aaDropDown, this);
-		
+
 		updateDropDown();
-		
+
 		//load data
 		selectedIndex = PSIConfig.getInstance().loadLastIndex();
 		actionBar.setSelectedNavigationItem(selectedIndex);
-		
+
 	}
 
 	@Override
@@ -214,7 +225,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	public void toggleContent(final View v, int res){
 
 		v.setVisibility( v.isShown()? View.GONE: View.VISIBLE );
-		
+
 		if(v.isShown()) {
 			displayArrow(res, "up");
 		}
@@ -268,7 +279,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		Drawable img = res.getDrawable(resourceId);
 		t.setCompoundDrawablesWithIntrinsicBounds(img, null , null, null);
 	}
-	
+
 	public void setPadding(View v) {
 		v.setPadding(5, 5, 5, 5);
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -306,7 +317,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		txtTitle.setText(
 				Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
 		txtTitle.setMovementMethod(LinkMovementMethod.getInstance());
@@ -323,7 +334,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		TableRow trLoadPercent = (TableRow) findViewById(R.id.trLoadPercent);
 		LayoutInflater inflater = getLayoutInflater();
 		ProgressBar pbLoad = (ProgressBar) inflater.inflate(R.layout.pg, null);
-		
+
 		trLoadPercent.removeAllViews();
 		if(entry.getCpuUsage() != -1) {
 			trLoadPercent.addView(new TextView(this));
@@ -335,7 +346,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		else {
 			trLoadPercent.setVisibility(LinearLayout.GONE);
 		}
-		
+
 		//psi version
 		TextView txtVersion = (TextView) findViewById(R.id.txtVersion);
 		txtVersion.setText(entry.getPsiVersion());
@@ -501,7 +512,18 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 		//bat section
 		showBat(entry);
+
+		if(autorefresh != 0) {
+			handler = new Handler();
+			handler.postDelayed(r, autorefresh*1000);
+		}
 	}
+
+	Runnable r = new Runnable(){
+		public void run(){
+			getData(selectedIndex);
+		}
+	};
 
 	/**
 	 * 
@@ -519,7 +541,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		((TextView) findViewById(R.id.errortxt)).setText(getString(R.string.lblError));
 		((TextView) findViewById(R.id.errorhost)).setText(host);
 		((TextView) findViewById(R.id.errorcode)).setText(error.toString());
-		
+
 	}
 
 	public void setRefreshActionButtonState(final boolean refreshing) {
@@ -548,16 +570,23 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
+		if(requestCode == PSIActivity.PREFERENCE) {
+			autorefresh = Integer.parseInt(pref.getString("autorefresh", 0+""));
+			return;
+		}
+
 		if (resultCode == RESULT_OK) {
 			//load new selected host
 			displayLoadingMessage(data.getExtras().getInt("host"));
 			selectedIndex = data.getExtras().getInt("host");
 			actionBar.setSelectedNavigationItem(selectedIndex);
 		}
-		
+
 		updateDropDown();
+
 	}
+
 
 	private void updateDropDown() {
 		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
@@ -572,7 +601,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				e.printStackTrace();
 			}
 		}
-		
+
 		aaDropDown.notifyDataSetChanged();
 	}
 
@@ -597,12 +626,16 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			Intent i = new Intent(this, HostListActivity.class);
 			startActivityForResult(i,0);
 			return true;
+		case R.id.iPreference:
+			Intent ip = new Intent(this, PSIPreferencesActivity.class);
+			startActivityForResult(ip, PSIActivity.PREFERENCE);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	
+
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -676,6 +709,10 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 	public void getData(int index) {
 
+		if(handler != null) {
+			handler.removeCallbacks(r);
+		}
+
 		JSONArray hostsList = PSIConfig.getInstance().loadHosts();
 		JSONObject currentHost = null;
 		try {
@@ -692,6 +729,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 					task.stop();
 				}*/
 
+				Log.d("PSIAndroid","getData for " + url);
 				task = new PSIDownloadData(this);
 				this.refresh();
 				if(!url.equals("")) {
@@ -748,7 +786,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 				TextView tvItemValueErrDrops = new TextView(this);
 				tvItemValueErrDrops.setText("(" + pni.getErr() + "/" + pni.getDrops() + ")");
-				
+
 				TableRow trItem = new TableRow(this);
 				trItem.addView(tvItemLabel);
 				trItem.addView(tvItemValueRx);
@@ -1477,13 +1515,15 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		
+
 		//load data
 		selectedIndex = itemPosition;
 		PSIConfig.getInstance().saveLastIndex(selectedIndex);
 		getData(selectedIndex);
 		Log.d("PSIAndroid","selectedIndex="+selectedIndex);
-		
+
 		return false;
 	}
+
+
 }

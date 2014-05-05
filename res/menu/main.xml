@@ -16,6 +16,12 @@
         android:title="@string/lblSettings"
         app:showAsAction="ifRoom">
     </item>
+        <item
+        android:id="@+id/iPreference"
+        android:alphabeticShortcut="p"
+        android:title="@string/lblPreference"
+        app:showAsAction="never">
+    </item>
     <item
         android:id="@+id/iAbout"
         android:alphabeticShortcut="a"
