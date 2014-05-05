@@ -573,11 +573,9 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if(requestCode == PSIActivity.CODE_PREFERENCE) {
-			if (resultCode == RESULT_OK) {
-				autorefresh = Integer.parseInt(pref.getString("autorefresh", 0+""));			
-				actionBar.setSelectedNavigationItem(selectedIndex);
-				return;
-			}
+			autorefresh = Integer.parseInt(pref.getString("autorefresh", 0+""));			
+			actionBar.setSelectedNavigationItem(selectedIndex);
+			return;
 		}
 		else if (requestCode == PSIActivity.CODE_HOST) {
 			if (resultCode == RESULT_OK) {
@@ -587,9 +585,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				actionBar.setSelectedNavigationItem(selectedIndex);
 			}
 		}
-
 		updateDropDown();
-
 	}
 
 
