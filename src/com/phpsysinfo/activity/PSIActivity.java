@@ -90,7 +90,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	SharedPreferences pref = null;
 	private static final int CODE_HOST = 10;
 	private static final int CODE_PREFERENCE = 20;
-	int autorefresh = 0;
+	int autoRefreshInterval = 0;
 	Handler handler = null;
 
 	@Override
@@ -128,7 +128,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		handler = new Handler();
 		
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		autorefresh = Integer.parseInt(pref.getString("autorefresh", 0+""));
+		autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));
 
 		//set alias if empty
 		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
@@ -516,8 +516,8 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		//bat section
 		showBat(entry);
 
-		if(autorefresh != 0) {
-			handler.postDelayed(r, autorefresh*1000);
+		if(autoRefreshInterval != 0) {
+			handler.postDelayed(r, autoRefreshInterval*1000);
 		}
 	}
 
@@ -574,7 +574,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if(requestCode == PSIActivity.CODE_PREFERENCE) {
-			autorefresh = Integer.parseInt(pref.getString("autorefresh", 0+""));			
+			autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));		
 			actionBar.setSelectedNavigationItem(selectedIndex);
 			return;
 		}

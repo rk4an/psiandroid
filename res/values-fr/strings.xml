@@ -71,4 +71,9 @@
     <string name="lblRemaining">Restant:</string> 
     <string name="lblState">Etat:</string>
     
+    <string name="tv_settings">Paramètres</string>
+    <string name="lblPreference">Paramètres</string>
+    <string name="autorefresh_title">Actualisation automatique</string> 
+    <string name="autorefresh_sum">Intervalle d\'actualisation (secondes)</string>  
+    
 </resources>
