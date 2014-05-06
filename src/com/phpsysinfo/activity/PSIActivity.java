@@ -172,8 +172,20 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+		if(autoRefreshInterval != 0) {
+			handler.postDelayed(runAutoUpdate, autoRefreshInterval*1000);
+		}
 	}
 
+	@Override
+	public void onPause(){
+		super.onPause();
+		if(handler != null) {
+			handler.removeCallbacks(runAutoUpdate);
+		}
+	}
+	
 	public void displayLogo(){
 		if (this.viewType == ViewType.LOGO) {
 			return;
@@ -517,11 +529,11 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		showBat(entry);
 
 		if(autoRefreshInterval != 0) {
-			handler.postDelayed(r, autoRefreshInterval*1000);
+			handler.postDelayed(runAutoUpdate, autoRefreshInterval*1000);
 		}
 	}
 
-	Runnable r = new Runnable(){
+	Runnable runAutoUpdate = new Runnable(){
 		public void run(){
 			getData(selectedIndex);
 		}
@@ -574,8 +586,14 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if(requestCode == PSIActivity.CODE_PREFERENCE) {
-			autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));		
-			actionBar.setSelectedNavigationItem(selectedIndex);
+			autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));	
+			
+			if(handler != null) {
+				handler.removeCallbacks(runAutoUpdate);
+			}
+			if(autoRefreshInterval != 0) {
+				handler.postDelayed(runAutoUpdate, autoRefreshInterval*1000);
+			}
 			return;
 		}
 		else if (requestCode == PSIActivity.CODE_HOST) {
@@ -711,9 +729,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 	public void getData(int index) {
 
-		if(handler != null) {
-			handler.removeCallbacks(r);
-		}
+		handler.removeCallbacks(runAutoUpdate);
 
 		JSONArray hostsList = PSIConfig.getInstance().loadHosts();
 		JSONObject currentHost = null;
