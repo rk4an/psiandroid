@@ -76,4 +76,7 @@
     <string name="autorefresh_title">Auto-Refresh</string> 
     <string name="autorefresh_sum">Auto-Refresh interval (seconds)</string>  
 
+    <string name="pref_swipe_title">Disable Swipe</string> 
+    <string name="pref_swipe_sum">Disable Swipe to change host</string> 
+    
 </resources>

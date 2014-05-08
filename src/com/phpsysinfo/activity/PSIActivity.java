@@ -91,6 +91,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	private static final int CODE_HOST = 10;
 	private static final int CODE_PREFERENCE = 20;
 	int autoRefreshInterval = 0;
+	boolean disableSwipe = false;
 	Handler handler = null;
 
 	@Override
@@ -129,7 +130,8 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));
-
+		disableSwipe = pref.getBoolean("pref_swipe", false);
+		
 		//set alias if empty
 		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
 		for (int i = 0; i < allHosts.length(); i++) {
@@ -247,39 +249,6 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		else {
 			displayArrow(res, "down");
 		}
-
-		/*Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down);
-		Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up);
-
-		slideUp.setAnimationListener(new AnimationListener() {
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				v.setVisibility(View.GONE);
-			}
-			@Override
-			public void onAnimationRepeat(Animation animation) {}
-			@Override
-			public void onAnimationStart(Animation animation) {}
-		});
-
-		slideDown.setAnimationListener(new AnimationListener() {
-			@Override
-			public void onAnimationEnd(Animation animation) {}
-			@Override
-			public void onAnimationRepeat(Animation animation) {}
-			@Override
-			public void onAnimationStart(Animation animation) {
-				v.setVisibility(View.VISIBLE);
-			}
-		});
-
-
-		if(v.isShown()) {
-			v.startAnimation(slideUp);
-		}
-		else {
-			v.startAnimation(slideDown);
-		}*/
 	}
 
 	@Override
@@ -587,6 +556,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 		if(requestCode == PSIActivity.CODE_PREFERENCE) {
 			autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));	
+			disableSwipe = pref.getBoolean("pref_swipe", false);
 			
 			if(handler != null) {
 				handler.removeCallbacks(runAutoUpdate);
@@ -662,6 +632,10 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 		JSONArray hostsJsonArray = PSIConfig.getInstance().loadHosts();
 
+		if(disableSwipe) {
+			return false;
+		}
+		
 		if(!isReady) {
 			return false;
 		}
@@ -741,11 +715,6 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				String url = currentHost.getString("url");
 				String user = currentHost.getString("username");
 				String password = currentHost.getString("password");
-
-				//cancel previous request
-				/*if(task != null) {
-					task.stop();
-				}*/
 
 				Log.d("PSIAndroid","getData for " + url);
 				task = new PSIDownloadData(this);
