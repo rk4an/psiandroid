@@ -17,7 +17,7 @@
 	<string name="lblCpu">Processor:</string>
     <string name="lblVersion">Version av PSI:</string>
     <string name="lblMemory">Minne</string>
-
+	
     <string name="lblMemoryUsage">Minnesanvändning</string>
     <string name="lblMountPoints">Monterade filsystem</string>
     <string name="lblNetwork">Nätverksanvändning</string>
@@ -56,8 +56,6 @@
     <string name="lblSmart">SMART</string>
     
     <string name="lblRaid">RAID</string>
-    <string name="lblRaidDevice">Enhet</string>
-    <string name="lblRaidActiveRegistered">Aktiv/Registrerad</string>
     
     <string name="lblUpdate">Uppdatera</string>
     <string name="lblPackages">Paket</string>
@@ -71,6 +69,14 @@
     
     <string name="lblBat">Batteri</string>  
     <string name="lblRemaining">Återstående:</string> 
-    <string name="lblState">Status:</string> 
+    <string name="lblState">Status:</string>
+	
+	<string name="tv_settings">Inställningar</string>
+    <string name="lblPreference">Inställningar</string>
+    <string name="autorefresh_title">Autouppdatering</string>
+    <string name="autorefresh_sum">Intervall för autouppdatering (i sekunder)</string>
+
+    <string name="pref_swipe_title">Avaktivera svep</string>
+    <string name="pref_swipe_sum">Avaktivera svepning för att byta värd</string>
     
 </resources>
