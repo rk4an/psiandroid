@@ -567,10 +567,13 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			return;
 		}
 		else if (requestCode == PSIActivity.CODE_HOST) {
+			
 			if (resultCode == RESULT_OK) {
 				//load new selected host
 				displayLoadingMessage(data.getExtras().getInt("host"));
 				selectedIndex = data.getExtras().getInt("host");
+
+				//FIXME: onItemSelected not called when selected item remains the same
 				actionBar.setSelectedNavigationItem(selectedIndex);
 			}
 		}
@@ -1500,6 +1503,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		return PSIActivity.context;
 	}
 
+	
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 
