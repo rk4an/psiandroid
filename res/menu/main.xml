@@ -12,7 +12,7 @@
     <item
         android:id="@+id/iSettings"
         android:alphabeticShortcut="s"
-        android:icon="@drawable/ic_action_settings"
+        android:icon="@drawable/ic_action_device_access_storage_1"
         android:title="@string/lblSettings"
         app:showAsAction="ifRoom">
     </item>
@@ -20,7 +20,8 @@
         android:id="@+id/iPreference"
         android:alphabeticShortcut="p"
         android:title="@string/lblPreference"
-        app:showAsAction="never">
+        android:icon="@drawable/ic_action_settings"
+        app:showAsAction="ifRoom">
     </item>
     <item
         android:id="@+id/iAbout"
