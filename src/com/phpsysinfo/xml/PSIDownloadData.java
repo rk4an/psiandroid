@@ -4,12 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.SSLHandshakeException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -22,7 +18,6 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
@@ -42,13 +37,14 @@ public class PSIDownloadData
 extends AsyncTask<String, Void, Void>
 {
 	private PSIErrorCode errorCode = PSIErrorCode.NO_ERROR;
+	private String errorMessage = "";
 	private PSIActivity activity;
 	private PSIHostData psiObject;
 	private String address = "";
 	private String alias = "";
 	private static AndroidHttpClient httpClient = null;
 	private boolean canceled = false;
-	
+
 	public PSIDownloadData(PSIActivity psiaa) {
 		super();
 		this.activity = psiaa;
@@ -63,13 +59,21 @@ extends AsyncTask<String, Void, Void>
 
 		SAXParser parser = null;
 		InputStream input = null;
-		
+
 		try {
 			input = getUrl(address,user,password);
+		}
+		catch (SSLHandshakeException e) {
+			Log.d("PSIAndroid", "SSL_ERROR");
+			errorCode = PSIErrorCode.SSL_ERROR;
+			errorMessage = e.getMessage();
+			httpClient.close();
+			return null;
 		}
 		catch (Exception e) {
 			Log.d("PSIAndroid", "BAD_URL");
 			errorCode = PSIErrorCode.BAD_URL;
+			errorMessage = e.getMessage();
 			httpClient.close();
 			return null;
 		}
@@ -80,13 +84,14 @@ extends AsyncTask<String, Void, Void>
 			httpClient.close();
 			return null;
 		}
-		
+
 		try {
 			parser = SAXParserFactory.newInstance().newSAXParser();
 		}
 		catch (Exception e) {
 			Log.d("PSIAndroid", "XML_PARSER_CREATE");
 			errorCode = PSIErrorCode.XML_PARSER_CREATE;
+			errorMessage = e.getMessage();
 			httpClient.close();
 			return null;
 		}
@@ -96,6 +101,7 @@ extends AsyncTask<String, Void, Void>
 			if(input == null) {
 				Log.d("PSIAndroid", "CANNOT_GET_XML");
 				errorCode = PSIErrorCode.CANNOT_GET_XML;
+				errorMessage = "no xml data received";
 				httpClient.close();
 				return null;
 			}
@@ -108,10 +114,11 @@ extends AsyncTask<String, Void, Void>
 			Log.d("PSIAndroid", "XML_PARSER_ERROR");
 			e.printStackTrace();
 			errorCode = PSIErrorCode.XML_PARSER_ERROR;
+			errorMessage = e.getMessage();
 			httpClient.close();
 			return null;
 		}
-		
+
 		httpClient.close();
 
 		return null;
@@ -127,7 +134,7 @@ extends AsyncTask<String, Void, Void>
 			//nothing
 		}
 		else {
-			this.activity.displayError(alias, errorCode);
+			this.activity.displayError(alias, errorCode, errorMessage);
 		}
 	}
 
@@ -139,15 +146,14 @@ extends AsyncTask<String, Void, Void>
 	public void stop() {
 		canceled = true;
 	}
-	
+
 	private static InputStream getUrl(String url, String user, String password)
 			throws MalformedURLException, IOException
 			{
-		try
-		{
+
 			//user agent
 			httpClient = AndroidHttpClient.newInstance("PSIAndroid");
-			
+
 			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 15000);
 			HttpConnectionParams.setSoTimeout(httpClient.getParams(), 15000);
 
@@ -158,24 +164,8 @@ extends AsyncTask<String, Void, Void>
 			//ssl
 			if (urlObj.getProtocol().toLowerCase().equals("https")) {
 
-				X509TrustManager tm = new X509TrustManager() { 
-					public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-					}
-
-					public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-					}
-
-					public X509Certificate[] getAcceptedIssuers() {
-						return null;
-					}
-				};
-				SSLContext ctx = SSLContext.getInstance("TLS");
-				ctx.init(null, new TrustManager[]{tm}, null);
-				SSLSocketFactory ssf = new MySSLSocketFactory(ctx);
-				ClientConnectionManager ccm = httpClient.getConnectionManager();
-				SchemeRegistry sr = ccm.getSchemeRegistry();
-				sr.register(new Scheme("https", ssf, 443));
-
+				SchemeRegistry schemeRegistry = new SchemeRegistry();
+				schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 			}
 
 			//credentials
@@ -198,13 +188,8 @@ extends AsyncTask<String, Void, Void>
 			else {
 				return null;
 			}
-			
+
 		}
-		catch(Exception e){
-			httpClient.close();
-			e.printStackTrace();
-		}
-		return null;
-			}
+
 
 }

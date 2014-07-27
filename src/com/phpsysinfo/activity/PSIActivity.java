@@ -127,11 +127,11 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		displayLogo();
 
 		handler = new Handler();
-		
+
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));
 		disableSwipe = pref.getBoolean("pref_swipe", false);
-		
+
 		//set alias if empty
 		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
 		for (int i = 0; i < allHosts.length(); i++) {
@@ -174,7 +174,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
 		if(autoRefreshInterval != 0) {
 			handler.postDelayed(runAutoUpdate, autoRefreshInterval*1000);
 		}
@@ -187,7 +187,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			handler.removeCallbacks(runAutoUpdate);
 		}
 	}
-	
+
 	public void displayLogo(){
 		if (this.viewType == ViewType.LOGO) {
 			return;
@@ -512,7 +512,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 	 * 
 	 * @param error
 	 */
-	public void displayError(String host, PSIErrorCode error) {
+	public void displayError(String host, PSIErrorCode error, String errorMessage) {
 
 		isReady = true;
 
@@ -523,7 +523,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 		((TextView) findViewById(R.id.errortxt)).setText(getString(R.string.lblError));
 		((TextView) findViewById(R.id.errorhost)).setText(host);
-		((TextView) findViewById(R.id.errorcode)).setText(error.toString());
+		((TextView) findViewById(R.id.errorcode)).setText("[" + error.toString() + "] " + errorMessage);
 
 	}
 
@@ -557,7 +557,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		if(requestCode == PSIActivity.CODE_PREFERENCE) {
 			autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));	
 			disableSwipe = pref.getBoolean("pref_swipe", false);
-			
+
 			if(handler != null) {
 				handler.removeCallbacks(runAutoUpdate);
 			}
@@ -567,7 +567,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			return;
 		}
 		else if (requestCode == PSIActivity.CODE_HOST) {
-			
+
 			if (resultCode == RESULT_OK) {
 				//load new selected host
 				displayLoadingMessage(data.getExtras().getInt("host"));
@@ -638,7 +638,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		if(disableSwipe) {
 			return false;
 		}
-		
+
 		if(!isReady) {
 			return false;
 		}
@@ -1503,7 +1503,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		return PSIActivity.context;
 	}
 
-	
+
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 
