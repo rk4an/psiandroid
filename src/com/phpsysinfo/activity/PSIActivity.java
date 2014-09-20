@@ -132,20 +132,40 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));
 		disableSwipe = pref.getBoolean("pref_swipe", false);
 
-		//set alias if empty
+		//update JSON
 		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
 		for (int i = 0; i < allHosts.length(); i++) {
 			try {
+				String url = ((JSONObject)allHosts.get(i)).getString("url");
+				String username = ((JSONObject)allHosts.get(i)).getString("username");
+				String password = ((JSONObject)allHosts.get(i)).getString("password");
+				String alias = "";
+				boolean ignoreCert = false;
+	
+				//set alias if empty
 				if(!((JSONObject)allHosts.get(i)).has("alias")) {
-					String url = ((JSONObject)allHosts.get(i)).getString("url");
-					String username = ((JSONObject)allHosts.get(i)).getString("username");
-					String password = ((JSONObject)allHosts.get(i)).getString("password");
-					PSIConfig.getInstance().editHost(i, url, url, username, password);
+					alias = url;
 				}
+				else {
+					alias = ((JSONObject)allHosts.get(i)).getString("alias");
+				}
+				
+				//set ignore if empty
+				if(!((JSONObject)allHosts.get(i)).has("ignore")) {
+					ignoreCert = false;
+				}
+				else {
+					ignoreCert = ((JSONObject)allHosts.get(i)).getBoolean("ignore");
+				}
+				
+				PSIConfig.getInstance().editHost(i, alias, url, username, password, ignoreCert);
+				
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
+		
+		
 
 		actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
@@ -728,12 +748,13 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				String url = currentHost.getString("url");
 				String user = currentHost.getString("username");
 				String password = currentHost.getString("password");
+				Boolean ignoreCert = currentHost.getBoolean("ignore");
 
 				Log.d("PSIAndroid","getData for " + url);
 				task = new PSIDownloadData(this);
 				this.refresh();
 				if(!url.equals("")) {
-					task.execute(url + PSIConfig.SCRIPT_NAME, user, password, alias);
+					task.execute(url + PSIConfig.SCRIPT_NAME, user, password, alias, ignoreCert.toString());
 				}
 			}
 

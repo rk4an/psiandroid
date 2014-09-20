@@ -25,6 +25,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -119,10 +121,10 @@ OnItemLongClickListener {
 
 				PSIConfig.getInstance().removeHost(position);
 				allHosts = PSIConfig.getInstance().loadHosts();
-				
+
 				lHosts.remove(position);
 				aaHosts.notifyDataSetChanged();
-				
+
 				break;
 			case DialogInterface.BUTTON_NEUTRAL:
 
@@ -168,10 +170,11 @@ OnItemLongClickListener {
 
 			LayoutInflater inflater = getActivity().getLayoutInflater();
 			View dialogView = inflater.inflate(R.layout.host_form, null);
-			final EditText alias = ((EditText)dialogView.findViewById(R.id.txtAlias));
-			final EditText url = ((EditText)dialogView.findViewById(R.id.txtUrl));
-			final EditText username = ((EditText)dialogView.findViewById(R.id.txtUsername));
-			final EditText password = ((EditText)dialogView.findViewById(R.id.txtPassword));
+			final EditText alias = ((EditText) dialogView.findViewById(R.id.txtAlias));
+			final EditText url = ((EditText) dialogView.findViewById(R.id.txtUrl));
+			final EditText username = ((EditText) dialogView.findViewById(R.id.txtUsername));
+			final EditText password = ((EditText) dialogView.findViewById(R.id.txtPassword));
+			final CheckBox certificate = ((CheckBox) dialogView.findViewById(R.id.cbCertificate));
 
 			if(HostListActivity.editMode) {
 				try {
@@ -179,6 +182,7 @@ OnItemLongClickListener {
 					url.setText(HostListActivity.editHost.getString("url"));
 					username.setText(HostListActivity.editHost.getString("username"));
 					password.setText(HostListActivity.editHost.getString("password"));
+					certificate.setChecked(HostListActivity.editHost.getBoolean("ignore"));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -194,11 +198,12 @@ OnItemLongClickListener {
 
 					String hostUrl = url.getText().toString().trim();
 					String aliasName = alias.getText().toString();
-
+					boolean ignoreCert = certificate.isChecked();
+					
 					if(aliasName.equals("")) {
 						aliasName = hostUrl;
 					}
-					
+
 					//default prefix with http
 					if (!hostUrl.startsWith("http://") && !hostUrl.startsWith("https://")) {
 						hostUrl = "http://" + hostUrl;
@@ -211,7 +216,8 @@ OnItemLongClickListener {
 									aliasName,
 									hostUrl,
 									username.getText().toString(),
-									password.getText().toString())) {
+									password.getText().toString(),
+									ignoreCert)) {
 
 								lHosts.set(position, aliasName);
 								aaHosts.notifyDataSetChanged();
@@ -222,7 +228,8 @@ OnItemLongClickListener {
 									aliasName,
 									hostUrl,
 									username.getText().toString(),
-									password.getText().toString())) {
+									password.getText().toString(),
+									ignoreCert)) {
 								lHosts.add(aliasName);
 								aaHosts.notifyDataSetChanged();
 							}

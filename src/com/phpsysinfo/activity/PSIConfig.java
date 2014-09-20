@@ -104,7 +104,7 @@ public class PSIConfig {
 	}
 
 
-	public boolean addHost(String alias, String url, String user, String password) {
+	public boolean addHost(String alias, String url, String user, String password, boolean ignoreCert) {
 		JSONArray allHosts = loadHosts();
 
 		try {
@@ -113,6 +113,7 @@ public class PSIConfig {
 			host.put("url", url);
 			host.put("username", user);
 			host.put("password", password);
+			host.put("ignore", ignoreCert);
 
 			allHosts.put(host);
 			saveHosts(allHosts);
@@ -124,7 +125,7 @@ public class PSIConfig {
 		return false;
 	}
 	
-	public boolean editHost(int position, String alias, String url, String user, String password) {
+	public boolean editHost(int position, String alias, String url, String user, String password, boolean ignoreCert) {
 		JSONArray allHosts = loadHosts();
 
 		try {
@@ -133,6 +134,7 @@ public class PSIConfig {
 			host.put("url", url);
 			host.put("username", user);
 			host.put("password", password);
+			host.put("ignore", ignoreCert);
 			
 			saveHosts(allHosts);
 			return true;

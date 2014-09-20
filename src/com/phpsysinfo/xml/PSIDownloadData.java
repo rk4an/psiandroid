@@ -5,6 +5,17 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import javax.net.ssl.SSLHandshakeException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -18,6 +29,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
@@ -42,6 +54,7 @@ extends AsyncTask<String, Void, Void>
 	private PSIHostData psiObject;
 	private String address = "";
 	private String alias = "";
+	private Boolean ignoreCert = false;
 	private static AndroidHttpClient httpClient = null;
 	private boolean canceled = false;
 
@@ -56,12 +69,13 @@ extends AsyncTask<String, Void, Void>
 		String user = strs[1];
 		String password = strs[2];
 		alias = strs[3];
-
+		ignoreCert = Boolean.parseBoolean(strs[4]);
+		
 		SAXParser parser = null;
 		InputStream input = null;
 
 		try {
-			input = getUrl(address,user,password);
+			input = getUrl(address,user,password, ignoreCert);
 		}
 		catch (SSLHandshakeException e) {
 			Log.d("PSIAndroid", "SSL_ERROR");
@@ -147,49 +161,71 @@ extends AsyncTask<String, Void, Void>
 		canceled = true;
 	}
 
-	private static InputStream getUrl(String url, String user, String password)
-			throws MalformedURLException, IOException
+	private static InputStream getUrl(String url, String user, String password, Boolean ignoreCert)
+			throws MalformedURLException, IOException, KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException
 			{
 
-			//user agent
-			httpClient = AndroidHttpClient.newInstance("PSIAndroid");
+		//user agent
+		httpClient = AndroidHttpClient.newInstance("PSIAndroid");
 
-			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 15000);
-			HttpConnectionParams.setSoTimeout(httpClient.getParams(), 15000);
+		HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 15000);
+		HttpConnectionParams.setSoTimeout(httpClient.getParams(), 15000);
 
-			URL urlObj = new URL(url);
-			HttpHost host = new HttpHost(urlObj.getHost(), urlObj.getPort(), urlObj.getProtocol());
-			AuthScope scope = new AuthScope(urlObj.getHost(), urlObj.getPort());
+		URL urlObj = new URL(url);
+		HttpHost host = new HttpHost(urlObj.getHost(), urlObj.getPort(), urlObj.getProtocol());
+		AuthScope scope = new AuthScope(urlObj.getHost(), urlObj.getPort());
 
-			//ssl
-			if (urlObj.getProtocol().toLowerCase().equals("https")) {
+		//ssl
+		if (urlObj.getProtocol().toLowerCase().equals("https")) {
 
+			if(ignoreCert) {
+				X509TrustManager tm = new X509TrustManager() { 
+					public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+					}
+
+					public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+					}
+
+					public X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+				};
+				SSLContext ctx = SSLContext.getInstance("TLS");
+				ctx.init(null, new TrustManager[]{tm}, null);
+				SSLSocketFactory ssf = new MySSLSocketFactory(ctx);
+				ClientConnectionManager ccm = httpClient.getConnectionManager();
+				SchemeRegistry sr = ccm.getSchemeRegistry();
+				sr.register(new Scheme("https", ssf, 443));
+			}
+			else {
 				SchemeRegistry schemeRegistry = new SchemeRegistry();
 				schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 			}
 
-			//credentials
-			UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, password);
-			CredentialsProvider cp = new BasicCredentialsProvider();
-			cp.setCredentials(scope, creds);
-			HttpContext credContext = new BasicHttpContext();
-			credContext.setAttribute(ClientContext.CREDS_PROVIDER, cp);
-
-			//get request
-			HttpGet job = new HttpGet(url);
-			HttpResponse response = httpClient.execute(host,job,credContext);
-			HttpEntity entity = response.getEntity();
-			InputStream instream = entity.getContent();
-			StatusLine status = response.getStatusLine();
-
-			if(status.getStatusCode() == 200) {
-				return instream;
-			}
-			else {
-				return null;
-			}
-
 		}
+
+		//credentials
+		UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, password);
+		CredentialsProvider cp = new BasicCredentialsProvider();
+		cp.setCredentials(scope, creds);
+		HttpContext credContext = new BasicHttpContext();
+		credContext.setAttribute(ClientContext.CREDS_PROVIDER, cp);
+
+		//get request
+		HttpGet job = new HttpGet(url);
+		HttpResponse response = httpClient.execute(host,job,credContext);
+		HttpEntity entity = response.getEntity();
+		InputStream instream = entity.getContent();
+		StatusLine status = response.getStatusLine();
+
+		if(status.getStatusCode() == 200) {
+			return instream;
+		}
+		else {
+			return null;
+		}
+
+			}
 
 
 }
