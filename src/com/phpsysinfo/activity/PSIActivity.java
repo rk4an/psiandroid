@@ -306,6 +306,16 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				Html.fromHtml("<a href=\""+url+"\">"+entry.getHostname()+"</a>"));
 		txtTitle.setMovementMethod(LinkMovementMethod.getInstance());
 
+		//machine
+		if(entry.getMachine() != null) {
+			TextView txtMachine = (TextView) findViewById(R.id.txtMachine);
+			txtMachine.setText(entry.getMachine());
+			findViewById(R.id.trMachine).setVisibility(LinearLayout.VISIBLE);
+		}
+		else {
+			findViewById(R.id.trMachine).setVisibility(LinearLayout.GONE);
+		}
+		
 		//uptime
 		TextView txtUptime = (TextView) findViewById(R.id.txtUptime);
 		txtUptime.setText(entry.getUptime());

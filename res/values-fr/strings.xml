@@ -9,6 +9,7 @@
     <string name="lblError">Erreur</string>
     
     <string name="lblKernel">Noyau:</string>
+    <string name="lblMachine">Machine:</string>
     <string name="lblDistro">Distribution:</string>
     <string name="lblIp">IP:</string>
     <string name="lblUptime">Uptime:</string>

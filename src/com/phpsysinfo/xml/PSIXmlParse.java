@@ -275,6 +275,9 @@ public class PSIXmlParse extends DefaultHandler {
 			PSIBat bat = new PSIBat(dc, rc, c, cs);
 			this.entry.setBat(bat);
 		}
+		else if (localName.equalsIgnoreCase("Hardware")){
+			this.entry.setMachine(attributes.getValue("Name"));
+		}
 	}
 
 	@Override

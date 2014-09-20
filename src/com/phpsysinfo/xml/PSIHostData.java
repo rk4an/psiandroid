@@ -8,6 +8,7 @@ import android.util.Log;
 
 public class PSIHostData {
 
+	private String machine = "";
 	private String hostname = "";
 	private String uptime = "";
 	private String loadAvg = "";
@@ -335,6 +336,14 @@ public class PSIHostData {
 
 	public void setCpuUsage(int cpuUsage) {
 		this.cpuUsage = cpuUsage;
+	}
+
+	public String getMachine() {
+		return machine;
+	}
+
+	public void setMachine(String machine) {
+		this.machine = machine;
 	}
 
 }
