@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
-            
+
             <TableRow
                 android:id="@+id/trDistro"
                 android:layout_width="match_parent"
@@ -214,6 +214,26 @@
 
                 <TextView
                     android:id="@+id/txtUsers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trProcesses"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/lblProcesses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblProcesses"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtProcesses"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>

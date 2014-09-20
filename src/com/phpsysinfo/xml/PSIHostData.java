@@ -21,6 +21,11 @@ public class PSIHostData {
 	private int cpuCore = 0;
 	private int cpuUsage = -1;
 	private String users = "";
+	private int processes = -1;
+	private int processesRunning = -1;
+	private int processesSleeping = -1;
+	private int processesStopped = -1;
+	private int processesZombie = -1;
 
 	private List<PSIMountPoint> mountPoint = new ArrayList<PSIMountPoint>();
 	private int appMemoryPercent = 0;
@@ -42,9 +47,9 @@ public class PSIHostData {
 	private List<PSIUps> ups = new ArrayList<PSIUps>();
 
 	private List<PSIPrinter> printer = new ArrayList<PSIPrinter>();
-	
+
 	private PSIBat bat = null;
-	
+
 	private int normalUpdate = -1;
 	private int securityUpdate = -1;
 
@@ -151,11 +156,11 @@ public class PSIHostData {
 	public void setCpu(String processor) {
 		this.cpu = processor;
 	}
-	
+
 	public void addCpuCore() {
 		this.cpuCore++;
 	}
-	
+
 	public int getCpuCore() {
 		return this.cpuCore;
 	}
@@ -212,12 +217,12 @@ public class PSIHostData {
 
 		try {
 			float itemp = Float.parseFloat(temp);
-			
+
 			if(max == null) {
 				max = "-1";
 			}
 			float imax = Float.parseFloat(max);
-			
+
 			temperature.add(new PSITemperature(description, itemp, imax));
 		}
 		catch(Exception e) {
@@ -258,11 +263,11 @@ public class PSIHostData {
 		if(err != null && !err.equals("")) {
 			_err =  Integer.parseInt(err);
 		}
-		
+
 		if(drops != null && !drops.equals("")) {
 			_drops = Integer.parseInt(drops);
 		}
-		
+
 		networkInterface.add(new PSINetworkInterface(name, _rxBytes, _txBytes, _err, _drops));
 	}
 
@@ -289,7 +294,7 @@ public class PSIHostData {
 	public List<PSIPrinter> getPrinter() {
 		return printer;
 	}
-	
+
 	public List<PSIUps> getUps() {
 		return ups;
 	}
@@ -305,7 +310,7 @@ public class PSIHostData {
 	public void addRaid(PSIRaid r) {
 		raid.add(r);
 	}
-	
+
 	public int getNormalUpdate() {
 		return normalUpdate;
 	}
@@ -346,4 +351,44 @@ public class PSIHostData {
 		this.machine = machine;
 	}
 
+	public int getProcesses() {
+		return processes;
+	}
+
+	public void setProcesses(int processes) {
+		this.processes = processes;
+	}
+
+
+	public int getProcessesRunning() {
+		return processesRunning;
+	}
+
+	public void setProcessesRunning(int processesRunning) {
+		this.processesRunning = processesRunning;
+	}
+
+	public int getProcessesSleeping() {
+		return processesSleeping;
+	}
+
+	public void setProcessesSleeping(int processesSleeping) {
+		this.processesSleeping = processesSleeping;
+	}
+
+	public int getProcessesStopped() {
+		return processesStopped;
+	}
+
+	public void setProcessesStopped(int processesStopped) {
+		this.processesStopped = processesStopped;
+	}
+
+	public int getProcessesZombie() {
+		return processesZombie;
+	}
+
+	public void setProcessesZombie(int processesZombie) {
+		this.processesZombie = processesZombie;
+	}
 }

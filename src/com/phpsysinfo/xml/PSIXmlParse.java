@@ -63,9 +63,25 @@ public class PSIXmlParse extends DefaultHandler {
 				int cpuLoad = (int) Double.parseDouble(attributes.getValue("CPULoad"));
 				this.entry.setCpuUsage(cpuLoad);
 			}
-			catch(Exception e) {
-				
+			catch(Exception e) {}
+			
+			try {
+				int processes = (int) Integer.parseInt(attributes.getValue("Processes"));
+				this.entry.setProcesses(processes);
 			}
+			catch(Exception e) {}
+			
+			try {
+				int processesRunning = (int) Integer.parseInt(attributes.getValue("ProcessesRunning"));
+				int processesSleeping = (int) Integer.parseInt(attributes.getValue("ProcessesSleeping"));
+				int processesStopped = (int) Integer.parseInt(attributes.getValue("ProcessesStopped"));
+				int processesZombie = (int) Integer.parseInt(attributes.getValue("ProcessesZombie"));
+				this.entry.setProcessesRunning(processesRunning);
+				this.entry.setProcessesSleeping(processesSleeping);
+				this.entry.setProcessesStopped(processesStopped);
+				this.entry.setProcessesZombie(processesZombie);
+			}
+			catch(Exception e) {}
 			
 		}
 		else if (localName.equalsIgnoreCase("Memory")){

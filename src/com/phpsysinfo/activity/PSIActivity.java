@@ -336,6 +336,25 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			findViewById(R.id.trMachine).setVisibility(LinearLayout.GONE);
 		}
 		
+		//processes
+		if(entry.getProcesses() != -1) {
+			TextView txtProcesses = (TextView) findViewById(R.id.txtProcesses);
+			txtProcesses.setText(entry.getProcesses()+"");
+			findViewById(R.id.trProcesses).setVisibility(LinearLayout.VISIBLE);
+		}
+		else {
+			findViewById(R.id.trProcesses).setVisibility(LinearLayout.GONE);
+		}
+		
+		if(entry.getProcessesRunning() != -1) {
+			TextView txtProcesses = (TextView) findViewById(R.id.txtProcesses);
+			txtProcesses.setText(entry.getProcesses() + " ("+
+			entry.getProcessesRunning() + "\u00A0" + getString(R.string.lblProcessesRunning) +", " +
+			entry.getProcessesSleeping() + "\u00A0" + getString(R.string.lblProcessesSleeping) + ", " +
+			entry.getProcessesStopped() + "\u00A0" + getString(R.string.lblProcessesStopped) +", " +
+			entry.getProcessesZombie() + "\u00A0" + getString(R.string.lblProcessesZombie) +")");
+		}
+		
 		//uptime
 		TextView txtUptime = (TextView) findViewById(R.id.txtUptime);
 		txtUptime.setText(entry.getUptime());

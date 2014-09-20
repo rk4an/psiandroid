@@ -16,6 +16,7 @@
     <string name="lblLoad">Charge:</string>
     <string name="lblUsers">Utilisateurs:</string>
     <string name="lblCpu">Processeur:</string>
+    <string name="lblProcesses">Processus:</string>
     <string name="lblVersion">PSI version:</string>
     <string name="lblMemory">Mémoire</string>
 

@@ -16,6 +16,11 @@
     <string name="lblLoad">Load:</string>
     <string name="lblUsers">Users:</string>
     <string name="lblCpu">Cpu:</string>
+    <string name="lblProcesses">Processes:</string>
+    <string name="lblProcessesRunning">running</string>
+    <string name="lblProcessesSleeping">sleeping</string>
+    <string name="lblProcessesStopped">stopped</string>
+    <string name="lblProcessesZombie">zombie</string>
     <string name="lblVersion">PSI version:</string>
     <string name="lblMemory">Memory</string>
     
