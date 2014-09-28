@@ -26,6 +26,7 @@ public class PSIHostData {
 	private int processesSleeping = -1;
 	private int processesStopped = -1;
 	private int processesZombie = -1;
+	private int processesOther = -1;
 
 	private List<PSIMountPoint> mountPoint = new ArrayList<PSIMountPoint>();
 	private int appMemoryPercent = 0;
@@ -390,5 +391,13 @@ public class PSIHostData {
 
 	public void setProcessesZombie(int processesZombie) {
 		this.processesZombie = processesZombie;
+	}
+
+	public int getProcessesOther() {
+		return processesOther;
+	}
+
+	public void setProcessesOther(int processesOther) {
+		this.processesOther = processesOther;
 	}
 }

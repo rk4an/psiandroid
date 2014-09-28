@@ -76,10 +76,12 @@ public class PSIXmlParse extends DefaultHandler {
 				int processesSleeping = (int) Integer.parseInt(attributes.getValue("ProcessesSleeping"));
 				int processesStopped = (int) Integer.parseInt(attributes.getValue("ProcessesStopped"));
 				int processesZombie = (int) Integer.parseInt(attributes.getValue("ProcessesZombie"));
+				int processesOther = (int) Integer.parseInt(attributes.getValue("ProcessesOther"));
 				this.entry.setProcessesRunning(processesRunning);
 				this.entry.setProcessesSleeping(processesSleeping);
 				this.entry.setProcessesStopped(processesStopped);
 				this.entry.setProcessesZombie(processesZombie);
+				this.entry.setProcessesOther(processesOther);
 			}
 			catch(Exception e) {}
 			
