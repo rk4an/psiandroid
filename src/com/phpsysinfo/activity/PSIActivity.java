@@ -141,7 +141,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				String password = ((JSONObject)allHosts.get(i)).getString("password");
 				String alias = "";
 				boolean ignoreCert = false;
-	
+
 				//set alias if empty
 				if(!((JSONObject)allHosts.get(i)).has("alias")) {
 					alias = url;
@@ -149,7 +149,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				else {
 					alias = ((JSONObject)allHosts.get(i)).getString("alias");
 				}
-				
+
 				//set ignore if empty
 				if(!((JSONObject)allHosts.get(i)).has("ignore")) {
 					ignoreCert = false;
@@ -157,15 +157,15 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				else {
 					ignoreCert = ((JSONObject)allHosts.get(i)).getBoolean("ignore");
 				}
-				
+
 				PSIConfig.getInstance().editHost(i, alias, url, username, password, ignoreCert);
-				
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		
+
+
 
 		actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
@@ -335,7 +335,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		else {
 			findViewById(R.id.trMachine).setVisibility(LinearLayout.GONE);
 		}
-		
+
 		//processes
 		if(entry.getProcesses() != -1) {
 			TextView txtProcesses = (TextView) findViewById(R.id.txtProcesses);
@@ -345,32 +345,32 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		else {
 			findViewById(R.id.trProcesses).setVisibility(LinearLayout.GONE);
 		}
-		
+
 		if(entry.getProcessesRunning() != -1) {
 			TextView txtProcesses = (TextView) findViewById(R.id.txtProcesses);
-			
+
 			txtProcesses.append(" ("+
 					entry.getProcessesRunning() + "\u00A0" + getString(R.string.lblProcessesRunning));
-			
+
 			if(entry.getProcessesSleeping() != -1 && entry.getProcessesSleeping() != 0) {
 				txtProcesses.append(", " + entry.getProcessesSleeping() + "\u00A0" + getString(R.string.lblProcessesSleeping));
 			}
-			
+
 			if(entry.getProcessesStopped() != -1 && entry.getProcessesStopped() != 0 ) {
 				txtProcesses.append(", " + entry.getProcessesStopped() + "\u00A0" + getString(R.string.lblProcessesStopped));
 			}
-			
+
 			if(entry.getProcessesZombie() != -1 && entry.getProcessesZombie() != 0) {
 				txtProcesses.append(", " +  entry.getProcessesZombie() + "\u00A0" + getString(R.string.lblProcessesZombie));
 			}
-			
+
 			if(entry.getProcessesOther() != -1 && entry.getProcessesOther() != 0) {
 				txtProcesses.append(", " +  entry.getProcessesOther() + "\u00A0" + getString(R.string.lblProcessesOther));
 			}
-			
+
 			txtProcesses.append(")");
 		}
-		
+
 		//uptime
 		TextView txtUptime = (TextView) findViewById(R.id.txtUptime);
 		txtUptime.setText(entry.getUptime());
@@ -1502,16 +1502,20 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			TextView tvItemLabel = new TextView(this);
 			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblRemaining) + " </b>"));
 
-			int remainingCapacity = 0;
-			int designCapacity = 0;
 			int percent = 0;
 			try {
-				remainingCapacity = Integer.parseInt(entry.getBat().getRemainingCapacity());
-				designCapacity = Integer.parseInt(entry.getBat().getDesignCapacity());
-				percent = (int) (((float)remainingCapacity/designCapacity)*100);
+				percent = Integer.parseInt(entry.getBat().getCapacity());
 			}
 			catch (Exception e) {
-
+				int remainingCapacity = 0;
+				int designCapacity = 0;
+				try {
+					remainingCapacity = Integer.parseInt(entry.getBat().getRemainingCapacity());
+					designCapacity = Integer.parseInt(entry.getBat().getDesignCapacity());
+					percent = (int) (((float)remainingCapacity/designCapacity)*100);
+				}
+				catch (Exception ex) {
+				}
 			}
 
 			TextView tvItemValue = new TextView(this);
