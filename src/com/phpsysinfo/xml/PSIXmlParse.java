@@ -96,6 +96,12 @@ public class PSIXmlParse extends DefaultHandler {
 			catch(Exception e) {}
 
 			try {
+				int processesWaiting = (int) Integer.parseInt(attributes.getValue("ProcessesWaiting"));
+				this.entry.setProcessesWaiting(processesWaiting);
+			}
+			catch(Exception e) {}	
+			
+			try {
 				int processesOther = (int) Integer.parseInt(attributes.getValue("ProcessesOther"));
 				this.entry.setProcessesOther(processesOther);
 			}

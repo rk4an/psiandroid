@@ -21,6 +21,7 @@
     <string name="lblProcessesSleeping">sleeping</string>
     <string name="lblProcessesStopped">stopped</string>
     <string name="lblProcessesZombie">zombie</string>
+    <string name="lblProcessesWaiting">waiting</string>
     <string name="lblProcessesOther">other</string>
     <string name="lblVersion">PSI version:</string>
     <string name="lblMemory">Memory</string>

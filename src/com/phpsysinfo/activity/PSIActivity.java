@@ -364,6 +364,10 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				txtProcesses.append(", " +  entry.getProcessesZombie() + "\u00A0" + getString(R.string.lblProcessesZombie));
 			}
 
+			if(entry.getProcessesWaiting() != -1 && entry.getProcessesWaiting() != 0) {
+				txtProcesses.append(", " +  entry.getProcessesWaiting() + "\u00A0" + getString(R.string.lblProcessesWaiting));
+			}
+			
 			if(entry.getProcessesOther() != -1 && entry.getProcessesOther() != 0) {
 				txtProcesses.append(", " +  entry.getProcessesOther() + "\u00A0" + getString(R.string.lblProcessesOther));
 			}

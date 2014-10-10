@@ -26,6 +26,7 @@ public class PSIHostData {
 	private int processesSleeping = -1;
 	private int processesStopped = -1;
 	private int processesZombie = -1;
+	private int processesWaiting = -1;
 	private int processesOther = -1;
 
 	private List<PSIMountPoint> mountPoint = new ArrayList<PSIMountPoint>();
@@ -399,5 +400,13 @@ public class PSIHostData {
 
 	public void setProcessesOther(int processesOther) {
 		this.processesOther = processesOther;
+	}
+
+	public int getProcessesWaiting() {
+		return processesWaiting;
+	}
+
+	public void setProcessesWaiting(int processesWaiting) {
+		this.processesWaiting = processesWaiting;
 	}
 }
