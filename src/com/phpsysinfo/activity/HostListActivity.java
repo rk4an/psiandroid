@@ -26,7 +26,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -47,6 +46,7 @@ OnItemLongClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.hosts_view);
+		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		lvHosts = (ListView) findViewById(R.id.lvHostsList);
 		lvHosts.setOnItemClickListener(this);
