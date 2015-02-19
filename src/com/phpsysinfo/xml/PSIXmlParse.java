@@ -29,7 +29,7 @@ public class PSIXmlParse extends DefaultHandler {
 
 	private PSIRaid currentRaid = null;
 
-	private StringBuffer buffer = new StringBuffer();
+	private StringBuilder buffer = new StringBuilder();
 
 	@Override
 	public void processingInstruction(String target, String data) throws SAXException {
@@ -298,12 +298,12 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 		else if(localName.equalsIgnoreCase("packages")){
 			inPackageUpdate = true;
-			buffer = new StringBuffer();
+			buffer = new StringBuilder();
 		}
 
 		else if(localName.equalsIgnoreCase("security")){
 			inSecurityUpdate = true;
-			buffer = new StringBuffer();
+			buffer = new StringBuilder();
 		}
 		else if(localName.equalsIgnoreCase("Bat")){
 			String dc = attributes.getValue("DesignCapacity");
@@ -325,11 +325,11 @@ public class PSIXmlParse extends DefaultHandler {
 		super.characters(ch, start, length);
 
 		if(inPackageUpdate) {
-			buffer.append(ch);
+			buffer.append(ch, start, length);
 		}
 
 		if(inSecurityUpdate) {
-			buffer.append(ch);
+			buffer.append(ch, start, length);
 		}
 	}
 
@@ -360,7 +360,7 @@ public class PSIXmlParse extends DefaultHandler {
 		else if(localName.equalsIgnoreCase("packages")){
 			inPackageUpdate = false;
 			try {
-				entry.setNormalUpdate(Integer.parseInt(buffer.toString()));
+				entry.setNormalUpdate(Integer.parseInt(buffer.toString().trim()));
 			}
 			catch(Exception e) {
 				entry.setNormalUpdate(-1);
@@ -369,7 +369,7 @@ public class PSIXmlParse extends DefaultHandler {
 		else if(localName.equalsIgnoreCase("security")){
 			inSecurityUpdate = false;
 			try {
-				entry.setSecurityUpdate(Integer.parseInt(buffer.toString()));
+				entry.setSecurityUpdate(Integer.parseInt(buffer.toString().trim()));
 			}
 			catch(Exception e) {
 				entry.setSecurityUpdate(-1);
