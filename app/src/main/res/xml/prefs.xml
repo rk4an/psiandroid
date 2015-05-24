@@ -15,6 +15,15 @@
             android:key="pref_swipe"
             android:summary="@string/pref_swipe_sum"
             android:title="@string/pref_swipe_title" />
+
+        <ListPreference
+            android:defaultValue="15000"
+            android:entries="@array/timeout_entries"
+            android:entryValues="@array/timeout_values"
+            android:key="timeout"
+            android:summary="@string/timeout_sum"
+            android:title="@string/timeout_title" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

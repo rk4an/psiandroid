@@ -19,4 +19,17 @@
         <item>45</item>
     </string-array>
 
+    <string-array name="timeout_entries">
+        <item>10s</item>
+        <item>15s</item>
+        <item>30s</item>
+        <item>45s</item>
+    </string-array>
+    <string-array name="timeout_values">
+        <item>10000</item>
+        <item>15000</item>
+        <item>30000</item>
+        <item>45000</item>
+    </string-array>
+
 </resources>

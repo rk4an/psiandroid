@@ -129,8 +129,9 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		handler = new Handler();
 
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0+""));
+		autoRefreshInterval = Integer.parseInt(pref.getString("autorefresh", 0 + ""));
 		disableSwipe = pref.getBoolean("pref_swipe", false);
+		PSIConfig.TIMEOUT = Integer.parseInt(pref.getString("timeout", PSIConfig.TIMEOUT + ""));
 
 		//update JSON
 		JSONArray allHosts = PSIConfig.getInstance().loadHosts();
@@ -633,6 +634,9 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			if(autoRefreshInterval != 0) {
 				handler.postDelayed(runAutoUpdate, autoRefreshInterval*1000);
 			}
+
+			PSIConfig.TIMEOUT = Integer.parseInt(pref.getString("timeout", PSIConfig.TIMEOUT+""));
+
 			return;
 		}
 		else if (requestCode == PSIActivity.CODE_HOST) {

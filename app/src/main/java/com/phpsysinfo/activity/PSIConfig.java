@@ -17,7 +17,9 @@ public class PSIConfig {
 	public final static int MEMORY_SOFT_THR = 80;
 	public final static int MEMORY_HARD_THR = 90;
 	public final static int TEMP_SOFT_THR = 80;
-	
+	public static int TIMEOUT = 15000;
+
+
 	private static PSIConfig instance = null;
 
 	public static PSIConfig getInstance() {

@@ -18,6 +18,7 @@ implements Preference.OnPreferenceChangeListener {
 		addPreferencesFromResource(R.xml.prefs);
 
 		bindPreferenceSummaryToValue(findPreference("autorefresh"));
+		bindPreferenceSummaryToValue(findPreference("timeout"));
 	}
 
 	/**

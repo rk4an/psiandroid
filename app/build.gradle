@@ -8,8 +8,8 @@ android {
         applicationId "com.phpsysinfo"
         minSdkVersion 8
         targetSdkVersion 22
-        versionCode 843
-        versionName "0.84"
+        versionCode 850
+        versionName "0.85"
     }
 
     buildTypes {

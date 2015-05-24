@@ -44,6 +44,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.phpsysinfo.activity.PSIActivity;
+import com.phpsysinfo.activity.PSIConfig;
 
 public class PSIDownloadData
 extends AsyncTask<String, Void, Void>
@@ -168,8 +169,8 @@ extends AsyncTask<String, Void, Void>
 		//user agent
 		httpClient = AndroidHttpClient.newInstance("PSIAndroid");
 
-		HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 15000);
-		HttpConnectionParams.setSoTimeout(httpClient.getParams(), 15000);
+		HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), PSIConfig.TIMEOUT);
+		HttpConnectionParams.setSoTimeout(httpClient.getParams(), PSIConfig.TIMEOUT);
 
 		URL urlObj = new URL(url);
 		HttpHost host = new HttpHost(urlObj.getHost(), urlObj.getPort(), urlObj.getProtocol());
