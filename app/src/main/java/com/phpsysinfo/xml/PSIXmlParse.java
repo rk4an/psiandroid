@@ -329,7 +329,7 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 
 		if(inSecurityUpdate) {
-			buffer.append(ch, start, length);
+            buffer.append(ch, start, length);
 		}
 	}
 

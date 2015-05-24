@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.phpsysinfo"
+        minSdkVersion 8
+        targetSdkVersion 22
+        versionCode 842
+        versionName "0.84"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            applicationVariants.all { variant ->
+                variant.outputs.each  { output ->
+                    output.outputFile = new File(output.outputFile.parent, "PSIAndroid-" + defaultConfig.versionName + ".apk")
+                }
+            }
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:22.0+'
+}
