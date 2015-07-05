@@ -159,10 +159,10 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 
 		//ipmi
-		else if (localName.equalsIgnoreCase("Plugin_ipmi")){
+		else if (localName.equalsIgnoreCase("Plugin_ipmiinfo")){
 			inPluginImpi = true;
 		}
-		else if (inPluginImpi && localName.equalsIgnoreCase("Temperature")){
+		else if (inPluginImpi && localName.equalsIgnoreCase("Temperatures")){
 			inPluginImpiTemperature = true;
 		}
 		else if (inPluginImpiTemperature){
@@ -178,7 +178,7 @@ public class PSIXmlParse extends DefaultHandler {
 		else if (localName.equalsIgnoreCase("MBInfo")){
 			inMbInfo = true;
 		}
-		else if (inMbInfo && localName.equalsIgnoreCase("Temperature")){
+		else if (inMbInfo && localName.equalsIgnoreCase("Temperatures")){
 			inMbInfoTemperature = true;
 		}
 		else if (inMbInfo && localName.equalsIgnoreCase("Fans")){
@@ -335,7 +335,7 @@ public class PSIXmlParse extends DefaultHandler {
 
 	@Override
 	public void endElement(String uri, String localName, String name) throws SAXException {
-		if (localName.equalsIgnoreCase("Plugin_ipmi")){
+		if (localName.equalsIgnoreCase("Plugin_ipmiinfo")){
 			inPluginImpi = false;
 		}
 		else if(localName.equalsIgnoreCase("MBInfo")) {
