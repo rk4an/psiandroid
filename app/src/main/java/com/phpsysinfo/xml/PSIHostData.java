@@ -36,6 +36,7 @@ public class PSIHostData {
 	private int appMemoryFullPercent = 0;
 
 	private List<PSITemperature> temperature = new ArrayList<PSITemperature>();
+	private List<PSIVoltage> voltages = new ArrayList<PSIVoltage>();
 	private HashMap<String,String> fans = new HashMap<String,String>();
 
 	private List<PSINetworkInterface> networkInterface = new ArrayList<PSINetworkInterface>();
@@ -232,8 +233,25 @@ public class PSIHostData {
 		}
 	}
 
+	public void addVoltage(String description, String value) {
+
+		try {
+			float val = Float.parseFloat(value);
+
+
+			voltages.add(new PSIVoltage(description, val));
+		}
+		catch(Exception e) {
+			Log.d("PSIAndroid",e.toString());
+		}
+	}
+
 	public List<PSITemperature> getTemperature() {
 		return temperature;
+	}
+
+	public List<PSIVoltage> getVoltages() {
+		return voltages;
 	}
 
 	public void addFans(String label, String value) {

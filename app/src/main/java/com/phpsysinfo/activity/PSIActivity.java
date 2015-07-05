@@ -58,6 +58,7 @@ import com.phpsysinfo.xml.PSIRaidDevice;
 import com.phpsysinfo.xml.PSISmart;
 import com.phpsysinfo.xml.PSITemperature;
 import com.phpsysinfo.xml.PSIUps;
+import com.phpsysinfo.xml.PSIVoltage;
 
 enum ViewType {
 	NONE, LOGO, ERROR, DATA, LOADING
@@ -923,6 +924,54 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			llTemperature.addView(tTemperature);
 			llPlugins.addView(llTemperature);
 		}
+
+
+
+		if(entry.getVoltages().size() > 0) {
+
+			//header
+			HeaderTextView tvVoltage = new HeaderTextView(this);
+			tvVoltage.setId(R.id.tvVoltage);
+			tvVoltage.setText(getString(R.string.lblVoltage));
+			llPlugins.addView(tvVoltage);
+
+			tvVoltage.setOnClickListener(this);
+
+			//content
+			TableLayout tVoltage = new TableLayout(this);
+			tVoltage.setColumnShrinkable(0, true);
+			tVoltage.setColumnStretchable(0, true);
+			tVoltage.setColumnStretchable(1, true);
+			tVoltage.setId(R.id.tVoltage);
+
+			LinearLayout llVoltage = new LinearLayout(this);
+			llVoltage.setId(R.id.llVoltage);
+			llVoltage.setOrientation(LinearLayout.VERTICAL);
+
+			List<PSIVoltage> voltages = entry.getVoltages();
+
+			//populate
+			for (PSIVoltage voltage : voltages) {
+				TextView tvItemLabel = new TextView(this);
+				tvItemLabel.setText(Html.fromHtml("<b>" + voltage.getDescription() + ": </b>"));
+
+				TextView tvItemValue = new TextView(this);
+
+				tvItemValue.setText(voltage.getValue() + "");
+
+				tvItemValue.setWidth(0);
+				tvItemLabel.setWidth(0);
+				TableRow trItem = new TableRow(this);
+				trItem.addView(tvItemLabel);
+				trItem.addView(tvItemValue);
+
+				tVoltage.addView(trItem);
+			}
+
+			llVoltage.addView(tVoltage);
+			llPlugins.addView(llVoltage);
+		}
+
 	}
 
 	public void showPsStatus(PSIHostData entry) {

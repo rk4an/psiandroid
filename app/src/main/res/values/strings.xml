@@ -30,6 +30,7 @@
     <string name="lblMountPoints">Mounted File Systems</string>
     <string name="lblNetwork">Networks</string>
     <string name="lblTemperatures">Temperatures</string>
+    <string name="lblVoltage">Voltage</string>
     <string name="lblFans">Fans</string>
     
     <string name="lblUrlHint">http://</string>
