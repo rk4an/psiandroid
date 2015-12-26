@@ -266,11 +266,12 @@ public class PSIHostData {
 		return networkInterface;
 	}
 
-	public void addNetworkInterface(String name, String rxBytes, String txBytes, String err, String drops) {
+	public void addNetworkInterface(String name, String rxBytes, String txBytes, String err, String drops, String info) {
 		int _rxBytes = 0;
 		int _txBytes = 0;
 		int _err = 0;
 		int _drops = 0;
+		String _info = "";
 
 		if(rxBytes != null && !rxBytes.equals("")) {
 			_rxBytes = (int) (Long.parseLong(rxBytes)/1024/1024);
@@ -288,7 +289,11 @@ public class PSIHostData {
 			_drops = Integer.parseInt(drops);
 		}
 
-		networkInterface.add(new PSINetworkInterface(name, _rxBytes, _txBytes, _err, _drops));
+		if(info != null && !info.equals("")) {
+			_info = info;
+		}
+
+		networkInterface.add(new PSINetworkInterface(name, _rxBytes, _txBytes, _err, _drops, _info));
 	}
 
 	public void addProcessStatus(String label, String value) {

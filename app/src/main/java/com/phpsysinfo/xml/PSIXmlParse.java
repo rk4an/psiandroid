@@ -156,7 +156,9 @@ public class PSIXmlParse extends DefaultHandler {
 					attributes.getValue("RxBytes"),
 					attributes.getValue("TxBytes"),
 					attributes.getValue("Err"),
-					attributes.getValue("Drops"));
+					attributes.getValue("Drops"),
+					attributes.getValue("Info")
+			);
 		}
 
 		//ipmi

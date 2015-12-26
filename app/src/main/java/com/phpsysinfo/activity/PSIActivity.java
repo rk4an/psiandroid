@@ -859,6 +859,21 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				trItem.addView(tvItemValueErrDrops);
 
 				tNetwork.addView(trItem);
+
+				String[] infos = pni.getInfo().split(";");
+				for (int i = 0; i< infos.length; i++) {
+					TableRow trItemInfo = new TableRow(this);
+					TextView tvItemInfo = new TextView(this);
+
+					LayoutParams lp = new LayoutParams();
+					lp.span = 2;
+					tvItemInfo.setLayoutParams(lp);
+
+					tvItemInfo.setText(Html.fromHtml(infos[i]));
+					trItemInfo.addView(new TextView(this));
+					trItemInfo.addView(tvItemInfo);
+					tNetwork.addView(trItemInfo);
+				}
 			}
 
 			llNetwork.addView(tNetwork);
