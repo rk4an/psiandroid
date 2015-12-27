@@ -1580,11 +1580,16 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			}
 			catch (Exception e) {
 				int remainingCapacity = 0;
-				int designCapacity = 0;
+				int maxCapacity = 0;
 				try {
 					remainingCapacity = Integer.parseInt(entry.getBat().getRemainingCapacity());
-					designCapacity = Integer.parseInt(entry.getBat().getDesignCapacity());
-					percent = (int) (((float)remainingCapacity/designCapacity)*100);
+					try {
+						maxCapacity = Integer.parseInt(entry.getBat().getFullCapacity());
+					}
+					catch (Exception ex) {
+						maxCapacity = Integer.parseInt(entry.getBat().getDesignCapacity());
+					}
+					percent = (int) (((float)remainingCapacity/maxCapacity)*100);
 				}
 				catch (Exception ex) {
 				}

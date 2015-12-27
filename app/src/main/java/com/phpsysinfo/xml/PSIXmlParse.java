@@ -320,11 +320,12 @@ public class PSIXmlParse extends DefaultHandler {
 		}
 		else if(localName.equalsIgnoreCase("Bat")){
 			String dc = attributes.getValue("DesignCapacity");
+			String fc = attributes.getValue("FullCapacity");
 			String rc = attributes.getValue("RemainingCapacity");
 			String c = attributes.getValue("Capacity");
 			String cs = attributes.getValue("ChargingState");
 
-			PSIBat bat = new PSIBat(dc, rc, c, cs);
+			PSIBat bat = new PSIBat(dc, fc, rc, c, cs);
 			this.entry.setBat(bat);
 		}
 		else if (localName.equalsIgnoreCase("Hardware")){
