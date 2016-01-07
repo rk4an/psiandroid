@@ -79,8 +79,14 @@
     
     <string name="lblBat">Battery</string>  
     <string name="lblRemaining">Remaining:</string> 
-    <string name="lblState">State:</string> 
-    
+    <string name="lblState">State:</string>
+    <string name="lblUp">Uprecords</string>
+    <string name="lblUpUptime">Max Up</string>
+    <string name="lblUpUp">Total Up</string>
+    <string name="lblUpDown">Total Down</string>
+    <string name="lblUpPercent">Percent</string>
+
+
     <string name="tv_settings">Settings</string>
     <string name="lblPreference">Settings</string>
     <string name="autorefresh_title">Auto-Refresh</string> 

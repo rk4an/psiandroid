@@ -33,4 +33,7 @@
         <item type="id" name="tvBat"/>
         <item type="id" name="llBat"/>
         <item type="id" name="tBat"/>
+        <item type="id" name="tvUp"/>
+        <item type="id" name="tUp"/>
+        <item type="id" name="llUp"/>
     </resources>

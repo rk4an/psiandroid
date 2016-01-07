@@ -259,6 +259,9 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		else if(event.getId() == R.id.tvBat) {
 			toggleContent((View) findViewById(R.id.llBat), R.id.tvBat);
 		}
+		else if(event.getId() == R.id.tvUp) {
+			toggleContent((View) findViewById(R.id.llUp), R.id.tvUp);
+		}
 	}
 
 	public void toggleContent(final View v, int res){
@@ -567,6 +570,9 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 		//bat section
 		showBat(entry);
+
+		//uprecords section
+		showUprecords(entry);
 
 		if(autoRefreshInterval != 0) {
 			handler.postDelayed(runAutoUpdate, autoRefreshInterval*1000);
@@ -1630,11 +1636,101 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 			trItem.addView(tvItemLabel);
 			trItem.addView(tvItemValue);
 
-			tBat.addView(trItem);			
+			tBat.addView(trItem);
 
 			llBat.addView(tBat);
 			llPlugins.addView(llBat);
 		}
+	}
+
+
+	public void showUprecords(PSIHostData entry) {
+		LinearLayout llPlugins = (LinearLayout) findViewById(R.id.llPlugins);
+
+		if(!entry.getUprecords().getUp().equals("")) {
+
+			//header
+			HeaderTextView tvUp = new HeaderTextView(this);
+			tvUp.setId(R.id.tvUp);
+			tvUp.setText(getString(R.string.lblUp));
+			llPlugins.addView(tvUp);
+
+			tvUp.setOnClickListener(this);
+
+			//content
+			TableLayout tUp = new TableLayout(this);
+			tUp.setColumnStretchable(0, true);
+			tUp.setColumnStretchable(1, true);
+			tUp.setId(R.id.tUp);
+
+			LinearLayout llUp = new LinearLayout(this);
+			llUp.setId(R.id.llUp);
+			llUp.setOrientation(LinearLayout.VERTICAL);
+
+			//populate
+
+			//uptime
+			TextView tvItemLabel = new TextView(this);
+			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblUpUptime) + " </b>"));
+
+			TextView tvItemValue = new TextView(this);
+			tvItemValue.setText(entry.getUprecords().getUptime());
+
+			TableRow trItem = new TableRow(this);
+			trItem.addView(tvItemLabel);
+			trItem.addView(tvItemValue);
+
+			tUp.addView(trItem);
+
+
+			//up
+			tvItemLabel = new TextView(this);
+			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblUpUp) + " </b>"));
+
+			tvItemValue = new TextView(this);
+			tvItemValue.setText(entry.getUprecords().getUp());
+
+			trItem = new TableRow(this);
+			trItem.addView(tvItemLabel);
+			trItem.addView(tvItemValue);
+
+			tUp.addView(trItem);
+
+
+			//down
+			tvItemLabel = new TextView(this);
+			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblUpDown) + " </b>"));
+
+			tvItemValue = new TextView(this);
+			tvItemValue.setText(entry.getUprecords().getDown());
+
+			trItem = new TableRow(this);
+			trItem.addView(tvItemLabel);
+			trItem.addView(tvItemValue);
+
+			tUp.addView(trItem);
+
+
+			//percent
+			tvItemLabel = new TextView(this);
+			tvItemLabel.setText(Html.fromHtml("<b>" + getString(R.string.lblUpPercent) + " </b>"));
+
+			tvItemValue = new TextView(this);
+			tvItemValue.setText(entry.getUprecords().getPercent());
+
+			trItem = new TableRow(this);
+			trItem.addView(tvItemLabel);
+			trItem.addView(tvItemValue);
+
+			tUp.addView(trItem);
+
+			llUp.addView(tUp);
+			llPlugins.addView(llUp);
+		}
+
+
+
+
 	}
 
 	private void loadDynamicLayout(int layoutID){

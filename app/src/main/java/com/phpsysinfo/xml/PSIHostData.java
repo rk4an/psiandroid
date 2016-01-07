@@ -51,6 +51,8 @@ public class PSIHostData {
 
 	private List<PSIPrinter> printer = new ArrayList<PSIPrinter>();
 
+	private PSIUprecords uprecords = new PSIUprecords();
+
 	private PSIBat bat = null;
 
 	private int normalUpdate = -1;
@@ -431,5 +433,13 @@ public class PSIHostData {
 
 	public void setProcessesWaiting(int processesWaiting) {
 		this.processesWaiting = processesWaiting;
+	}
+
+	public PSIUprecords getUprecords() {
+		return uprecords;
+	}
+
+	public void setUprecords(PSIUprecords uprecords) {
+		this.uprecords = uprecords;
 	}
 }
