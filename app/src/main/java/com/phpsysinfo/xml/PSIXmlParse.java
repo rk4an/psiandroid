@@ -339,7 +339,7 @@ public class PSIXmlParse extends DefaultHandler {
 		else if (inUprecords && localName.equalsIgnoreCase("Item")){
 
 			String key = attributes.getValue("hash");
-			if(key.equals("1") || key.equals("-> 1")) {
+			if(key.equals("1") || key.equals("-&gt; 1")) {
 				this.entry.getUprecords().setUptime(attributes.getValue("Uptime"));
 			}
 			else if(key.equals("up")) {
