@@ -1345,7 +1345,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 				String list = "[" + psiRaid.getDisksRegistered() + "/" + psiRaid.getDisksActive() + "]";
 
 				for (PSIRaidDevice dev : psiRaid.getDevices()) {
-					if(dev.getStatus().equals(""))
+					if(dev.getStatus().equals("") || dev.getStatus().equals("ok"))
 						list = list + " " + dev.getName();
 					else {
 						int color = getResources().getColor(R.color.state_hard);
