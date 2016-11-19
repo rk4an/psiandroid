@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "25.0.0"
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.phpsysinfo"
         minSdkVersion 8
         targetSdkVersion 23
-        versionCode 903
-        versionName "0.90"
+        versionCode 910
+        versionName "0.91"
     }
 
     buildTypes {
