@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PSIAndroid</string>
+    
+    <string name="lblLoading">Φόρτωση...</string>
+    <string name="lblRefresh">Ανανέωση</string>
+    <string name="lblSettings">Ρυθμίσεις</string>
+    <string name="lblAbout">Σχετικά</string>
+    <string name="lblError">Σφάλμα</string>
+    
+    <string name="lblKernel">Πυρήνας:</string>
+    <string name="lblMachine">Μηχανή:</string>
+    <string name="lblDistro">Διανομή:</string>
+    <string name="lblIp">IP:</string>
+    <string name="lblUptime">Συνεχής Λειτουργία:</string>
+    <string name="lblLoad">Φόρτος:</string>
+    <string name="lblUsers">Χρήστες:</string>
+    <string name="lblCpu">Επεξεργαστής:</string>
+    <string name="lblProcesses">Διεργασίες:</string>
+    <string name="lblProcessesRunning">σε εκτέλεση</string>
+    <string name="lblProcessesSleeping">σε ύπνωση</string>
+    <string name="lblProcessesStopped">σταματημένες</string>
+    <string name="lblProcessesZombie">ζόμπι</string>
+    <string name="lblProcessesWaiting">σε αναμονή</string>
+    <string name="lblProcessesOther">άλλο</string>
+    <string name="lblVersion">Έκδοση PSI:</string>
+    <string name="lblMemory">Μνήμη</string>
+    
+    <string name="lblMemoryUsage">Χρήση Μνήμης</string>
+    <string name="lblMountPoints">Προσαρτημένα Συστήματα Αρχείων</string>
+    <string name="lblNetwork">Δίκτυα</string>
+    <string name="lblTemperatures">Θερμοκρασίες</string>
+    <string name="lblVoltage">Τάση</string>
+    <string name="lblFans">Ανεμιστήρες</string>
+    
+    <string name="lblUrlHint">http://</string>
+    <string name="lblHosts">Διακομιστές</string>
+    <string name="lblHost">Διακομιστής</string>
+    <string name="lblUser">Όνομα χρήστη</string>
+    <string name="lblPassword">Κωδικός</string>
+    <string name="lblSave">Αποθήκευση</string>
+    <string name="lblAlias">Ψευδώνυμο</string>
+    <string name="lblCertificate">Αγνόηση πιστοποιητικού (δεν ενδείκνυται)</string>
+    
+    <string name="lblOf">από</string>
+    <string name="lblMio">MiB</string>
+    <string name="lblGio">GiB</string>
+    <string name="lblTio">TiB</string>
+    
+    <string name="lblAdd">Προσθήκη</string>
+    <string name="lblActionFor">Ενέργεια για %1$s ?</string>
+    <string name="lblCancel">Ακύρωση</string>
+    <string name="lblEdit">Επεξεργασία</string>
+    <string name="lblRemove">Αφαίρεση</string>
+    
+    <string name="lblProcessStatus">Κατάσταση Διεργασίας</string>
+    
+    <string name="lblUps">UPS</string>
+    <string name="lblUpsModel">Μοντέλο</string>
+    <string name="lblUpsBatteryCharge">Φόρτιση μπαταρίας</string>
+    <string name="lblUpsLoad">Φόρτος</string>
+    <string name="lblUpsTime">Χρόνος που απομένει</string>
+    <string name="lblUpsBattery">Τάση μπαταρίας</string>
+    <string name="lblUpsLine">Τάση γραμμής</string>
+    
+    <string name="lblSmart">SMART</string>
+    
+    <string name="lblRaid">RAID</string>
+    
+    <string name="lblUpdate">Ανανέωση</string>
+    <string name="lblPackages">Πακέτα</string>
+    <string name="lblSecurity">Ασφάλεια</string>
+    
+    <string name="lblPrinter">Εκτυπωτές</string>
+    <string name="lblPercent">Ποσοστό</string>  
+    <string name="lblTenthsMl">Δεκάδες ml</string>  
+    <string name="lblImpressions">Εκτυπώσεις</string>  
+    <string name="lblTenthsGrams">Δεκάδες grams</string>
+    
+    <string name="lblBat">Μπαταρία</string>  
+    <string name="lblRemaining">Απομένει:</string> 
+    <string name="lblState">Κατάσταση:</string> 
+    
+    <string name="tv_settings">Ρυθμίσεις</string>
+    <string name="lblPreference">Ρυθμίσεις</string>
+    <string name="autorefresh_title">Αυτόματη Ανανέωση</string> 
+    <string name="autorefresh_sum">Μεσοδιάστημα αυτόματης ανανέωσης (δευτερόλεπτα)</string>
+    <string name="timeout_title">HTTP timeout</string>
+    <string name="timeout_sum">HTTP timeout (δευτερόλεπτα)</string>
+
+    <string name="pref_swipe_title">Απενεργοποίηση Swipe</string> 
+    <string name="pref_swipe_sum">Απενεργοποίηση χρήσης Swipe για αλλαγή διακομιστή</string> 
+    
+</resources>
