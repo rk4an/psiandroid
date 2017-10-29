@@ -16,6 +16,7 @@ public class PSIXmlParse extends DefaultHandler {
 	private boolean inMbInfo = false;
 	private boolean inMbInfoTemperature = false;
 	private boolean inMbInfoFans = false;
+	private boolean inMbInfoVoltage = false;
 
 	private boolean inPsStatus = false;
 
@@ -170,7 +171,7 @@ public class PSIXmlParse extends DefaultHandler {
 		else if ((inPluginImpi && localName.equalsIgnoreCase("Temperature")) || inPluginImpi && localName.equalsIgnoreCase("Temperatures")){
 			inPluginImpiTemperature = true;
 		}
-		else if ((inPluginImpi && localName.equalsIgnoreCase("Voltages"))){
+		else if ((inPluginImpi && localName.equalsIgnoreCase("Voltage")) || inPluginImpi && localName.equalsIgnoreCase("Voltages")){
 			inPluginImpiVoltage = true;
 		}
 		else if (inPluginImpiTemperature){
@@ -199,6 +200,9 @@ public class PSIXmlParse extends DefaultHandler {
 		else if (inMbInfo && localName.equalsIgnoreCase("Fans")){
 			inMbInfoFans = true;
 		}
+		else if (inMbInfo && localName.equalsIgnoreCase("Voltage")){
+			inMbInfoVoltage = true;
+		}
 		else if (inMbInfoTemperature){
 			if(localName.equalsIgnoreCase("Item")) {
 				String desc = attributes.getValue("Label");
@@ -210,6 +214,11 @@ public class PSIXmlParse extends DefaultHandler {
 		else if (inMbInfoFans){
 			if(localName.equalsIgnoreCase("Item")) {
 				this.entry.addFans(attributes.getValue("Label"), attributes.getValue("Value"));
+			}
+		}
+		else if (inMbInfoVoltage){
+			if(localName.equalsIgnoreCase("Item")) {
+				this.entry.addVoltage(attributes.getValue("Label"), attributes.getValue("Value"));
 			}
 		}
 
@@ -380,7 +389,7 @@ public class PSIXmlParse extends DefaultHandler {
 			inPluginImpiTemperature = false;
 			inMbInfoTemperature = false;
 		}
-		else if(localName.equalsIgnoreCase("Voltages")){
+		else if(localName.equalsIgnoreCase("Voltage") || localName.equalsIgnoreCase("Voltages")){
 			inPluginImpiVoltage = false;
 		}
 		else if(localName.equalsIgnoreCase("Fans")){

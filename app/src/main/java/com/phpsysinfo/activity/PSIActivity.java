@@ -22,7 +22,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.OnNavigationListener;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -65,7 +65,7 @@ enum ViewType {
 }
 
 public class PSIActivity 
-extends ActionBarActivity
+extends AppCompatActivity
 implements OnClickListener, View.OnTouchListener, OnNavigationListener
 {
 	private static Context context;
@@ -231,6 +231,9 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 		}
 		else if(event.getId() == R.id.tvTemperature) {
 			toggleContent((View) findViewById(R.id.llTemperature), R.id.tvTemperature);
+		}
+		else if(event.getId() == R.id.tvVoltage) {
+			toggleContent((View) findViewById(R.id.llVoltage), R.id.tvVoltage);
 		}
 		else if(event.getId() == R.id.tvNetwork) {
 			toggleContent((View) findViewById(R.id.llNetwork), R.id.tvNetwork);
@@ -978,7 +981,7 @@ implements OnClickListener, View.OnTouchListener, OnNavigationListener
 
 				TextView tvItemValue = new TextView(this);
 
-				tvItemValue.setText(voltage.getValue() + "");
+				tvItemValue.setText(voltage.getValue() + "V");
 
 				tvItemValue.setWidth(0);
 				tvItemLabel.setWidth(0);
